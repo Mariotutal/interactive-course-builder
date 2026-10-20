@@ -1,0 +1,389 @@
+{
+ "format": 1,
+ "id": "variabilidad-datos",
+ "title": "Por qué los datos varían: población, muestra y dispersión",
+ "summary": "Distinguir población de muestra, parámetro de estadístico, y medir la dispersión con la desviación típica.",
+ "level": "core",
+ "minutes": 30,
+ "outcomes": [
+  "o1"
+ ],
+ "prerequisites": [],
+ "prereqText": "<p>Solo necesitas saber calcular una media y un porcentaje. Si quieres repasar cómo se usa una hoja de cálculo para promedios, basta con la ayuda de tu programa (<code>PROMEDIO</code> / <code>AVERAGE</code>).</p>",
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>Tu responsable te pide: «¿Cuánto gasta de media un cliente por pedido en nuestra tienda online?». La base completa tiene 180 000 pedidos del año y la exportación tarda horas, así que tomas una muestra rápida de 8 pedidos y obtienes una media de 32,50 €. Una compañera toma otros 8 y obtiene 37,10 €.</p>\n<p>¿Quién se equivoca? ¿Cuál de las dos cifras comunicas? Antes de poder responder necesitas un vocabulario preciso: qué es lo que <em>realmente</em> quieres saber, qué has observado y por qué esas dos cifras no coinciden. (Los datos son ilustrativos.)</p>"
+  },
+  {
+   "type": "intuition",
+   "html": "<p>Piensa en una olla de sopa. Probar una cucharada te dice mucho sobre la sopa entera, pero otra cucharada sabrá un poquito distinto. La sopa es la <span class='term' data-term='población'>población</span>; la cucharada, la <span class='term' data-term='muestra'>muestra</span>. La diferencia entre cucharadas no significa que hayas probado mal.</p>",
+   "limits": "<p>La sopa está bien mezclada, así que cualquier cucharada sirve. Una población real (clientes de distintas regiones, pedidos de distintas campañas) no está «mezclada»: si pruebas solo la superficie (por ejemplo, solo clientes que contestan emails) la muestra puede estar <strong>sesgada</strong> y ninguna cantidad de cucharadas lo arregla. Más adelante verás que el margen de error solo cubre la variación al azar, no ese sesgo.</p>"
+  },
+  {
+   "type": "visual",
+   "purpose": "Mostrar que de una misma población salen muestras distintas y, por tanto, estadísticos distintos.",
+   "alt": "Un rectángulo grande arriba representa la población de 180 000 pedidos con media desconocida μ. Tres flechas bajan hacia tres rectángulos pequeños: muestra 1 con media 32,5, muestra 2 con media 37,1 y muestra 3 con media 29,8. Los números muestran que la media cambia de una muestra a otra mientras la población es la misma.",
+   "html": "<figure><svg viewBox='0 0 560 230' role='img' aria-labelledby='v1t v1d'><title id='v1t'>Una población, tres muestras, tres medias</title><desc id='v1d'>La población tiene un parámetro fijo μ desconocido. Tres muestras de 8 pedidos dan medias 32,5; 37,1 y 29,8 euros.</desc><defs><marker id='arrow' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='7' markerHeight='7' orient='auto-start-reverse'><path d='M0 0L10 5L0 10z'/></marker></defs>\n<rect class='n1' x='120' y='12' width='320' height='62' rx='10'/><text class='t' x='280' y='38' text-anchor='middle'>Población: 180 000 pedidos</text><text class='ts' x='280' y='58' text-anchor='middle'>parámetro: media μ (fija, desconocida)</text>\n<line class='edge' x1='190' y1='76' x2='110' y2='128' marker-end='url(#arrow)'/><line class='edge' x1='280' y1='76' x2='280' y2='128' marker-end='url(#arrow)'/><line class='edge' x1='370' y1='76' x2='450' y2='128' marker-end='url(#arrow)'/>\n<rect class='n2' x='30' y='130' width='160' height='70' rx='10'/><text class='ts' x='110' y='154' text-anchor='middle'>Muestra 1 (8 pedidos)</text><text class='t' x='110' y='180' text-anchor='middle'>x̄ = 32,5 €</text>\n<rect class='n2' x='200' y='130' width='160' height='70' rx='10'/><text class='ts' x='280' y='154' text-anchor='middle'>Muestra 2 (8 pedidos)</text><text class='t' x='280' y='180' text-anchor='middle'>x̄ = 37,1 €</text>\n<rect class='n2' x='370' y='130' width='160' height='70' rx='10'/><text class='ts' x='450' y='154' text-anchor='middle'>Muestra 3 (8 pedidos)</text><text class='t' x='450' y='180' text-anchor='middle'>x̄ = 29,8 €</text>\n<text class='tm' x='280' y='222' text-anchor='middle'>Cifras ilustrativas. Una sola μ; cada muestra da su propio estadístico x̄.</text></svg><figcaption>Un parámetro fijo; estadísticos que cambian con la muestra (datos ilustrativos).</figcaption></figure>"
+  },
+  {
+   "type": "explain",
+   "title": "Vocabulario mínimo",
+   "html": "<p>Un <span class='term' data-term='parámetro'>parámetro</span> es un número que describe la población: la media μ (mu) de todos los pedidos o la proporción verdadera p de clientes satisfechos. Es un valor <em>fijo</em>, aunque normalmente desconocido. Un <span class='term' data-term='estadístico'>estadístico</span> es un número calculado con una muestra: la media muestral x̄ («equis barra») o la proporción muestral p̂. Es el valor que usas para <em>estimar</em> el parámetro, y <strong>cambia</strong> de una muestra a otra. A ese cambio, que ocurre incluso cuando no hay errores de medida, se le llama <span class='term' data-term='variabilidad muestral'>variabilidad muestral</span>.</p>\n<p>Para describir cuánto se dispersan los valores individuales se usa la <span class='term' data-term='desviación típica'>desviación típica</span>. Se calcula así: (1) la media x̄; (2) la diferencia de cada valor respecto de x̄; (3) esas diferencias al cuadrado; (4) su suma dividida entre n − 1 (la <em>varianza</em> muestral); (5) la raíz cuadrada. Se divide entre n − 1 y no entre n porque la media calculada con la propia muestra ajusta la muestra mejor de lo que lo haría la media verdadera; con n − 1 la varianza muestral no subestima en promedio la varianza de la población. Es una convención estándar de los libros de texto; en la hoja de cálculo es <code>DESVEST.M</code> (en inglés <code>STDEV.S</code>).</p>\n<p><strong>Dos desviaciones distintas.</strong> La desviación típica s describe cuánto varían los <em>pedidos individuales</em>. Más adelante verás que la variación de la <em>media</em> de una muestra es mucho menor y tiene otro nombre (error estándar). No las confundas: es el error más frecuente al leer informes.</p>\n<p>Un aviso: la dispersión depende de la forma de la distribución. En una distribución simétrica en forma de campana (la <em>normal</em>), alrededor del 68 % de los valores caen a menos de 1 desviación típica de la media y alrededor del 95 % a menos de 1,96. Con datos muy asimétricos, como el gasto por pedido, esas cifras son solo aproximadas (simplificación del curso). Fuente de las definiciones: OpenIntro y el e-Handbook del NIST.</p>"
+  },
+  {
+   "type": "worked",
+   "title": "Media y desviación típica de 8 pedidos",
+   "html": "<p>Muestra de 8 importes en euros (datos ilustrativos): 23, 31, 28, 45, 19, 52, 27, 35.</p>",
+   "steps": [
+    {
+     "html": "<p><strong>Media.</strong> Suma = 260, y 260 / 8 = <strong>32,5 €</strong>.</p>"
+    },
+    {
+     "prompt": "<p>Antes de mirar: ¿qué desviación tiene el pedido de 52 € respecto de la media, y qué pasa con la suma de todas las desviaciones?</p>",
+     "selfExplain": true,
+     "html": "<p>52 − 32,5 = +19,5. Las desviaciones (−9,5; −1,5; −4,5; +12,5; −13,5; +19,5; −5,5; +2,5) suman 0 por construcción de la media; por eso hay que elevarlas al cuadrado antes de sumarlas.</p>"
+    },
+    {
+     "html": "<p><strong>Cuadrados:</strong> 90,25; 2,25; 20,25; 156,25; 182,25; 380,25; 30,25; 6,25. Suma = 868.</p>"
+    },
+    {
+     "html": "<p><strong>Varianza muestral:</strong> 868 / (8 − 1) = 124. <strong>Desviación típica s</strong> = √124 ≈ <strong>11,14 €</strong>.</p>"
+    },
+    {
+     "html": "<p><strong>En la hoja de cálculo.</strong> Con los datos en A1:A8: <code>=PROMEDIO(A1:A8)</code> da 32,5 y <code>=DESVEST.M(A1:A8)</code> da 11,14 (inglés: <code>AVERAGE</code>, <code>STDEV.S</code>). Comprueba el nombre exacto en tu programa.</p>"
+    }
+   ],
+   "result": "<p>Esta muestra dice que el pedido medio ronda los 32,5 €, con pedidos individuales que se alejan unos 11 € de media. Todavía <em>no</em> dice con qué precisión conocemos la media poblacional: eso llega en la lección 2.</p>"
+  },
+  {
+   "type": "predict",
+   "id": "v-p1",
+   "prompt": "Tomas una segunda muestra aleatoria de 8 pedidos de la misma población. ¿Qué esperas de su media?",
+   "options": [
+    "Será exactamente 32,5 €, porque la población es la misma",
+    "Estará probablemente cerca de 32,5 €, pero casi seguro no será idéntica",
+    "Puede ser cualquier valor, no tiene relación con la primera media"
+   ],
+   "correct": 1,
+   "feedback": {
+    "0": "Confunde el parámetro (fijo) con el estadístico (variable): cada muestra contiene pedidos distintos, así que su media difiere.",
+    "2": "La media muestral no es arbitraria: ambas medias estiman la misma μ y tienden a agruparse alrededor de ella; la pregunta es cuánto se separan."
+   },
+   "explanation": "Las dos medias estiman la misma μ, así que suelen parecerse, pero por azar de muestreo difieren. Cuantificar cuánto es el objetivo de las próximas lecciones."
+  },
+  {
+   "type": "activity",
+   "id": "v-a1",
+   "widget": "parameter-explorer",
+   "instructions": "<p><strong>Predice y comprueba.</strong> Antes de mover nada: si duplicas la desviación típica σ de una población normal, ¿qué porcentaje de valores seguirá entre μ − σ y μ + σ? Luego mueve μ y σ y observa la curva y las tres filas de porcentajes.</p>",
+   "debrief": "<p>El porcentaje dentro de ±1σ (≈ 68 %) y de ±1,96σ (≈ 95 %) <em>no cambia</em> con μ ni σ: σ solo estira la curva y μ la desplaza. Esa regularidad es la base de los márgenes de error.</p>",
+   "config": {
+    "title": "Población normal: μ, σ y porcentaje de valores",
+    "inputs": [
+     {
+      "id": "mu",
+      "label": "Media μ (€)",
+      "min": 20,
+      "max": 80,
+      "step": 1,
+      "value": 50
+     },
+     {
+      "id": "sigma",
+      "label": "Desviación típica σ (€)",
+      "min": 3,
+      "max": 25,
+      "step": 1,
+      "value": 10
+     }
+    ],
+    "outputs": [
+     {
+      "id": "p1",
+      "label": "Valores entre μ − σ y μ + σ",
+      "expr": "normcdf(mu + sigma, mu, sigma) - normcdf(mu - sigma, mu, sigma)",
+      "format": {
+       "percent": true,
+       "digits": 1
+      }
+     },
+     {
+      "id": "p196",
+      "label": "Valores entre μ − 1,96σ y μ + 1,96σ",
+      "expr": "normcdf(mu + 1.96 * sigma, mu, sigma) - normcdf(mu - 1.96 * sigma, mu, sigma)",
+      "format": {
+       "percent": true,
+       "digits": 1
+      }
+     },
+     {
+      "id": "lo",
+      "label": "Límite inferior μ − 1,96σ (€)",
+      "expr": "mu - 1.96 * sigma",
+      "format": {
+       "digits": 1
+      }
+     },
+     {
+      "id": "hi",
+      "label": "Límite superior μ + 1,96σ (€)",
+      "expr": "mu + 1.96 * sigma",
+      "format": {
+       "digits": 1
+      }
+     }
+    ],
+    "chart": {
+     "x": {
+      "var": "x",
+      "from": -20,
+      "to": 130
+     },
+     "series": [
+      {
+       "label": "densidad de la población normal",
+       "expr": "normpdf(x, mu, sigma)"
+      }
+     ],
+     "markers": [
+      {
+       "label": "μ",
+       "x": "mu"
+      }
+     ],
+     "xLabel": "importe del pedido (€)",
+     "yLabel": "densidad",
+     "ariaLabel": "Curva normal con media y desviación típica ajustables"
+    },
+    "interpret": [
+     {
+      "when": "mu - 1.96 * sigma < 0",
+      "tone": "warn",
+      "html": "Aviso: con estos valores el modelo normal daría importes negativos; los pedidos reales no lo son. La normal es solo una aproximación."
+     },
+     {
+      "when": "sigma >= 20",
+      "tone": "warn",
+      "html": "σ grande: los pedidos individuales son muy dispares; se necesitarán muestras mayores para estimar bien la media."
+     }
+    ],
+    "assumptions": [
+     "La población es exactamente normal (una simplificación: los importes reales suelen ser asimétricos).",
+     "Los parámetros μ y σ se tratan como conocidos; en la práctica se estiman.",
+     "Cifras ilustrativas."
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "v-a2",
+   "widget": "classify",
+   "assesses": [
+    "o1"
+   ],
+   "instructions": "<p>Decide, para cada frase, si el número descrito es un <strong>parámetro</strong> (describe la población) o un <strong>estadístico</strong> (calculado con una muestra). Pulsa «Comprobar» al terminar y lee el porqué de cada fallo.</p>",
+   "debrief": "<p>La pista: ¿lo calculaste con todos los individuos de interés o con una parte? Los parámetros son fijos y desconocidos salvo que midas a toda la población; los estadísticos varían con la muestra.</p>",
+   "config": {
+    "categories": [
+     {
+      "id": "par",
+      "label": "Parámetro"
+     },
+     {
+      "id": "est",
+      "label": "Estadístico"
+     }
+    ],
+    "items": [
+     {
+      "id": "k1",
+      "html": "La media de gasto de los 180 000 pedidos del año (todos)",
+      "category": "par",
+      "feedback": "Se calcula con toda la población: es un parámetro."
+     },
+     {
+      "id": "k2",
+      "html": "La media de gasto de 8 pedidos elegidos al azar: 32,5 €",
+      "category": "est",
+      "feedback": "Se calcula con una muestra: es un estadístico y cambiaría con otra muestra."
+     },
+     {
+      "id": "k3",
+      "html": "El porcentaje de suscriptores que abrió el email, medido en los 1 200 destinatarios elegidos para la prueba (que solo son una parte de la lista)",
+      "category": "est",
+      "feedback": "Aunque sea un porcentaje, procede de una muestra de la lista total: estadístico."
+     },
+     {
+      "id": "k4",
+      "html": "La proporción verdadera de clientes satisfechos entre todos los que compraron este año",
+      "category": "par",
+      "feedback": "Describe a toda la población de clientes; es fija aunque nadie la conozca: parámetro."
+     },
+     {
+      "id": "k5",
+      "html": "La desviación típica s de las 8 observaciones",
+      "category": "est",
+      "feedback": "Una desviación calculada con la muestra es un estadístico (estima σ)."
+     },
+     {
+      "id": "k6",
+      "html": "La media de gasto calculada con los datos de todos los clientes de la tienda, sin dejar ninguno fuera (un censo completo)",
+      "category": "par",
+      "feedback": "Si no hay muestra, sino censo de la población de interés, el número es el parámetro."
+     }
+    ],
+    "debrief": "<p>Lo importante no es el nombre sino la pregunta: «¿cambiaría este número si repitiera el muestreo?». Si sí, es un estadístico.</p>"
+   }
+  },
+  {
+   "type": "practice",
+   "id": "v-pr1",
+   "level": "guided",
+   "setting": "in-app",
+   "task": "<p>Seis importes (€, ilustrativos): 12, 15, 9, 14, 10, 16. Calcula a mano la media y la desviación típica muestral s, y comprueba con tu hoja de cálculo.</p>",
+   "hints": [
+    "<p>Media: suma 76 entre 6.</p>",
+    "<p>Resta la media a cada valor, eleva al cuadrado, suma y divide entre n − 1 = 5.</p>"
+   ],
+   "rubric": [
+    "Calculo la media correctamente",
+    "Divido entre n − 1 y no entre n",
+    "La hoja de cálculo coincide con mi resultado"
+   ],
+   "solution": "<p>Media = 76/6 ≈ 12,67. Cuadrados de las desviaciones: 0,44; 5,44; 13,44; 1,78; 7,11; 11,11; suma = 39,33; varianza = 39,33/5 = 7,87; s ≈ <strong>2,80 €</strong>. Hoja de cálculo: <code>=DESVEST.M(…)</code>.</p>"
+  },
+  {
+   "type": "practice",
+   "id": "v-pr2",
+   "level": "independent",
+   "setting": "offline",
+   "task": "<p>Estos son 12 importes de pedidos (ilustrativos): 22, 35, 41, 18, 29, 50, 26, 33, 38, 24, 47, 31. Forma tres muestras de 4 pedidos consecutivos (los 4 primeros, los 4 siguientes y los 4 últimos). Calcula la media de cada una y la media de las 12. Después responde por escrito: ¿cuánto varían las tres medias frente a cuánto varían los 12 importes? ¿Qué te sugiere?</p>",
+   "rubric": [
+    "Calculo las tres medias y la general",
+    "Comparo el rango (o la dispersión) de las medias con la de los importes individuales",
+    "Concluyo que las medias de muestras varían menos que los datos individuales, pero no son iguales"
+   ],
+   "solution": "<p>Medias: 29,0 (22, 35, 41, 18); 34,5 (29, 50, 26, 33); 35,0 (38, 24, 47, 31); media de los 12 = 32,83. Los 12 importes van de 18 a 50 (rango 32) mientras las tres medias van de 29 a 35 (rango 6): las medias agrupan e «igualan» valores altos y bajos, por eso fluctúan menos. Aun así no coinciden: variabilidad muestral. (Con solo tres muestras la comparación es una pista, no una prueba.)</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "v-c1",
+     "assesses": [
+      "o1"
+     ],
+     "prompt": "Un informe dice «la media de los pedidos es 32,5 €» tras analizar 8 pedidos de una población de 180 000. ¿Qué es 32,5 €?",
+     "options": [
+      "Un parámetro, porque es la media del año",
+      "Un estadístico, porque se calculó con una muestra",
+      "Un parámetro, porque la muestra se eligió al azar"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Solo sería parámetro si se hubieran usado los 180 000 pedidos.",
+      "2": "El azar en la selección no convierte una muestra en la población: sigue siendo un estadístico."
+     },
+     "explanation": "Un estadístico procede de una muestra y cambiaría con otra; el parámetro es la media de toda la población."
+    },
+    {
+     "id": "v-c2",
+     "assesses": [
+      "o1"
+     ],
+     "kind": "numeric",
+     "prompt": "Calcula la desviación típica muestral (con n − 1) de los valores 2, 4, 6 (en las mismas unidades). Redondea a dos decimales.",
+     "answer": 2,
+     "tolerance": 0.01,
+     "explanation": "Media 4; desviaciones −2, 0, +2; cuadrados 4, 0, 4; suma 8; entre n − 1 = 2 da 4; raíz = 2. Dividir entre n daría 1,63, el error típico de olvidar n − 1.",
+     "feedbackWrong": "Pista: media 4; suma de cuadrados 8; divide entre n − 1 = 2 y saca la raíz."
+    },
+    {
+     "id": "v-c3",
+     "assesses": [
+      "o1"
+     ],
+     "prompt": "Dos muestras aleatorias del mismo tamaño y la misma población dan medias 41,2 y 43,7. ¿Cuál es la explicación más razonable?",
+     "options": [
+      "Una de las dos muestras está mal calculada",
+      "Variabilidad muestral: cada muestra contiene individuos distintos",
+      "La media de la población ha cambiado"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "No hace falta ningún error de cálculo para que las medias difieran.",
+      "2": "La población es la misma; lo que difiere son los individuos elegidos."
+     },
+     "explanation": "Variabilidad muestral: es esperable que dos estadísticos de la misma población difieran."
+    },
+    {
+     "id": "v-c4",
+     "assesses": [
+      "o1"
+     ],
+     "kind": "open",
+     "prompt": "Con tus palabras: ¿por qué dos muestras aleatorias de la misma población pueden dar medias distintas aunque nadie cometa errores? Pon un ejemplo de marketing.",
+     "rubric": [
+      "Dice que cada muestra contiene individuos distintos",
+      "Distingue parámetro (fijo) de estadístico (variable)",
+      "Incluye un ejemplo concreto (pedidos, clientes, emails…)"
+     ],
+     "model": "<p>La población tiene una media fija μ, pero cada muestra incluye clientes diferentes, con importes diferentes, y su media x̄ depende de cuáles hayan entrado. Ejemplo: dos analistas toman 8 pedidos cada uno de los 180 000 del año; uno incluye por azar un pedido de 52 € y el otro uno de 19 €; sus medias difieren sin que nadie haya cometido un error.</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "v-t1",
+   "assesses": [
+    "o1"
+   ],
+   "task": "<p><strong>Situación nueva.</strong> Envías 5 campañas de email, cada una a una muestra distinta de 500 suscriptores de la misma lista (se supone que se elige al azar y el mensaje es igual en las cinco). Tasas de apertura: 19,8 %, 23,4 %, 21,0 %, 24,6 %, 20,2 %. Una persona del equipo dice: «la campaña 4 funcionó mejor que la 1». En 3–5 frases: ¿qué opinas? Usa los términos parámetro, estadístico y variabilidad muestral e indica qué información adicional necesitarías para decidir. (Datos ilustrativos.)</p>",
+   "rubric": [
+    "Identifica la tasa verdadera de la lista como parámetro y cada tasa de apertura como estadístico",
+    "Atribuye al menos parte de la diferencia a variabilidad muestral",
+    "No afirma «mejor» solo por la diferencia observada",
+    "Propone qué falta: cuánto varían las tasas por azar con n = 500, algo que verás en las lecciones siguientes"
+   ],
+   "model": "<p>Las cinco tasas son estadísticos que estiman un mismo parámetro: la tasa de apertura verdadera de toda la lista. Aunque el mensaje sea idéntico, cada muestra de 500 contiene suscriptores distintos, así que es normal que las tasas oscilen unos puntos alrededor de ese valor. De 19,8 % a 24,6 % hay casi 5 puntos, pero antes de decir que la campaña 4 «funcionó mejor» habría que saber cuánto se espera que varíe una tasa por puro azar con n = 500 (lo que cuantifica el error estándar) y si las campañas realmente diferían en algo. Con solo estos números, no hay base para afirmar que la 4 sea mejor.</p>"
+  },
+  {
+   "type": "reflect",
+   "id": "v-r1",
+   "prompt": "Escribe con tus palabras la diferencia entre «la media de mi muestra» y «la media de mi población». ¿Cuál conoces y cuál quieres conocer?"
+  }
+ ],
+ "sources": [
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20",
+   "note": "Error estándar como desviación típica del estadístico; condición éxito-fracaso (≥ 10 éxitos y ≥ 10 fracasos esperados); estimación ± z*×EE; z* = 1,96 para 95 %; advertencia contra «con cierta probabilidad»."
+  },
+  {
+   "title": "OpenIntro Statistics, cap. 5 «Foundations for inference» (secciones 5.1 variabilidad y 5.2 intervalos de confianza)",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://www.openintro.org/book/os/",
+   "accessed": "2026-10-20",
+   "note": "Solo se verificó el índice de capítulos de la página; el texto del PDF no pudo consultarse con las herramientas disponibles."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 1.3.5.2 «Confidence Limits for the Mean»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm",
+   "accessed": "2026-10-20",
+   "note": "Fórmula Ȳ ± t(1−α/2, N−1)·s/√N; el nivel de confianza se asocia al procedimiento; «dentro de un intervalo calculado, la media verdadera está o no está»."
+  },
+  {
+   "title": "Ejemplos de pedidos, importes y tasas de apertura: datos inventados y etiquetados como ilustrativos; la analogía de la sopa es una decisión pedagógica del curso.",
+   "kind": "pedagogical",
+   "note": "Decisión del curso: ejemplos y cifras ilustrativas inventadas para este curso, no datos reales."
+  }
+ ],
+ "next": "<p>Has visto que los estadísticos varían. En la lección 2 cuantificas <em>cuánto</em> varía la media muestral y descubres qué la hace variar más o menos: el tamaño de muestra n y la dispersión σ.</p>"
+}

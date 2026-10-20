@@ -1,0 +1,21 @@
+{
+  "topic": "Estadística introductoria: variabilidad muestral e intervalos de confianza",
+  "goals": [
+    "Explicar por qué la media de una muestra varía de una muestra a otra",
+    "Interpretar correctamente un intervalo de confianza del 95 %",
+    "Decidir si un margen de error reportado en una encuesta o un test A/B respalda una afirmación"
+  ],
+  "scope": "Estadística introductoria: media y proporción, intervalo de confianza para una media, una proporción y una diferencia de proporciones; sin contrastes de hipótesis formales",
+  "language": "es",
+  "locale": "es-ES",
+  "learner": {
+    "startingKnowledge": "Sabe calcular medias y porcentajes y usa hojas de cálculo; nunca estudió estadística formal",
+    "background": "Analista de marketing (perfil sintético ficticio); le preocupa malinterpretar encuestas",
+    "depth": "solid"
+  },
+  "time": { "totalHours": 4, "sessionMinutes": 30 },
+  "presentation": { "visual": "high", "interaction": "high" },
+  "practice": { "tools": ["Hoja de cálculo"], "software": ["Programa de hoja de cálculo; sin software estadístico"] },
+  "sources": { "evidenceStandard": "Libros de texto de estadística reconocidos o referencias estadísticas oficiales (p. ej., NIST/SEMATECH e-Handbook, OpenIntro Statistics)" },
+  "diagnostic": true
+}

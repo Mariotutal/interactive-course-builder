@@ -1,0 +1,208 @@
+{
+  "format": 1,
+  "id": "sourcing-who-and-why",
+  "title": "Sourcing: who made this and why?",
+  "summary": "Ask who made a source, for whom, when and why, and use the answers to decide what the source can and cannot show.",
+  "level": "core",
+  "minutes": 45,
+  "outcomes": ["o1"],
+  "prerequisites": [],
+  "prereqText": "<p>None. If you want the outline of events first, read the short overview linked in the sources below (about five minutes), then come back.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>A history podcast describes a famous picture: Paul Revere's print of British soldiers firing on Bostonians in King Street. The host says, “This is what happened that night.” You pause the episode and open the picture in the Massachusetts Historical Society's collection: <a href=\"https://www.masshist.org/database/viewer.php?item_id=151&amp;img_step=1&amp;mode=dual\">MHS Collections Online, item 151</a>.</p><p><strong>Before you read on</strong>, spend two minutes with the image and its printed caption. Jot down: Who made this? Who would have bought it? When? What did the maker want you to feel or do? Then read on and compare your notes with the method below.</p><p><em>Image note:</em> this course does not reproduce the engraving, because no locally licensed copy is bundled. The link above is the archive's own page. The caption text quoted later was copied from the archive's transcription.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Treat a source like a witness in a courtroom, but one you can only question with the evidence available. A good lawyer does not ask only “What did you see?” but “Where were you standing? Who asked you to testify? What do you gain if people believe you?” The answers do not tell you the witness is lying. They tell you <em>which parts of the testimony to check first</em> and which parts the witness was well placed to know.</p>",
+      "limits": "<p>The analogy breaks in three places. A source cannot be cross-examined, so you can only test it against other evidence. Sources are not only testimony: a print, a headline or a typeface also makes choices. And a courtroom ends with a verdict; history often ends with “likely”, “contested” or “unknown”.</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Show how the four sourcing questions feed into what a source says and leaves out, so the method is a loop with evidence rather than a checklist verdict.",
+      "alt": "A diagram with four boxes in a row labeled author, audience, date and purpose, each with an arrow pointing into a larger box labeled what the source says and what it leaves out. A dashed arrow runs from that box back to the four boxes, labeled check against other evidence.",
+      "html": "<figure><svg viewBox=\"0 0 620 250\" role=\"img\" aria-labelledby=\"sv-t sv-d\"><title id=\"sv-t\">The four sourcing questions</title><desc id=\"sv-d\">Author, audience, date and purpose each point to what the source says and leaves out. A dashed line returns to the four boxes, labeled check against other evidence.</desc><defs><marker id=\"arrow\" markerWidth=\"10\" markerHeight=\"10\" refX=\"8\" refY=\"5\" orient=\"auto\"><path d=\"M0,0 L10,5 L0,10 z\" fill=\"currentColor\"/></marker></defs><rect class=\"n1\" x=\"10\" y=\"20\" width=\"135\" height=\"54\" rx=\"8\"/><text class=\"ts\" x=\"22\" y=\"52\">1 Author</text><rect class=\"n2\" x=\"165\" y=\"20\" width=\"135\" height=\"54\" rx=\"8\"/><text class=\"ts\" x=\"177\" y=\"52\">2 Audience</text><rect class=\"n3\" x=\"320\" y=\"20\" width=\"135\" height=\"54\" rx=\"8\"/><text class=\"ts\" x=\"332\" y=\"52\">3 Date</text><rect class=\"n4\" x=\"475\" y=\"20\" width=\"135\" height=\"54\" rx=\"8\"/><text class=\"ts\" x=\"487\" y=\"52\">4 Purpose</text><rect class=\"n-plain hl\" x=\"110\" y=\"140\" width=\"400\" height=\"60\" rx=\"10\"/><text class=\"t\" x=\"170\" y=\"176\">What it says and what it leaves out</text><line class=\"edge\" x1=\"77\" y1=\"74\" x2=\"200\" y2=\"138\" marker-end=\"url(#arrow)\"/><line class=\"edge\" x1=\"232\" y1=\"74\" x2=\"270\" y2=\"138\" marker-end=\"url(#arrow)\"/><line class=\"edge\" x1=\"387\" y1=\"74\" x2=\"350\" y2=\"138\" marker-end=\"url(#arrow)\"/><line class=\"edge\" x1=\"542\" y1=\"74\" x2=\"420\" y2=\"138\" marker-end=\"url(#arrow)\"/><path class=\"edge dashed\" d=\"M110 170 C 30 170, 20 120, 40 80\" fill=\"none\" marker-end=\"url(#arrow)\"/><text class=\"tm\" x=\"10\" y=\"230\">Dashed: check these answers, and the content, against other evidence.</text></svg><figcaption>The four questions generate hypotheses about the content; other evidence tests them.</figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "title": "The method: sourcing before reading for facts",
+      "html": "<p><span class=\"term\" data-term=\"sourcing\">Sourcing</span> means asking four questions of any document, image or object before you decide what to do with its content:</p><ol><li><strong>Author.</strong> Who made it, and what was their position (an officer under charge, a printer, a town committee, a newspaper)? Were they present, or relaying others?</li><li><strong>Audience.</strong> Who was it made for? Words written to persuade readers an ocean away differ from words written for neighbors who remember the night.</li><li><strong>Date.</strong> How long after the event? Was the author still deciding what to say, or already defending a fixed position? When and where was it published, not only when was it written?</li><li><strong>Purpose.</strong> What did the author want the audience to believe or do?</li></ol><p>These answers shape <em>what the source includes, how it names things, and what it omits</em>. They give you hypotheses, not verdicts. A source with an obvious <span class=\"term\" data-term=\"purpose\">purpose</span> is not thereby false: an interested witness can still report true things, and a source with no stated purpose can still mislead. The question is always “for which claim can I use this source, and what would I check it against?”</p><p><strong>Primary and secondary.</strong> A <span class=\"term\" data-term=\"primary source\">primary source</span> was made at the time under study; a <span class=\"term\" data-term=\"secondary source\">secondary source</span> interprets such material afterward. The same object can be either, depending on your question: a 1770 newspaper is primary for what Bostonians were told, and would be a poor secondary guide to what happened in King Street.</p><p><span class=\"term\" data-term=\"provenance\">Provenance</span>, the documented history of how an item was made, published and kept, is where most sourcing answers come from. Archives such as the Massachusetts Historical Society put this information on the item page; read it, not only the image.</p><p><strong>Labeling your reasoning.</strong> Keep three things apart. What the source <em>says</em> (quote it). What is known <em>about</em> the source (provenance). What you <span class=\"term\" data-term=\"inference\">infer</span> (your reasoning, which can be wrong). Much weak historical writing blurs these.</p>"
+    },
+    {
+      "type": "explain",
+      "title": "Three sources you will meet (verified facts and open questions)",
+      "html": "<p><strong>Context (simplification: course summary of MHS overview).</strong> On the evening of 5 March 1770, in Boston, British soldiers of the Twenty-ninth Regiment under Captain Thomas Preston were at the Customs House when shots were fired amid a crowd; three civilians died at once and two more were mortally wounded. Preston was tried first (opened 24 October 1770) and found not guilty; the soldiers' trial began 27 November: six were found not guilty and two were convicted of manslaughter. Each side collected sworn <span class=\"term\" data-term=\"deposition\">depositions</span> to support its account. (MHS, <em>The Coming of the American Revolution: Boston Massacre</em>.)</p><p><strong>Source A: Paul Revere's engraving.</strong> The MHS item is an <span class=\"term\" data-term=\"engraving\">engraving</span> by Paul Revere, Boston, 1770, hand-colored, about 22.8 cm by 20 cm. Its printed heading reads “THE BLOODY MASSACRE perpetrated in King -- Street BOSTON on March 5th 1770 by a party of the 29th REGT.” Below the image is a verse that begins “Unhappy Boston! see thy Sons deplore,” and the caption names Samuel Gray, Samuel Maverick, James Caldwell, Crispus Attucks and Patrick Carr as killed, with Christopher Monk and John Clark as mortally wounded. <em>Unverified by me:</em> catalog summaries I could not open directly report that Revere copied a design by Henry Pelham and issued the print in late March 1770. Check the Library of Congress record before repeating this.</p><p><strong>Source B: Captain Preston's account.</strong> MHS describes it as written by Preston while jailed in Boston, hoping to gain support in England; it was published in the <em>Public Advertiser</em> in London in April 1770 and republished by Boston printers in June 1770 (<em>Supplement to the Boston Evening-Post</em>, 25 June 1770).</p><p><strong>Source C: the 12 March 1770 <em>Boston-Gazette</em> report.</strong> MHS lists it as an article from pages 2 and 3 of <em>The Boston-Gazette, and Country Journal</em>, number 779, opening “The Town of Boston affords a recent and melancholy Demonstration”. The archive page names no author.</p><p><strong>Open questions you should expect to have.</strong> Who wrote the Gazette report, and from what information? When exactly did Preston write? These are real gaps; a careful reader says “not stated on the page” rather than guessing.</p>"
+    },
+    {
+      "type": "worked",
+      "title": "Sourcing Captain Preston's account",
+      "html": "<p>Read the steps and answer the self-explain prompts before opening them. Facts come from the MHS item page; quotations come from the MHS transcription.</p>",
+      "steps": [
+        { "prompt": "<p><strong>Author.</strong> Who wrote it, and in what situation?</p>", "html": "<p>Captain Thomas Preston, who commanded the soldiers at the Customs House, wrote it from jail while facing prosecution. He was both a participant and the accused. That gives him access to what he saw and a strong stake in how it is read.</p>" },
+        { "prompt": "<p><strong>Audience.</strong> Who was it first meant for? How can you tell?</p>", "selfExplain": true, "html": "<p>MHS says he wrote it hoping for support in England, and it appeared first in a London paper in April 1770. The first audience was a British public, not Boston neighbors. Boston readers saw it only in June, when Boston printers republished it. <em>Inference:</em> he would stress points that make the troops' conduct look reasonable to people who did not witness the scene.</p>" },
+        { "prompt": "<p><strong>Date.</strong> How near to the event, and when was it published?</p>", "html": "<p>Written within weeks, before any trial. Exact writing date is not given on the page we read, so we treat it as uncertain. Published April (London) and June (Boston) 1770, and the verdict came in October. He was still deciding what story to tell, with the outcome of his case undecided.</p>" },
+        { "prompt": "<p><strong>Purpose.</strong> What does he want readers to conclude? Find a sentence that shows it.</p>", "selfExplain": true, "html": "<p>To show that he and his men acted under threat and that he did not order the firing. Two phrases from the transcription: “I was soon informed by a Townsman, their Intention was to carry off the Soldier from his Post, and probably murder him.” and “Don't fire, stop your Firing”. The first frames the soldier as endangered; the second records his own words as an attempt to stop the shooting.</p>" },
+        { "prompt": "<p><strong>Use.</strong> So what can this source be used for?</p>", "html": "<p>Strong evidence for how an accused officer chose to present his case to a British audience. Weaker, unless corroborated, for the claim about what he ordered. The second use is tested in the next lesson by comparing it with another account.</p>" }
+      ],
+      "result": "<p>Sourcing did not tell us “Preston lied” or “Preston told the truth”. It told us what he was likely trying to do, what claims need corroboration, and what the document is good evidence of.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "ss-p1",
+      "prompt": "Preston's account was first printed in London in April 1770 and republished in Boston in June 1770. Which inference does that publication history support best?",
+      "options": [
+        "He was mainly trying to influence opinion in England, where a decision about the troops and his case could be shaped.",
+        "He wrote it for the Boston jury that later tried him.",
+        "Because it was printed twice, its claims must be reliable.",
+        "He wrote it after being acquitted, to explain his side."
+      ],
+      "correct": 0,
+      "feedback": {
+        "1": "The trial began in October; the account was already in print months earlier, and MHS says it was written hoping for support in England. A jury is not the stated audience.",
+        "2": "Being printed twice shows reach, not accuracy. Republishing can even reflect a wish to answer opponents.",
+        "3": "Chronology rules this out: the verdict came in October 1770; the account was printed in April and June."
+      },
+      "explanation": "MHS says Preston wrote it from jail hoping to gain support in England and that London printed it in April 1770. The supported inference is that England was the intended audience. It remains an inference about intent, which is why we use words like “mainly”."
+    },
+    {
+      "type": "activity",
+      "id": "ss-a1",
+      "widget": "classify",
+      "assesses": ["o1"],
+      "instructions": "<p>Sort each statement about Preston's account into the right bucket. Decide first, then check. Notice how often a plausible statement is an <em>inference</em> rather than something the source or the archive says.</p>",
+      "debrief": "<p>You should have noticed that the claims about <em>intent</em> are inferences built on provenance, and that the last item turns an inference into a verdict the evidence cannot support. Good sourcing keeps the three buckets apart in your own writing.</p>",
+      "config": {
+        "categories": [
+          { "id": "says", "label": "The source says (quotable)" },
+          { "id": "prov", "label": "Provenance (known about the source)" },
+          { "id": "inf", "label": "Inference (my reasoning)" }
+        ],
+        "items": [
+          { "id": "c1", "html": "Preston writes: “I was soon informed by a Townsman, their Intention was to carry off the Soldier from his Post, and probably murder him.”", "category": "says", "feedback": "This is a direct quotation from the transcription: what the source asserts, not whether it is true." },
+          { "id": "c2", "html": "Preston wrote the account while in jail in Boston, hoping to gain support in England.", "category": "prov", "feedback": "This comes from the MHS description of the item, not from the text itself." },
+          { "id": "c3", "html": "It was printed in the Public Advertiser in London in April 1770 and republished by Boston printers in June 1770.", "category": "prov", "feedback": "Publication history is provenance, as documented on the MHS item page." },
+          { "id": "c4", "html": "Preston stresses the danger to the soldiers because he wants English readers to see their conduct as reasonable.", "category": "inf", "feedback": "Plausible and supported by the audience evidence, but it is your reading of his motive. Keep it labeled as an inference." },
+          { "id": "c5", "html": "Preston's account is therefore false.", "category": "inf", "feedback": "This is an inference, and a weak one. A purpose tells you what to check; it does not show a claim is false. You would need evidence against specific claims." }
+        ],
+        "debrief": "<p>Three buckets, three levels of confidence.</p>"
+      }
+    },
+    {
+      "type": "practice",
+      "id": "ss-pr1",
+      "level": "guided",
+      "setting": "in-app",
+      "task": "<p>Source Revere's engraving using the four questions. Open the <a href=\"https://www.masshist.org/database/viewer.php?item_id=151&amp;img_step=1&amp;mode=dual\">MHS item</a>, read the heading and verse, and look at the image. Write 4 to 6 sentences covering author, audience, date and purpose. Mark each sentence <em>says</em>, <em>provenance</em> or <em>inference</em>. Then say what the print is good evidence of, and what it cannot show.</p>",
+      "hints": [
+        "<p>Author: the item page names the maker, and his trade matters (he sold prints). What does the caption do besides label the scene?</p>",
+        "<p>Audience: who buys a printed picture with a verse underneath, and where would it be displayed? Compare to a private letter.</p>",
+        "<p>Purpose: look at the words chosen in the heading, such as who is named as the actor and what the event is called. Ask: would a neutral label sound the same?</p>"
+      ],
+      "rubric": [
+        "Names Revere as the maker and does not treat the print as a neutral photograph",
+        "Uses the heading's wording (for example “BLOODY MASSACRE” and “by a party of the 29th REGT”) as evidence of how the event is framed",
+        "Labels at least one sentence as inference",
+        "States what the print is good evidence of (how Bostonians were invited to see the event) and what it cannot settle (details of the sequence of events)",
+        "Does not claim details about its date or sources that the archive page does not state"
+      ],
+      "model": "<p><strong>Model (one reasonable version).</strong> Author (provenance): the MHS item is an engraving by Paul Revere, Boston, 1770; he made and sold prints, so it is a commercial and persuasive object, not a record. Audience (inference): a printed, hand-colored sheet with a verse was made for many buyers, probably Bostonians sympathetic to the victims. Date (provenance): 1770, within weeks of the event according to the catalog record I read; the exact release date I did not verify. Purpose (inference): the heading names the event “THE BLOODY MASSACRE” and gives the actor as “a party of the 29th REGT”, so the title already contains the verdict; the verse “Unhappy Boston! see thy Sons deplore,” invites grief and blame; the caption turns five dead into named individuals. Use: good evidence of how the event was framed for a Boston public. Weak evidence for what happened minute by minute, because the print compresses the scene into one chosen moment and we do not know what the maker saw. Do check the image yourself for what it shows about who is armed and who is giving orders; whatever you see is a choice made by the maker, which is the point of the lesson.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "ss-pr2",
+      "level": "independent",
+      "setting": "in-app",
+      "task": "<p>Now do the same for the 12 March 1770 <em>Boston-Gazette</em> report with no hints: <a href=\"https://www.masshist.org/database/viewer.php?item_id=316&amp;img_step=1&amp;pid=2&amp;mode=dual\">MHS item 316</a>. Use the archive page and the transcription. In 5 to 7 sentences cover author, audience, date and purpose; state clearly what the page does <em>not</em> tell you; and say one claim in the report you would want to corroborate before using it.</p>",
+      "rubric": [
+        "Identifies the publication (a newspaper, number 779, 12 March 1770) as the 'author' level and says that no individual author is named on the archive page",
+        "Infers an audience (local readers of a Boston newspaper) and notes that this audience included people who had just lived through the event",
+        "Notes the speed: a week after the event",
+        "Links purpose to the opening wording or other phrasing and labels it as inference",
+        "Names at least one specific claim to corroborate (for example the account of who ordered the soldiers to fire)"
+      ],
+      "model": "<p>Author: <em>The Boston-Gazette, and Country Journal</em>; the archive page names no writer, so the author and the writer's sources are unknown (provenance gap). Audience: readers of a Boston paper, many of whom lived through the night (inference). Date: 12 March 1770, one week after the event, in the middle of a fast-moving dispute. Purpose (inference): the opening, “The Town of Boston affords a recent and melancholy Demonstration”, signals an interpretive frame before any facts, so the report is shaping how the event should be understood as well as informing. Claim to corroborate: the report says “the Captain commanded them to fire”; I would compare that with accounts from other participants and with the later trial record. The report is good evidence of what a Boston paper told its readers a week afterward; it is not, by itself, good evidence of who gave the order. Note: a widely repeated view that this paper favored the Patriot cause is general knowledge I did not verify in the pages I fetched; I would check it in a recognized history before relying on it.</p>"
+    },
+    {
+      "type": "check",
+      "questions": [
+        {
+          "id": "ss-c1",
+          "assesses": ["o1"],
+          "prompt": "Which of these is a <em>provenance</em> fact about Preston's account (not a quotation and not an inference)?",
+          "options": [
+            "Preston wanted the British public to sympathize with the soldiers.",
+            "Preston's account was first published in London in April 1770.",
+            "Preston lied about the order to fire.",
+            "Preston's account is more reliable than a newspaper."
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "That is an inference about purpose. It is reasonable, but it is your reasoning, not a documented fact about the source.",
+            "2": "That is a claim about truth that no sourcing step alone can establish; you would need evidence against that specific claim.",
+            "3": "A comparative reliability judgment is an inference that depends on the claim being tested. No source is reliable in general."
+          },
+          "explanation": "Publication history is documented on the MHS item page, which makes it provenance. The other options are inferences or verdicts."
+        },
+        {
+          "id": "ss-c2",
+          "assesses": ["o1"],
+          "prompt": "A classmate says: “Revere was selling prints to make a point, so the engraving is worthless as a source.” Which reply is best?",
+          "options": [
+            "Agree; sources made to persuade should be ignored.",
+            "Disagree; Revere was an artist, so the print is accurate.",
+            "Partly disagree: the purpose shows what to be cautious about, and the print is still strong evidence of how the event was framed for Bostonians.",
+            "Disagree; prints are always more reliable than text."
+          ],
+          "correct": 2,
+          "feedback": {
+            "0": "This treats purpose as disqualifying. Persuasive sources are among the best evidence for what people were being told and what they were asked to feel.",
+            "1": "Skill with images does not make the content a neutral record; the heading itself names the event and the actors.",
+            "3": "No medium is automatically more reliable. Each makes different choices."
+          },
+          "explanation": "Sourcing turns 'worthless or reliable' into 'useful for which question'. The print is strong evidence of framing and weak evidence of the minute-by-minute sequence."
+        },
+        {
+          "id": "ss-c3",
+          "assesses": ["o1"],
+          "kind": "open",
+          "prompt": "In your own words: explain how the <em>audience</em> of a source can change what it says. Use one concrete example from Preston's account or from the engraving.",
+          "rubric": [
+            "States that authors choose what to include, stress and omit depending on who they are addressing",
+            "Uses a specific example (such as London readers versus Boston readers for Preston, or buyers of a print for Revere)",
+            "Avoids saying that audience makes a source false"
+          ],
+          "model": "<p>Authors tailor what they say to readers' knowledge and what they need them to believe. Preston wrote hoping for support in England, so a London reader who was not there is the person he must convince; that is why he emphasizes the danger to the soldier and his order to stop firing. That does not make the account false, but it tells me which claims to test against accounts written for people who were in Boston.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "ss-t1",
+      "assesses": ["o1"],
+      "task": "<p><strong>Illustrative scenario (invented, not a real event).</strong> Two hours after a bridge accident, a regional bus company posts a statement on its website: “Our driver followed all safety procedures; the accident was caused by a sudden road defect.” You find it while researching what happened.</p><p>In 5 to 7 sentences: apply the four sourcing questions (say what you know, what you do not, and what you would try to find out), say what this statement is good evidence of, and name two other kinds of sources you would want. Do not decide whether the company is right.</p>",
+      "rubric": [
+        "Identifies the company as author with a stake in liability",
+        "Identifies an audience (public, regulators, insurers) and notes timing (2 hours, before any investigation)",
+        "Infers a purpose and labels it as inference",
+        "States what the statement is good evidence of (the company's initial position) rather than of the cause of the accident",
+        "Names at least two other source kinds (for example an independent investigation, eyewitness statements, maintenance records)"
+      ],
+      "model": "<p>Author: the bus company (known); it has a possible legal and reputational stake. Audience: the public, regulators and perhaps insurers (inference). Date: two hours after the accident, before any investigation could have reported, so it is a position, not a finding. Purpose: limit blame (inference). Not known: who drafted it and whether any evidence supports 'road defect'. Good evidence of: how the company chose to frame the incident immediately. It is not good evidence of the cause. I would seek an independent investigator's report, statements from other witnesses or drivers, and road maintenance records. This is the same move as with Preston's account: the source is useful, for a specific question.</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "ss-r1",
+      "prompt": "Think of a source you rely on in everyday life (a news report, a social post, a brochure, a podcast host's claim). Write 2 to 3 sentences answering: whose is it, for whom, and what would I check before repeating its main claim?"
+    }
+  ],
+  "sources": [
+    { "title": "The Bloody Massacre perpetrated in King Street, Boston on March 5th 1770 by a party of the 29th Regiment (engraving by Paul Revere)", "kind": "primary", "author": "Paul Revere", "date": "1770", "url": "https://www.masshist.org/database/viewer.php?item_id=151&img_step=1&mode=dual", "accessed": "2026-10-20", "note": "MHS Collections Online item 151: heading transcription, verse beginning, victim names, dimensions, hand-colored. Image not reproduced here." },
+    { "title": "Case of Capt. Thomas Preston of the 29th Regiment (Supplement to the Boston Evening-Post, no. 1813, 25 June 1770)", "kind": "primary", "author": "Capt. Thomas Preston", "date": "1770", "url": "https://www.masshist.org/database/viewer.php?item_id=462", "accessed": "2026-10-20", "note": "MHS transcription view; quotations in this lesson (“I was soon informed by a Townsman…”, “Don't fire, stop your Firing”) were confirmed there. MHS description gives writing in jail and publication in London in April 1770." },
+    { "title": "Boston, March 12. The Town of Boston affords a recent and melancholy Demonstration (The Boston-Gazette, and Country Journal, no. 779)", "kind": "primary", "date": "12 March 1770", "url": "https://www.masshist.org/database/viewer.php?item_id=316&img_step=1&pid=2&mode=dual", "accessed": "2026-10-20", "note": "MHS Collections Online item 316, pages 2-3; no individual author shown on the page." },
+    { "title": "The Coming of the American Revolution: Boston Massacre", "kind": "secondary", "author": "Massachusetts Historical Society", "url": "https://www.masshist.org/revolution/massacre.php", "accessed": "2026-10-20", "note": "Source for the context box: casualties, trial dates and outcomes, that each side collected depositions." },
+    { "title": "The Case of Capt. Thomas Preston of the 29th Regiment, 1770 (Hamilton Education Program)", "kind": "reference", "author": "Gilder Lehrman Institute of American History", "url": "https://hamilton.gilderlehrman.org/supporting-document/case-capt-thomas-preston-29th-regiment-1770", "accessed": "2026-10-20", "note": "Teaching transcription; used to cross-check the Preston quotations. Not a primary archive; prefer the MHS page." },
+    { "title": "Course decisions in this lesson", "kind": "pedagogical", "note": "The four sourcing questions are a teaching simplification of source criticism. The transfer scenario is invented and labelled illustrative. Catalog statements about Pelham and the print's release date were not verified by fetching the Library of Congress record (HTTP 403) and are flagged in the text." }
+  ],
+  "next": "<p>Next, <em>Corroboration: comparing accounts</em>. You will put Preston's account beside the 12 March <em>Boston-Gazette</em> report, locate exactly where they disagree, and practise explaining the disagreement without rushing to a winner.</p>"
+}

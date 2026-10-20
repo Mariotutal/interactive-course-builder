@@ -1,0 +1,18 @@
+{
+  "topic": "Beginner Spanish (CEFR A1): ordering food and drink at a café or bar in Spain",
+  "goals": [
+    "Understand a short café exchange with a waiter",
+    "Order food and drink politely, including quantities and simple preferences",
+    "Ask for the bill and respond to common questions",
+    "Choose correctly between tú and usted in this setting"
+  ],
+  "scope": "CEFR A1, café/bar service encounters in Spain only",
+  "language": "en",
+  "locale": "en-US",
+  "learner": { "startingKnowledge": "True beginner in Spanish", "background": "Synthetic profile: adult English speaker travelling to Madrid in two months", "depth": "intro" },
+  "time": { "totalHours": 3, "sessionMinutes": 20 },
+  "constraints": ["No microphone-based tools required", "Target language: Spanish as spoken in Spain (es-ES)"],
+  "presentation": { "visual": "high", "interaction": "high" },
+  "practice": { "realWorld": "Weekly speaking practice with a friend who speaks Spanish; no microphone tools" },
+  "sources": { "evidenceStandard": "Council of Europe CEFR descriptors; Instituto Cervantes Plan curricular; RAE / Diccionario panhispánico de dudas for usage", "freshness": "unknown" }
+}

@@ -1,0 +1,341 @@
+{
+  "format": 1,
+  "id": "history-sources-boston-massacre",
+  "version": "0.1.0",
+  "title": "Reading Primary Sources Critically: the Boston Massacre",
+  "subtitle": "Sourcing, corroboration and cautious claims, practised on accounts of King Street, 5 March 1770",
+  "language": "en",
+  "locale": "en-US",
+  "learner": {
+    "topic": "Historical source analysis: reading primary sources critically, using the Boston Massacre (5 March 1770) as the case",
+    "goals": [
+      "Identify a source's author, audience, date and purpose and explain how they shape what it says",
+      "Compare two accounts of the same event and explain their disagreements with evidence",
+      "Write a short evidence-based claim that acknowledges competing interpretations"
+    ],
+    "scope": "Method of source criticism applied to one event; not a full history of the American Revolution",
+    "exclusions": [
+      "Full narrative history of the Revolution",
+      "Paleography"
+    ],
+    "language": "en",
+    "locale": "en-US",
+    "learner": {
+      "startingKnowledge": "Adult self-learner; enjoys history podcasts; no training in historical method",
+      "background": "Synthetic demo profile",
+      "depth": "solid",
+      "knownGaps": []
+    },
+    "time": {
+      "totalHours": 3,
+      "sessionMinutes": 45
+    },
+    "presentation": {
+      "visual": "medium",
+      "interaction": "medium",
+      "reducedMotion": false,
+      "readingLevel": "unknown"
+    },
+    "sources": {
+      "provided": [],
+      "freshness": "unknown",
+      "evidenceStandard": "Primary sources from authoritative archives/editions (Library of Congress, Massachusetts Historical Society, Founders Online / National Archives) plus recognized scholarship for context"
+    },
+    "constraints": [],
+    "accessibility": {
+      "screenReader": false,
+      "notes": ""
+    },
+    "practice": {
+      "tools": [],
+      "equipment": [],
+      "software": [],
+      "datasets": [],
+      "realWorld": "unknown"
+    },
+    "output": {
+      "format": "web+markdown",
+      "host": "unknown"
+    },
+    "diagnostic": true
+  },
+  "assumptions": [
+    "Synthetic learner profile used only to demonstrate the format",
+    "Unknown: learner.background beyond podcasts; examples assume no knowledge of the Revolution beyond a general outline (a short context box is provided)",
+    "Quotations from primary sources are short phrases copied from pages fetched on 2026-10-20 (see each lesson's sources). The fetching tool returned page text through a summarizing layer, so a human should re-check each quotation against the linked page image or transcription before publication",
+    "Two lessons are fully developed; further planned lessons are listed in PROGRESS.md and are deliberately not included",
+    "The Revere engraving is described and linked, not reproduced, because no locally licensed copy is included",
+    "Transfer tasks use clearly labelled illustrative modern scenarios, not real events"
+  ],
+  "outcomes": [
+    {
+      "id": "o1",
+      "text": "Identify a source's author, audience, date and purpose, and explain how each shapes what the source says",
+      "level": "core"
+    },
+    {
+      "id": "o2",
+      "text": "Compare two accounts of the same event, locate where they disagree, and explain the disagreement with evidence about who made them and why",
+      "level": "core"
+    },
+    {
+      "id": "o3",
+      "text": "Write a short evidence-based claim that cites sources, states its confidence, and acknowledges at least one competing interpretation",
+      "level": "core"
+    }
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "title": "Sourcing: who made this and why?",
+      "summary": "Ask four questions of any source before trusting or dismissing it.",
+      "prerequisites": [],
+      "lessons": [
+        "sourcing-who-and-why"
+      ]
+    },
+    {
+      "id": "m2",
+      "title": "Corroboration and cautious claims",
+      "summary": "Put two accounts side by side, explain their disagreements, and write what the evidence supports.",
+      "prerequisites": [
+        "m1"
+      ],
+      "lessons": [
+        "corroboration-comparing-accounts"
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "primary source",
+      "aka": [
+        "primary sources"
+      ],
+      "definition": "Material created at the time being studied (or by someone who lived it): a letter, newspaper report, print, deposition. Primary is a role relative to your question, not a type of object."
+    },
+    {
+      "term": "secondary source",
+      "aka": [
+        "secondary sources"
+      ],
+      "definition": "Work that interprets primary sources after the fact, such as a historian's book or an encyclopedia entry."
+    },
+    {
+      "term": "sourcing",
+      "definition": "Asking who made a source, for whom, when and why, before deciding what to make of its content."
+    },
+    {
+      "term": "provenance",
+      "definition": "The documented origin and history of a source: who made it, how it was published or kept, and how it reached us."
+    },
+    {
+      "term": "audience",
+      "definition": "The people a source was meant to reach. Audience changes what an author includes, stresses or leaves out."
+    },
+    {
+      "term": "purpose",
+      "definition": "What the author hoped the source would do: persuade, defend, record, mourn, sell. A purpose does not make a source false; it tells you what to check."
+    },
+    {
+      "term": "inference",
+      "aka": [
+        "inferences"
+      ],
+      "definition": "A conclusion you draw from evidence rather than something a source states outright. Good history labels inferences as such."
+    },
+    {
+      "term": "corroboration",
+      "definition": "Checking a claim against other independent sources. Agreement among sources that copied each other is not independent confirmation."
+    },
+    {
+      "term": "deposition",
+      "aka": [
+        "depositions"
+      ],
+      "definition": "A sworn statement taken from a witness, often collected by one side of a dispute to support its case."
+    },
+    {
+      "term": "contested",
+      "definition": "Disputed among sources or among historians, as opposed to established (well supported across sources) or unknown."
+    },
+    {
+      "term": "interpretation",
+      "aka": [
+        "interpretations"
+      ],
+      "definition": "An explanation of what happened or why, built from evidence. Several interpretations can be defensible when the evidence is thin or conflicting."
+    },
+    {
+      "term": "claim",
+      "aka": [
+        "claims"
+      ],
+      "definition": "A statement you assert and support with cited evidence. A well-made claim states how confident it is."
+    },
+    {
+      "term": "engraving",
+      "definition": "A print made by cutting an image into a metal plate, inking it and pressing paper onto it, so many copies can be sold. Prints could spread an image quickly and cheaply."
+    }
+  ],
+  "routes": [
+    {
+      "id": "core",
+      "title": "Core route",
+      "description": "Both available lessons in order, then the capstone. Two 45-minute sessions plus the capstone.",
+      "lessons": [
+        "sourcing-who-and-why",
+        "corroboration-comparing-accounts"
+      ]
+    }
+  ],
+  "review": {
+    "intervals": [
+      1,
+      3,
+      7,
+      21,
+      60
+    ]
+  },
+  "intro": "<p>Podcasts and documentaries hand you conclusions. Historians work from <em>sources</em>: things people wrote, printed or drew at the time, each made by someone, for someone, for a reason. This course teaches a small, reusable method for reading such sources and for saying what they do and do not show. The case is the shooting in King Street, Boston, on 5 March 1770, because it left us unusually rival accounts, made within weeks of each other by people who wanted different outcomes.</p><p><strong>How it works.</strong> Each lesson is built for one 45-minute session: you try before you are told, compare your answer with a model, and write short answers in your own words. Open-ended questions have <em>rubrics and model answers, not answer keys</em>, because on this topic several conclusions can be defensible. The course is a guided start (about 1.5 hours of material in this version, with more lessons planned); the full plan is about 3 hours.</p><p><strong>Prerequisites.</strong> None beyond curiosity. Background in one box: in 1770 Boston was garrisoned by British soldiers, and many residents resented their presence. Tension had risen over the preceding days.</p>",
+  "diagnostic": {
+    "intro": "<p>Three quick questions on how you already read sources. They only suggest a pace; nothing is hidden from you.</p>",
+    "fastLabel": "quick pass: predictions and checks",
+    "fullLabel": "study fully",
+    "questions": [
+      {
+        "id": "dg1",
+        "prompt": "A letter written by a participant the day after an event is…",
+        "options": [
+          "Always reliable because it is so close in time",
+          "A primary source whose author, audience and purpose still need checking",
+          "A secondary source because it is only one person's view"
+        ],
+        "correct": 1,
+        "explanation": "Closeness in time helps but does not remove motive or limited vantage point. A participant's letter is a primary source.",
+        "feedback": {
+          "0": "Closeness in time is a plus, not a guarantee: the writer may have been frightened, mistaken, or trying to shape what others believe.",
+          "2": "Primary/secondary is about when and by whom it was made, not about how many viewpoints it holds."
+        },
+        "lessons": [
+          "sourcing-who-and-why"
+        ]
+      },
+      {
+        "id": "dg2",
+        "prompt": "Two reports of the same event disagree about who started it. The best first move is…",
+        "options": [
+          "Pick the one that seems more neutral",
+          "Average them",
+          "Ask who made each, for whom and why, and what else could settle the point"
+        ],
+        "correct": 2,
+        "explanation": "Disagreement is a starting point for explaining differences with evidence, not a signal to pick a winner by tone.",
+        "feedback": {
+          "0": "Neutral tone is easy to fake and is not evidence.",
+          "1": "Facts do not average; one claim may be wrong or both may be partial."
+        },
+        "lessons": [
+          "corroboration-comparing-accounts"
+        ]
+      },
+      {
+        "id": "dg3",
+        "prompt": "Which sentence is the most carefully worded claim?",
+        "options": [
+          "The soldiers were obviously innocent.",
+          "The sources prove the crowd was a mob.",
+          "Given that the accounts conflict and both have reasons to persuade, the evidence here does not settle who gave the order."
+        ],
+        "correct": 2,
+        "explanation": "It names the evidence situation and states its limit instead of overreaching.",
+        "feedback": {
+          "0": "\"Obviously\" signals no evidence is cited.",
+          "1": "\"Prove\" overreaches when sources disagree."
+        },
+        "lessons": [
+          "corroboration-comparing-accounts"
+        ]
+      }
+    ]
+  },
+  "capstone": {
+    "id": "capstone",
+    "title": "Capstone: a short argument with competing interpretations",
+    "task": "<p><strong>Question:</strong> Were the events of 5 March 1770 better understood as a deliberate massacre of civilians by soldiers, or as a chaotic confrontation in which soldiers panicked?</p><p>Write 250 to 350 words. You must: (1) state your claim and how confident you are; (2) use at least two sources from the course (for example Preston's account, the 12 March <em>Boston-Gazette</em> report, the Revere engraving), citing each by author, date and archive link; (3) for each source, say in one sentence how its author, audience and purpose affect what it says; (4) present at least one competing interpretation fairly and explain why you still prefer yours or why you suspend judgment; (5) name one piece of evidence that would change your mind.</p><p>You may choose a different supported claim if you justify it, but you may not claim certainty about the order to fire.</p>",
+    "levels": [
+      "Beginning",
+      "Developing",
+      "Proficient"
+    ],
+    "rubric": [
+      {
+        "criterion": "Sourcing",
+        "descriptors": [
+          "Treats sources as simply true or simply biased",
+          "Names author or date but does not connect them to what the source says",
+          "For each source, connects author, audience, date and purpose to specific features of its content"
+        ]
+      },
+      {
+        "criterion": "Use of evidence",
+        "descriptors": [
+          "Asserts without citing",
+          "Cites sources but loosely or without distinguishing quotation from inference",
+          "Cites precisely, separates what a source says from what you infer, and notes gaps"
+        ]
+      },
+      {
+        "criterion": "Competing interpretations",
+        "descriptors": [
+          "Ignores other views",
+          "Mentions another view without engaging it",
+          "States a rival interpretation fairly and explains why the evidence does or does not favor yours"
+        ]
+      },
+      {
+        "criterion": "Calibration",
+        "descriptors": [
+          "Overstates (proves, obviously) or refuses to conclude anything",
+          "Some hedging, not tied to the evidence",
+          "Confidence matches the strength of evidence and says what would change it"
+        ]
+      }
+    ],
+    "assesses": [
+      "o1",
+      "o2",
+      "o3"
+    ],
+    "evaluation": "<p><strong>Human judgment is needed.</strong> The browser cannot grade an essay. Self-assess with the rubric first. Then ask a person (a friend who reads history, a tutor, or a study group) to read your text and the rubric and say, for each criterion, which level they see and quote the sentence that shows it. If they cannot find a competing interpretation presented fairly, revise. Do not rely on a language model to grade this either; its confident feedback is not evidence about your reasoning.</p>",
+    "model": "<p><strong>One defensible exemplar (not the only one).</strong> “My claim, held with moderate confidence, is that the evidence best supports a confused confrontation rather than a planned massacre, but the sources cannot settle who gave the order to fire. Captain Preston, writing to persuade a British audience while under charge, says his words were &quot;Don&#39;t fire, stop your Firing&quot;; the 12 March <em>Boston-Gazette</em> report says &quot;the Captain commanded them to fire&quot;. Each account fits its author’s position, so neither can be taken at face value, and neither is independent of the other’s aims. A rival reading, that the soldiers acted on an order and the event was a deliberate act of force, takes the Gazette at its word; it is defensible, but it rests on one printed report whose author and sources are not stated on the archive page. What would change my mind: a signed, independent sworn statement from a close witness agreeing with one account.”</p><p>Note what the exemplar does: it quotes briefly, ties each account to purpose, states a rival, and says what evidence would shift it. A claim favoring the Gazette reading, supported as carefully, would also reach Proficient.</p>"
+  },
+  "sources": [
+    {
+      "title": "The Coming of the American Revolution: Boston Massacre",
+      "kind": "secondary",
+      "author": "Massachusetts Historical Society",
+      "url": "https://www.masshist.org/revolution/massacre.php",
+      "note": "Educational overview with linked primary documents; accessed 2026-10-20",
+      "accessed": "2026-10-20"
+    },
+    {
+      "title": "Case of Capt. Thomas Preston of the 29th Regiment (Supplement to the Boston Evening-Post, 25 June 1770)",
+      "kind": "primary",
+      "url": "https://www.masshist.org/database/viewer.php?item_id=462",
+      "note": "MHS Collections Online item 462",
+      "accessed": "2026-10-20"
+    },
+    {
+      "title": "Boston, March 12. The Town of Boston affords a recent and melancholy Demonstration (Boston-Gazette, 12 March 1770)",
+      "kind": "primary",
+      "url": "https://www.masshist.org/database/viewer.php?item_id=316&img_step=1&pid=2&mode=dual",
+      "note": "MHS Collections Online item 316",
+      "accessed": "2026-10-20"
+    }
+  ],
+  "theme": {
+    "accent": "#7a3b2e"
+  }
+}

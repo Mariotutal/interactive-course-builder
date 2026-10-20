@@ -1,0 +1,16 @@
+{
+  "topic": "Historical source analysis: reading primary sources critically, using the Boston Massacre (5 March 1770) as the case",
+  "goals": [
+    "Identify a source's author, audience, date and purpose and explain how they shape what it says",
+    "Compare two accounts of the same event and explain their disagreements with evidence",
+    "Write a short evidence-based claim that acknowledges competing interpretations"
+  ],
+  "scope": "Method of source criticism applied to one event; not a full history of the American Revolution",
+  "exclusions": ["Full narrative history of the Revolution", "Paleography"],
+  "language": "en",
+  "locale": "en-US",
+  "learner": { "startingKnowledge": "Adult self-learner; enjoys history podcasts; no training in historical method", "background": "Synthetic demo profile", "depth": "solid" },
+  "time": { "totalHours": 3, "sessionMinutes": 45 },
+  "presentation": { "visual": "medium", "interaction": "medium" },
+  "sources": { "evidenceStandard": "Primary sources from authoritative archives/editions (Library of Congress, Massachusetts Historical Society, Founders Online / National Archives) plus recognized scholarship for context", "freshness": "unknown" }
+}

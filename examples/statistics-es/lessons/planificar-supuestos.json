@@ -1,0 +1,366 @@
+{
+ "format": 1,
+ "id": "planificar-supuestos",
+ "title": "Avanzado: planificar el tamaño de muestra y cuándo fallan los supuestos",
+ "summary": "Despejar n para un margen objetivo, ajustar por diseño y no respuesta, y reconocer cuándo un intervalo «del 95 %» no cumple su nivel.",
+ "level": "advanced",
+ "minutes": 30,
+ "outcomes": [
+  "o6"
+ ],
+ "prerequisites": [
+  "test-ab"
+ ],
+ "prereqText": "<p>Lección avanzada y opcional. Necesitas lo anterior en su conjunto, en especial el margen de error de proporciones y de medias (lecciones 3, 5 y 6).</p>",
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>Marketing quiere una encuesta con «margen de error de ±2 puntos» y pregunta cuántas respuestas hacen falta y cuánto costará. Por otro lado, un proveedor te entrega un «IC 95 %» basado en solo 8 clientes. Ahora debes planificar antes de recoger datos —y desconfiar de intervalos cuya etiqueta no se cumple—. (Datos ilustrativos.)</p>"
+  },
+  {
+   "type": "intuition",
+   "html": "<p>El margen de error es un <em>presupuesto de incertidumbre</em>: decides cuánta imprecisión toleras (±E) y calculas cuántas respuestas «compran» esa precisión. Cada punto extra de precisión se paga con más muestra, y el precio sube deprisa.</p>",
+   "limits": "<p>Un presupuesto solo vale si lo gastas en lo correcto. Más muestra reduce el error por azar, pero no arregla una muestra sesgada ni una pregunta sugerida: puedes comprar mucha precisión sobre una cifra equivocada.</p>"
+  },
+  {
+   "type": "visual",
+   "purpose": "Mostrar el coste creciente de reducir el margen de error.",
+   "alt": "Cuatro barras: para un margen de ±5 puntos hacen falta 385 respuestas; para ±3, 1 068; para ±2, 2 401; para ±1, 9 604. Para reducir el margen a la mitad hay que multiplicar el tamaño de muestra por cuatro.",
+   "html": "<figure><svg viewBox='0 0 560 220' role='img' aria-labelledby='p7t p7d'><title id='p7t'>Tamaño de muestra necesario según el margen de error</title><desc id='p7d'>Cuatro barras con la altura proporcional a la raíz del tamaño necesario: margen ±5 puntos requiere 385 encuestados; ±3, 1 068; ±2, 2 401; ±1, 9 604. Reducir el margen a la mitad multiplica por cuatro el tamaño.</desc><line class='edge' x1='50' y1='180' x2='540' y2='180'/><rect class='n2' x='70' y='150.56787469447713' width='70' height='29.432125305522874'/><text class='t' x='105' y='144.56787469447713' text-anchor='middle'>385</text><text class='ts' x='105' y='198' text-anchor='middle'>±5 puntos</text><rect class='n2' x='185' y='130.97959608489543' width='70' height='49.02040391510457'/><text class='t' x='220' y='124.97959608489543' text-anchor='middle'>1068</text><text class='ts' x='220' y='198' text-anchor='middle'>±3 puntos</text><rect class='n2' x='300' y='106.5' width='70' height='73.5'/><text class='t' x='335' y='100.5' text-anchor='middle'>2401</text><text class='ts' x='335' y='198' text-anchor='middle'>±2 puntos</text><rect class='n2' x='415' y='33' width='70' height='147'/><text class='t' x='450' y='27' text-anchor='middle'>9604</text><text class='ts' x='450' y='198' text-anchor='middle'>±1 puntos</text><text class='tm' x='300' y='216' text-anchor='middle'>Peor caso p = 50 %, 95 % de confianza. La altura de la barra es proporcional a √n, no a n (n crece mucho más deprisa).</text></svg><figcaption>Número de respuestas necesarias para cada margen objetivo.</figcaption></figure>"
+  },
+  {
+   "type": "explain",
+   "title": "Despejar n y límites del intervalo",
+   "html": "<p><strong>Proporciones.</strong> Partiendo del margen E = z·√(p(1−p)/n) y despejando n obtenemos <strong>n = z²·p(1−p)/E²</strong>. Sin información previa se usa p = 0,5 (peor caso): n ≈ 0,96/E²: con E = 0,03 y z = 1,96, n ≈ 1 067,1, que se redondea hacia arriba (1 068); es el orden de magnitud del ejemplo de Pew (n = 1 067). Con E = 0,02 salen 2 401. <strong>Medias.</strong> n = (z·σ/E)², que necesita una estimación de σ (de un piloto o de datos anteriores). (Despeje algebraico del curso a partir de la fórmula del margen.)</p>\n<p><strong>Ajustes prácticos.</strong> Con efecto de diseño deff, necesitas n·deff respuestas efectivas; con una tasa de respuesta r, debes contactar n·deff/r personas. Estos ajustes dan un tamaño de <em>planificación</em> ilustrativo, no una garantía.</p>\n<p><strong>Cuándo falla el nivel nominal.</strong> El «95 %» del intervalo es una propiedad que se cumple si los supuestos se cumplen (muestra aleatoria, independencia, aproximación adecuada). Con el simulador del curso, 4 000 repeticiones por caso y semilla 2026 (simulación propia, no una fuente externa), la proporción de intervalos de «95 %» que contienen la media fue:</p>\n<ul><li>población normal, n = 25, intervalo t: ≈ 94,9 %;</li><li>población normal, n = 5, intervalo z: ≈ 87,9 %;</li><li>población sesgada, n = 10, intervalo t: ≈ 89,7 %; con n = 100: ≈ 94,4 %;</li><li>población Sí/No (p = 0,40), n = 10, intervalo z: ≈ 90,3 %; con n = 100: ≈ 95,2 %.</li></ul>\n<p>Lectura: con muestras pequeñas, el intervalo z se queda corto; con datos sesgados y n pequeño incluso t lo hace; para proporciones pequeñas, la aproximación normal falla (condición éxito–fracaso). Hay procedimientos alternativos para proporciones pequeñas (por ejemplo, intervalos distintos del de Wald); no se desarrollan aquí ni se han verificado en una fuente del curso.</p>\n<p><strong>Siempre fuera del intervalo:</strong> sesgo de selección, no respuesta, redacción, mediciones erróneas, y problemas de diseño de experimentos. Ningún n los repara.</p>"
+  },
+  {
+   "type": "predict",
+   "id": "p-p1",
+   "prompt": "Con n = 1 068 el margen de error de una encuesta es ±3 puntos. Si quieres ±1,5 puntos, ¿cuántas respuestas necesitas aproximadamente?",
+   "options": [
+    "Unas 2 100 (el doble)",
+    "Unas 4 300 (cuatro veces más)",
+    "Unas 1 600 (un 50 % más)"
+   ],
+   "correct": 1,
+   "feedback": {
+    "0": "El margen cae con 1/√n: para reducirlo a la mitad hay que multiplicar n por 4, no por 2.",
+    "2": "Un 50 % más de respuestas solo reduce el margen un 18 %."
+   },
+   "explanation": "n es proporcional a 1/E²: E/2 → 4n. 1 068 × 4 ≈ 4 270."
+  },
+  {
+   "type": "worked",
+   "title": "Planificar una encuesta y un estudio de medias",
+   "html": "<p>Datos ilustrativos.</p>",
+   "steps": [
+    {
+     "html": "<p><strong>Encuesta de proporción, E = ±3 puntos, 95 %, peor caso:</strong> n = 1,96²·0,25/0,03² = 3,8416·0,25/0,0009 = 1 067,1 → <strong>1 068</strong>.</p>"
+    },
+    {
+     "prompt": "<p>Si esperas que solo responda el 40 % de los contactados y el efecto de diseño es 1,3, ¿a cuántas personas contactas? Calcúlalo antes de ver el resultado.</p>",
+     "selfExplain": true,
+     "html": "<p>Respuestas efectivas = 1 068 × 1,3 ≈ 1 388; contactos = 1 388 / 0,40 ≈ <strong>3 470</strong>.</p>"
+    },
+    {
+     "html": "<p><strong>Media de importe, σ ≈ 15 € (de un piloto), E = ±3 €:</strong> n = (1,96·15/3)² = 9,8² = 96,04 → <strong>97</strong> pedidos.</p>"
+    },
+    {
+     "html": "<p><strong>Aviso.</strong> σ viene de un piloto, que también varía; el n obtenido es una orientación. Repite el cálculo al disponer de datos reales.</p>"
+    }
+   ],
+   "result": "<p>±3 puntos requieren 1 068 respuestas útiles; con contacto al 40 % y deff 1,3 se planifican unos 3 470. Para ±3 € en una media con σ = 15 € bastan 97 pedidos.</p>"
+  },
+  {
+   "type": "activity",
+   "id": "p-a1",
+   "widget": "parameter-explorer",
+   "instructions": "<p><strong>Predice:</strong> ¿cuántas personas hay que contactar para ±2 puntos con tasa de respuesta del 30 % y deff = 1,5? Luego comprueba con el explorador y observa qué factor pesa más: el margen, el deff o la tasa de respuesta.</p>",
+   "debrief": "<p>Con E = 2 puntos, p = 50 %, deff 1,5 y respuesta 30 %: 2 401 × 1,5 / 0,30 ≈ 12 000 contactos. El margen objetivo (por el cuadrado) domina; después, la tasa de respuesta: baja respuesta multiplica el coste sin reducir el margen... y además aumenta el riesgo de sesgo, que el cálculo no refleja.</p>",
+   "config": {
+    "title": "Tamaño de muestra y contactos necesarios",
+    "inputs": [
+     {
+      "id": "E",
+      "label": "Margen de error objetivo (puntos)",
+      "min": 1,
+      "max": 10,
+      "step": 0.5,
+      "value": 3
+     },
+     {
+      "id": "p",
+      "label": "Proporción esperada (%)",
+      "min": 5,
+      "max": 95,
+      "step": 1,
+      "value": 50
+     },
+     {
+      "id": "deff",
+      "label": "Efecto de diseño",
+      "min": 1,
+      "max": 2.5,
+      "step": 0.1,
+      "value": 1
+     },
+     {
+      "id": "r",
+      "label": "Tasa de respuesta esperada (%)",
+      "min": 5,
+      "max": 100,
+      "step": 1,
+      "value": 100
+     }
+    ],
+    "outputs": [
+     {
+      "id": "n0",
+      "label": "Respuestas necesarias (muestreo aleatorio simple)",
+      "expr": "ceil(3.8416 * (p / 100) * (1 - p / 100) / ((E / 100) ^ 2))",
+      "format": {
+       "digits": 0
+      }
+     },
+     {
+      "id": "n1",
+      "label": "Respuestas efectivas con efecto de diseño",
+      "expr": "ceil(3.8416 * (p / 100) * (1 - p / 100) / ((E / 100) ^ 2) * deff)",
+      "format": {
+       "digits": 0
+      }
+     },
+     {
+      "id": "n2",
+      "label": "Personas a contactar",
+      "expr": "ceil(3.8416 * (p / 100) * (1 - p / 100) / ((E / 100) ^ 2) * deff / (r / 100))",
+      "format": {
+       "digits": 0
+      }
+     }
+    ],
+    "chart": {
+     "x": {
+      "var": "x",
+      "from": 1,
+      "to": 10,
+      "steps": 90
+     },
+     "series": [
+      {
+       "label": "respuestas necesarias para margen x (puntos)",
+       "expr": "3.8416 * (p / 100) * (1 - p / 100) / ((x / 100) ^ 2) * deff"
+      }
+     ],
+     "markers": [
+      {
+       "label": "margen elegido",
+       "x": "E"
+      }
+     ],
+     "xLabel": "margen de error objetivo (puntos)",
+     "yLabel": "respuestas necesarias",
+     "ariaLabel": "Respuestas necesarias frente al margen de error objetivo"
+    },
+    "interpret": [
+     {
+      "when": "r < 30",
+      "tone": "warn",
+      "html": "Una tasa de respuesta baja también aumenta el riesgo de sesgo de no respuesta, que este cálculo no recoge."
+     },
+     {
+      "when": "E < 2",
+      "tone": "warn",
+      "html": "Márgenes menores de 2 puntos exigen muestras muy grandes; plantéate si esa precisión es necesaria."
+     }
+    ],
+    "assumptions": [
+     "Fórmula n = z²p(1−p)/E² con z = 1,96 (95 %), aproximación normal y muestreo aleatorio simple.",
+     "El efecto de diseño y la tasa de respuesta son supuestos del usuario, no valores medidos.",
+     "No se incluye corrección por población finita.",
+     "Cifras ilustrativas."
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "p-a2",
+   "widget": "sampling-sim",
+   "assesses": [
+    "o6"
+   ],
+   "instructions": "<p><strong>Predice:</strong> ¿qué porcentaje de intervalos «del 95 %» contendrá μ si usas la población normal, el intervalo z y n = 5? Comprueba con «Extraer 100» varias veces (o cambiando la semilla). Después prueba con población «Sí/No» (n = 10, intervalo z) y con «sesgada» (n = 10, intervalo t). Por último sube n a 30 y a 100 y vuelve a mirar.</p>",
+   "debrief": "<p>Con n = 5 y z el acierto ronda el 88 % (no 95 %); con la población Sí/No y n = 10, ≈ 90 %. Al subir n, el acierto se acerca al 95 %. Con 100 repeticiones es normal oscilar unos 2–3 puntos; para ver diferencias de 5 puntos conviene repetir varias veces. Moraleja: el nivel nominal solo se cumple si los supuestos se cumplen.</p>",
+   "config": {
+    "title": "¿Cumple el intervalo el nivel que anuncia?",
+    "population": "normal",
+    "n": 5,
+    "level": 0.95,
+    "method": "z",
+    "seed": 11,
+    "assumptions": [
+     "Poblaciones artificiales: normal, exponencial (sesgada) y Bernoulli (p = 0,40).",
+     "Muestreo aleatorio simple e independiente; se estudia solo el efecto de n pequeño y de la forma de la población.",
+     "Las proporciones observadas de acierto fluctúan con pocas repeticiones; no son predicciones exactas.",
+     "El tipo de intervalo «z» usa la desviación típica muestral con el valor crítico normal."
+    ]
+   }
+  },
+  {
+   "type": "practice",
+   "id": "p-pr1",
+   "level": "guided",
+   "setting": "in-app",
+   "task": "<p>Calcula el tamaño de muestra para una encuesta con margen de ±2 puntos (95 %, peor caso).</p>",
+   "hints": [
+    "<p>n = z²·p(1−p)/E² con z = 1,96, p = 0,5 y E = 0,02.</p>"
+   ],
+   "rubric": [
+    "Despeja n con la fórmula",
+    "Redondea hacia arriba",
+    "Obtiene ≈ 2 401"
+   ],
+   "solution": "<p>n = 3,8416·0,25/0,0004 = <strong>2 401</strong> (redondeado hacia arriba).</p>"
+  },
+  {
+   "type": "practice",
+   "id": "p-pr2",
+   "level": "independent",
+   "setting": "offline",
+   "task": "<p>Quieres estimar el importe medio de pedido con margen de ±2 € y σ ≈ 30 € (de un piloto). El diseño tiene deff = 1,3 y el 60 % de los contactados responderá. Calcula respuestas necesarias, respuestas efectivas y contactos. Después anota qué supuestos pueden fallar.</p>",
+   "rubric": [
+    "n = (1,96·30/2)² ≈ 865",
+    "Respuestas efectivas ≈ 1 124 y contactos ≈ 1 873",
+    "Menciona riesgos: σ del piloto, sesgo de no respuesta, importes asimétricos"
+   ],
+   "solution": "<p>n = (1,96·30/2)² = 864,4 → 865; con deff 1,3: 865·1,3 ≈ 1 125; contactos ≈ 1 125/0,6 ≈ 1 875 (las cifras exactas dependen del redondeo). Supuestos que pueden fallar: que σ ≈ 30 sea fiable, que quienes responden representen a todos, y que la distribución de importes (muy sesgada) permita la aproximación.</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "p-c1",
+     "assesses": [
+      "o6"
+     ],
+     "kind": "numeric",
+     "prompt": "¿Cuántas respuestas (redondeadas hacia arriba) hacen falta para un margen de ±5 puntos al 95 % en el peor caso (p = 0,5)?",
+     "answer": 385,
+     "tolerance": 1,
+     "explanation": "n = 1,96²·0,25/0,05² = 384,16 → 385.",
+     "feedbackWrong": "Pista: n = 3,8416·0,25/0,0025."
+    },
+    {
+     "id": "p-c2",
+     "assesses": [
+      "o6"
+     ],
+     "prompt": "Una encuesta se aplica a 20 000 personas que se apuntaron a una web, con margen publicado ±0,7. ¿Qué es lo más adecuado?",
+     "options": [
+      "Confiar: el margen es muy pequeño",
+      "Cuestionar la fiabilidad: el margen solo cubre error de muestreo aleatorio y la muestra es autoseleccionada",
+      "Concluir que el margen real es 0,7 × 2"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Un margen pequeño no corrige el sesgo de selección.",
+      "2": "No hay un factor mágico: el sesgo no se puede cuantificar con el margen."
+     },
+     "explanation": "El margen supone muestreo aleatorio; no cubre sesgos (Pew: errores ajenos al muestreo)."
+    },
+    {
+     "id": "p-c3",
+     "assesses": [
+      "o6"
+     ],
+     "prompt": "En la simulación con n = 5, población normal y intervalo z, ¿qué esperas de los intervalos «del 95 %»?",
+     "options": [
+      "Contendrán μ alrededor del 95 % de las veces",
+      "Contendrán μ claramente menos del 95 % (≈ 88 %)",
+      "Contendrán μ más del 95 %"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Con n pequeño el multiplicador z no compensa la incertidumbre de estimar σ con s; el nivel real baja.",
+      "2": "El efecto es el contrario: se queda corto, no largo."
+     },
+     "explanation": "Es el motivo por el que se usa t cuando se estima σ: z se queda corto con n pequeño."
+    },
+    {
+     "id": "p-c4",
+     "assesses": [
+      "o6"
+     ],
+     "kind": "open",
+     "prompt": "Explica por qué más muestra no siempre mejora una encuesta, y cuándo sí.",
+     "rubric": [
+      "Dice que más n reduce solo el error de muestreo",
+      "Menciona que los sesgos persisten",
+      "Indica cuándo n ayuda: cuando el problema es la imprecisión por azar"
+     ],
+     "model": "<p>Más muestra reduce el error aleatorio, es decir, estrecha el intervalo, pero no corrige sesgos (selección, no respuesta, redacción): una muestra autoseleccionada enorme da una estimación precisa del grupo equivocado. Más n sí ayuda cuando el problema es que el intervalo es demasiado ancho para decidir y el muestreo es aleatorio.</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "p-t1",
+   "assesses": [
+    "o6"
+   ],
+   "task": "<p><strong>Situación nueva (planificar un A/B).</strong> Partes de una conversión base del 5 % y quieres que el margen de error del intervalo de la <em>diferencia</em> sea de ±1 punto (95 %). Suponiendo igual n en las dos variantes y tasas parecidas (p ≈ 0,05), parte del EE de la diferencia, √(2p(1−p)/n), iguala 1,96·EE a 0,01 y despeja n por variante. ¿Qué te dice el resultado sobre la viabilidad de detectar mejoras pequeñas con poco tráfico? (Datos ilustrativos.)</p>",
+   "rubric": [
+    "Plantea 0,01 = 1,96·√(2·0,05·0,95/n)",
+    "Obtiene n ≈ 3 650 por variante",
+    "Concluye que mejoras pequeñas exigen mucho tráfico y que n crece como 1/E²"
+   ],
+   "model": "<p>0,01 = 1,96·√(0,095/n) → n = 1,96²·0,095/0,0001 = 3,8416·950 ≈ <strong>3 650 por variante</strong> (despeje algebraico propio). Para ±0,5 puntos serían cuatro veces más (≈ 14 600). Con poco tráfico, solo se detectarán diferencias grandes; conviene decidir de antemano qué efecto mínimo interesa y planificar el tamaño en consecuencia.</p>"
+  },
+  {
+   "type": "reflect",
+   "id": "p-r1",
+   "prompt": "¿Qué supuesto de los que has visto te preocupa más en los datos de tu propio trabajo y cómo lo comprobarías?"
+  }
+ ],
+ "sources": [
+  {
+   "title": "Understanding the margin of error in election polls",
+   "kind": "reference",
+   "author": "Andrew Mercer, Pew Research Center",
+   "date": "2016-09-08",
+   "url": "https://www.pewresearch.org/short-reads/2016/09/08/understanding-the-margin-of-error-in-election-polls/",
+   "accessed": "2026-10-20",
+   "note": "Margen ≈ ±3 con n = 1 067; margen de la ventaja ≈ el doble; subgrupos de ~160 casos con ≈ ±8 (una opción) y ≈ ±16 (ventaja); el efecto de diseño; errores ajenos al muestreo."
+  },
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20",
+   "note": "Error estándar como desviación típica del estadístico; condición éxito-fracaso (≥ 10 éxitos y ≥ 10 fracasos esperados); estimación ± z*×EE; z* = 1,96 para 95 %; advertencia contra «con cierta probabilidad»."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 7.1.4 «What are confidence intervals?»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm",
+   "accessed": "2026-10-20",
+   "note": "Intervalo con σ conocida Ȳ ± z·σ/√N y con σ estimada (más ancho); interpretación a la larga."
+  },
+  {
+   "title": "OpenIntro Statistics, cap. 5 «Foundations for inference» (secciones 5.1 variabilidad y 5.2 intervalos de confianza)",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://www.openintro.org/book/os/",
+   "accessed": "2026-10-20",
+   "note": "Solo se verificó el índice de capítulos de la página; el texto del PDF no pudo consultarse con las herramientas disponibles."
+  },
+  {
+   "title": "Las proporciones de cobertura proceden de simulaciones del propio curso (simulador sampling-sim, 4 000 repeticiones, semilla 2026), no de una fuente externa. Las fórmulas de tamaño de muestra son despejes algebraicos de la fórmula del margen verificada; no se contrastaron con un texto concreto.",
+   "kind": "pedagogical",
+   "note": "Decisión del curso: ejemplos y cifras ilustrativas inventadas para este curso, no datos reales."
+  }
+ ],
+ "next": "<p>Has terminado las lecciones. Haz la tarea final integrando variabilidad, intervalos, encuestas y A/B.</p>"
+}

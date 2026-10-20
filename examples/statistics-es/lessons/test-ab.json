@@ -1,0 +1,461 @@
+{
+ "format": 1,
+ "id": "test-ab",
+ "title": "Test A/B: ¿respalda el intervalo la afirmación?",
+ "summary": "Construir e interpretar el intervalo de la diferencia de dos proporciones independientes y decidir si respalda que una variante sea mejor.",
+ "level": "core",
+ "minutes": 30,
+ "outcomes": [
+  "o5"
+ ],
+ "prerequisites": [
+  "encuestas-margen"
+ ],
+ "prereqText": "<p>Necesitas el intervalo de una proporción (lección 3), su lectura correcta (lección 4) y la idea de margen de la diferencia (lección 5).</p>",
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>Probaste dos versiones de la página de pago. A: 200 compras de 4 000 visitantes (5,0 %). B: 236 de 4 000 (5,9 %). Alguien escribe en el canal: «¡B convierte un 18 % más! Lo ponemos para todos». Otra persona replica: «con 4 000 visitas en cada variante, un 0,9 de diferencia puede ser ruido». ¿Quién tiene razón? (Datos ilustrativos.)</p>"
+  },
+  {
+   "type": "intuition",
+   "html": "<p>Imagina que pesas dos paquetes con una báscula imprecisa: cada pesada tiene su ruido. Si quieres saber cuánto más pesa uno que otro, los ruidos de las dos pesadas se <em>suman</em>: la diferencia es más incierta que cada peso por separado. En un test A/B, cada conversión observada es una pesada con ruido; la diferencia B − A tiene el ruido de ambas.</p>",
+   "limits": "<p>En la báscula el ruido es de la báscula; en un A/B el «ruido» proviene de qué visitantes cayeron en cada grupo, y solo se comporta así si los grupos se asignaron <strong>al azar</strong> y las visitas son independientes. Si B se mostró un día de rebajas y A otro, la diferencia mezcla el efecto de la variante con el del día, y ningún intervalo lo corrige.</p>"
+  },
+  {
+   "type": "visual",
+   "purpose": "Mostrar que dos intervalos individuales pueden solaparse mientras la diferencia se evalúa con su propio intervalo respecto al 0.",
+   "alt": "Dos paneles. Arriba, los intervalos del 95 % de A (4,3 % a 5,7 %, centro 5,0) y B (5,2 % a 6,6 %, centro 5,9) se solapan. Abajo, el intervalo de la diferencia B menos A, de −0,09 a +1,89 puntos con centro +0,9, cruza la línea discontinua del cero.",
+   "html": "<figure><svg viewBox='0 0 560 270' role='img' aria-labelledby='a6t a6d'><title id='a6t'>Intervalos individuales y de la diferencia en un test A/B</title><desc id='a6d'>Arriba, los intervalos del 95 % de la variante A (4,3 % a 5,7 %) y de la B (5,2 % a 6,6 %), que se solapan. Abajo, el intervalo de la diferencia B − A (−0,09 a +1,89 puntos), que incluye 0 marcado con una línea discontinua.</desc>\n<text class='t' x='40' y='20'>Conversión de cada variante (%)</text>\n<line class='edge' x1='40' y1='110' x2='520' y2='110'/><line class='edge' x1='40' y1='106' x2='40' y2='114'/><text class='tm' x='40' y='128' text-anchor='middle'>3</text><line class='edge' x1='136' y1='106' x2='136' y2='114'/><text class='tm' x='136' y='128' text-anchor='middle'>4</text><line class='edge' x1='232' y1='106' x2='232' y2='114'/><text class='tm' x='232' y='128' text-anchor='middle'>5</text><line class='edge' x1='328' y1='106' x2='328' y2='114'/><text class='tm' x='328' y='128' text-anchor='middle'>6</text><line class='edge' x1='424' y1='106' x2='424' y2='114'/><text class='tm' x='424' y='128' text-anchor='middle'>7</text><line class='edge' x1='520' y1='106' x2='520' y2='114'/><text class='tm' x='520' y='128' text-anchor='middle'>8</text>\n<line class='edge' x1='166.72000000000003' y1='50' x2='297.28' y2='50' stroke-width='3'/><circle cx='232' cy='50' r='4' fill='currentColor'/><text class='ts' x='160.72000000000003' y='54' text-anchor='end'>A: 5,0 %</text>\n<line class='edge hl' x1='248.32' y1='80' x2='388.48' y2='80'/><circle cx='318.40000000000003' cy='80' r='4' fill='currentColor'/><text class='ts' x='394.48' y='84'>B: 5,9 %</text>\n<text class='tm' x='280' y='146' text-anchor='middle'>los dos intervalos se solapan…</text>\n<text class='t' x='40' y='170'>Diferencia B − A (puntos porcentuales)</text>\n<line class='edge' x1='40' y1='235' x2='520' y2='235'/><line class='edge' x1='88' y1='231' x2='88' y2='239'/><text class='tm' x='88' y='253' text-anchor='middle'>-1</text><line class='edge' x1='184' y1='231' x2='184' y2='239'/><text class='tm' x='184' y='253' text-anchor='middle'>0</text><line class='edge' x1='280' y1='231' x2='280' y2='239'/><text class='tm' x='280' y='253' text-anchor='middle'>1</text><line class='edge' x1='376' y1='231' x2='376' y2='239'/><text class='tm' x='376' y='253' text-anchor='middle'>2</text><line class='edge' x1='472' y1='231' x2='472' y2='239'/><text class='tm' x='472' y='253' text-anchor='middle'>3</text>\n<line class='edge dashed' x1='184' y1='180' x2='184' y2='235'/><text class='ts' x='188' y='192'>0 = sin diferencia</text>\n<line class='edge hl' x1='175.35999999999999' y1='212' x2='365.43999999999994' y2='212'/><circle cx='270.4' cy='212' r='4' fill='currentColor'/><text class='ts' x='371.43999999999994' y='216'>+0,9 (−0,09 a +1,89)</text>\n<text class='tm' x='280' y='266' text-anchor='middle'>Datos ilustrativos: A 200/4 000, B 236/4 000</text></svg><figcaption>La diferencia tiene su propio intervalo; aquí incluye el 0 (datos ilustrativos).</figcaption></figure>"
+  },
+  {
+   "type": "explain",
+   "title": "El intervalo de la diferencia de proporciones",
+   "html": "<p>Con dos grupos independientes de tamaños n₁ y n₂ y proporciones muestrales p̂₁ y p̂₂, la <span class='term' data-term='diferencia de proporciones'>diferencia de proporciones</span> p̂₂ − p̂₁ tiene error estándar</p>\n<p style='text-align:center'><strong>EE = √( p̂₁(1−p̂₁)/n₁ + p̂₂(1−p̂₂)/n₂ )</strong></p>\n<p>y el intervalo del 95 % es <strong>(p̂₂ − p̂₁) ± 1,96 × EE</strong>, la misma receta «estimación ± valor crítico × EE» de la lección 3. Condiciones: grupos independientes (asignación aleatoria), observaciones independientes y al menos unos 10 éxitos y 10 fracasos en cada grupo (condición éxito–fracaso de OpenIntro). Fuente de la receta y del 1,96: OpenIntro (cap. 13); la fórmula del EE de una diferencia procede del mismo texto en su capítulo de dos proporciones, que no se pudo abrir con las herramientas del curso: verify en tu libro de referencia.</p>\n<p><strong>Cómo decidir.</strong></p><ul><li>Si el intervalo de la diferencia <strong>incluye 0</strong>, los datos son compatibles con «sin diferencia» (y con una mejora o un empeoramiento pequeños). No respaldan por sí solos que B sea mejor. <em>No</em> significa que A y B sean iguales: significa que no hay suficiente evidencia.</li><li>Si el intervalo <strong>excluye 0 por arriba</strong>, los datos respaldan que B supera a A. Pero mira <em>cuánto</em>: el intervalo da el rango de efectos plausibles. Un efecto de +0,2 puntos puede ser real y no importar al negocio.</li><li>Define de antemano el <strong>efecto mínimo relevante</strong> (por ejemplo, +1 punto cubre el coste del cambio). Solo se respalda «B mejora al menos eso» si el límite inferior lo supera.</li></ul>\n<p><strong>Absoluto frente a relativo.</strong> «+0,9 puntos» es una diferencia absoluta; «+18 %» es relativa (0,9/5,0). La relativa suena mayor y arrastra la misma incertidumbre: su intervalo va (dividiendo entre p̂₁, solo como orden de magnitud) de −2 % a +38 %.</p>\n<p><strong>No compares intervalos individuales a ojo.</strong> Que los intervalos de A y de B se solapen no significa que la diferencia incluya 0: el intervalo de la diferencia es un cálculo aparte (con las cifras de la figura, 5,0 % y 5,9 %, los intervalos se solapan y la diferencia incluye 0; pero con 5,0 % y 6,25 % los intervalos individuales siguen solapándose y la diferencia ya excluye 0, como puedes comprobar en el explorador). Usa siempre el intervalo de la diferencia.</p>\n<p><strong>Lo que no cubre el intervalo.</strong> Asignación no aleatoria, diseño con parada anticipada o muchas variantes comparadas a la vez, efectos de novedad: son problemas ajenos al margen (se mencionan sin desarrollar; consúltalos en una referencia de experimentación; este curso no los ha verificado en una fuente).</p>"
+  },
+  {
+   "type": "predict",
+   "id": "a-p1",
+   "prompt": "En el test A/B, la diferencia observada es +0,9 puntos y su intervalo del 95 % es (−0,09; +1,89). ¿Qué conclusión es la más defendible?",
+   "options": [
+    "B es mejor: la diferencia es positiva",
+    "Los datos son compatibles con que B sea peor, igual o mejor; no respaldan por sí solos que B sea mejor",
+    "A y B convierten exactamente igual"
+   ],
+   "correct": 1,
+   "feedback": {
+    "0": "La estimación puntual es positiva, pero el intervalo incluye valores negativos y el 0.",
+    "2": "Que el intervalo incluya 0 no demuestra igualdad; indica falta de evidencia suficiente."
+   },
+   "explanation": "El intervalo incluye 0 y pequeñas diferencias negativas: no excluye «sin efecto» ni «ligeramente peor»."
+  },
+  {
+   "type": "worked",
+   "title": "Intervalo de la diferencia en el test A/B de pago",
+   "html": "<p>A: 200 de 4 000; B: 236 de 4 000 (ilustrativo).</p>",
+   "steps": [
+    {
+     "html": "<p><strong>Proporciones:</strong> p̂_A = 0,050; p̂_B = 0,059. Diferencia = 0,009 (0,9 puntos). Condición éxito–fracaso: 200, 236 éxitos y 3 800, 3 764 fracasos: sobrada.</p>"
+    },
+    {
+     "prompt": "<p>Calcula el error estándar de la diferencia antes de ver el resultado.</p>",
+     "selfExplain": true,
+     "html": "<p>EE = √(0,05·0,95/4000 + 0,059·0,941/4000) = √(1,1875·10⁻⁵ + 1,388·10⁻⁵) = √(2,576·10⁻⁵) ≈ 0,00507 (0,51 puntos).</p>"
+    },
+    {
+     "html": "<p><strong>Margen</strong> = 1,96 · 0,00507 ≈ 0,00995 (≈ 1,0 puntos). <strong>Intervalo</strong> = 0,9 ± 1,0 → <strong>(−0,09; +1,89) puntos</strong>.</p>"
+    },
+    {
+     "html": "<p><strong>Lectura.</strong> Incluye 0 (por muy poco). Los datos son compatibles con una mejora de hasta casi 2 puntos y con una diferencia nula o ligeramente negativa. No se justifica «B convierte un 18 % más, demostrado»; sí «B va por delante en la muestra; hace falta más evidencia».</p>"
+    },
+    {
+     "html": "<p><strong>Hoja de cálculo.</strong> Con éxitos en B1 y B2, n en C1 y C2: p₁ <code>=B1/C1</code>, p₂ <code>=B2/C2</code>, EE <code>=RAIZ(D1*(1-D1)/C1+D2*(1-D2)/C2)</code>, límites <code>=(D2-D1)±1,96*EE</code> (calcula cada uno con su signo).</p>"
+    }
+   ],
+   "result": "<p>Intervalo de la diferencia: (−0,09; +1,89) puntos. Incluye 0, así que el test no respalda por sí solo «B es mejor».</p>"
+  },
+  {
+   "type": "activity",
+   "id": "a-a1",
+   "widget": "parameter-explorer",
+   "instructions": "<p><strong>Predice y comprueba.</strong> (1) Con los valores iniciales, ¿incluye el intervalo de la diferencia el 0? (2) Sube la conversión de B a 6,25 %: ¿qué pasa con el intervalo de la diferencia y con los intervalos individuales (¿se solapan todavía)? (3) Con B = 5,9 %, ¿cuántos visitantes por variante hacen falta para que el límite inferior pase de 0?</p>",
+   "debrief": "<p>(2) Con B = 6,25 % el intervalo de la diferencia ya excluye 0 (aprox. +0,24 a +2,26) mientras los intervalos individuales (A: 4,3–5,7; B: 5,5–7,0) todavía se solapan: por eso no debes juzgar por el solapamiento. (3) Con 0,9 puntos de diferencia, hacen falta unos 4 900 visitantes por variante para que el límite inferior pase de 0 (cálculo del curso: n = 1,96²·(0,05·0,95 + 0,059·0,941)/0,009² ≈ 4 890; el gráfico lo confirma: el margen cae por debajo de 0,9 en torno a ese valor). La lección 7 generaliza este cálculo.</p>",
+   "config": {
+    "title": "Test A/B: intervalo de la diferencia de conversiones",
+    "inputs": [
+     {
+      "id": "na",
+      "label": "Visitantes A",
+      "min": 200,
+      "max": 20000,
+      "step": 100,
+      "value": 4000
+     },
+     {
+      "id": "ca",
+      "label": "Conversión A (%)",
+      "min": 1,
+      "max": 20,
+      "step": 0.05,
+      "value": 5
+     },
+     {
+      "id": "nb",
+      "label": "Visitantes B",
+      "min": 200,
+      "max": 20000,
+      "step": 100,
+      "value": 4000
+     },
+     {
+      "id": "cb",
+      "label": "Conversión B (%)",
+      "min": 1,
+      "max": 20,
+      "step": 0.05,
+      "value": 5.9
+     }
+    ],
+    "outputs": [
+     {
+      "id": "diff",
+      "label": "Diferencia B − A (puntos)",
+      "expr": "cb - ca",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "se",
+      "label": "Error estándar de la diferencia (puntos)",
+      "expr": "100 * sqrt((ca / 100) * (1 - ca / 100) / na + (cb / 100) * (1 - cb / 100) / nb)",
+      "format": {
+       "digits": 3
+      }
+     },
+     {
+      "id": "moe",
+      "label": "Margen de error de la diferencia (puntos)",
+      "expr": "196 * sqrt((ca / 100) * (1 - ca / 100) / na + (cb / 100) * (1 - cb / 100) / nb)",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "lo",
+      "label": "Diferencia: límite inferior",
+      "expr": "cb - ca - 196 * sqrt((ca / 100) * (1 - ca / 100) / na + (cb / 100) * (1 - cb / 100) / nb)",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "hi",
+      "label": "Diferencia: límite superior",
+      "expr": "cb - ca + 196 * sqrt((ca / 100) * (1 - ca / 100) / na + (cb / 100) * (1 - cb / 100) / nb)",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "rel",
+      "label": "Mejora relativa observada (%)",
+      "expr": "100 * (cb - ca) / ca",
+      "format": {
+       "digits": 1
+      }
+     },
+     {
+      "id": "alo",
+      "label": "Intervalo de A: límite superior (%)",
+      "expr": "ca + 196 * sqrt((ca / 100) * (1 - ca / 100) / na)",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "blo",
+      "label": "Intervalo de B: límite inferior (%)",
+      "expr": "cb - 196 * sqrt((cb / 100) * (1 - cb / 100) / nb)",
+      "format": {
+       "digits": 2
+      }
+     }
+    ],
+    "chart": {
+     "x": {
+      "var": "x",
+      "from": 500,
+      "to": 20000
+     },
+     "series": [
+      {
+       "label": "margen de la diferencia con x visitantes por variante",
+       "expr": "196 * sqrt((ca / 100) * (1 - ca / 100) / x + (cb / 100) * (1 - cb / 100) / x)"
+      },
+      {
+       "label": "diferencia observada",
+       "expr": "cb - ca"
+      }
+     ],
+     "markers": [
+      {
+       "label": "n medio actual",
+       "x": "(na + nb) / 2"
+      }
+     ],
+     "xLabel": "visitantes por variante",
+     "yLabel": "puntos porcentuales",
+     "ariaLabel": "Margen de error de la diferencia frente a visitantes por variante, con la diferencia observada como referencia"
+    },
+    "interpret": [
+     {
+      "when": "cb - ca - 196 * sqrt((ca / 100) * (1 - ca / 100) / na + (cb / 100) * (1 - cb / 100) / nb) <= 0 && cb - ca + 196 * sqrt((ca / 100) * (1 - ca / 100) / na + (cb / 100) * (1 - cb / 100) / nb) >= 0",
+      "tone": "warn",
+      "html": "El intervalo de la diferencia incluye 0: los datos no respaldan por sí solos que haya diferencia."
+     },
+     {
+      "when": "cb - ca - 196 * sqrt((ca / 100) * (1 - ca / 100) / na + (cb / 100) * (1 - cb / 100) / nb) > 0",
+      "tone": "ok",
+      "html": "El intervalo excluye 0 por arriba: B supera a A bajo estos supuestos. Revisa cuánto: mira el límite inferior."
+     },
+     {
+      "when": "ca + 196 * sqrt((ca / 100) * (1 - ca / 100) / na) > cb - 196 * sqrt((cb / 100) * (1 - cb / 100) / nb) && cb > ca",
+      "tone": "warn",
+      "html": "Los intervalos individuales de A y B se solapan: eso no decide nada; usa el intervalo de la diferencia."
+     }
+    ],
+    "assumptions": [
+     "Asignación aleatoria e independiente entre variantes; sin cambios de condiciones durante el test.",
+     "Confianza del 95 % (1,96) con aproximación normal; condición éxito–fracaso en cada grupo.",
+     "Tamaño de muestra fijado de antemano, sin mirar resultados intermedios para decidir cuándo parar.",
+     "Cifras ilustrativas."
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "a-a2",
+   "widget": "classify",
+   "assesses": [
+    "o5"
+   ],
+   "instructions": "<p>Cada fila es el intervalo del 95 % de la diferencia B − A (en puntos) de un test distinto. El equipo solo implantará B si hay evidencia de que mejora al menos <strong>+1 punto</strong>. Clasifica cada resultado.</p>",
+   "debrief": "<p>Reglas: incluye 0 → no concluyente; excluye 0 pero el límite inferior es menor que 1 → mejora respaldada, pero no se demuestra que alcance el mínimo relevante; límite inferior ≥ 1 → mejora relevante respaldada.</p>",
+   "config": {
+    "categories": [
+     {
+      "id": "no",
+      "label": "No respalda que B mejore"
+     },
+     {
+      "id": "si",
+      "label": "Respalda mejora, pero no ≥ 1 punto"
+     },
+     {
+      "id": "gr",
+      "label": "Respalda mejora de al menos 1 punto"
+     }
+    ],
+    "items": [
+     {
+      "id": "r1",
+      "html": "(−0,1; +1,9)",
+      "category": "no",
+      "feedback": "Incluye 0: compatible con ninguna mejora."
+     },
+     {
+      "id": "r2",
+      "html": "(+0,2; +2,6)",
+      "category": "si",
+      "feedback": "Excluye 0, pero el límite inferior (0,2) es menor que 1: mejora respaldada, magnitud incierta."
+     },
+     {
+      "id": "r3",
+      "html": "(+1,2; +3,4)",
+      "category": "gr",
+      "feedback": "El intervalo entero supera 1: mejora relevante respaldada."
+     },
+     {
+      "id": "r4",
+      "html": "(−0,8; +3,4)",
+      "category": "no",
+      "feedback": "Incluye 0; el intervalo amplio refleja poca precisión."
+     },
+     {
+      "id": "r5",
+      "html": "(+0,5; +0,9)",
+      "category": "si",
+      "feedback": "Intervalo preciso, pero toda la mejora plausible es menor que 1 punto."
+     },
+     {
+      "id": "r6",
+      "html": "(−2,0; +0,4)",
+      "category": "no",
+      "feedback": "Incluye 0; podría incluso ser peor."
+     }
+    ]
+   }
+  },
+  {
+   "type": "practice",
+   "id": "a-pr1",
+   "level": "guided",
+   "setting": "in-app",
+   "task": "<p>A: 24 conversiones de 400; B: 34 de 400 (ilustrativo). Calcula el intervalo del 95 % de la diferencia y decide si respalda que B sea mejor. Compara con el 41,7 % «relativo».</p>",
+   "hints": [
+    "<p>p̂_A = 0,06; p̂_B = 0,085; diferencia = 2,5 puntos.</p>",
+    "<p>EE = √(0,06·0,94/400 + 0,085·0,915/400).</p>"
+   ],
+   "rubric": [
+    "EE ≈ 1,83 puntos",
+    "Intervalo ≈ −1,1 a +6,1 puntos",
+    "Concluye que no respalda y que la cifra relativa exagera la evidencia"
+   ],
+   "solution": "<p>EE ≈ 0,0183; margen ≈ 0,0359; diferencia 0,025 → <strong>(−1,1; +6,1) puntos</strong>. Incluye 0. «+42 % relativo» suena mucho, pero se basa en 24 y 34 conversiones: la incertidumbre es enorme.</p>"
+  },
+  {
+   "type": "practice",
+   "id": "a-pr2",
+   "level": "independent",
+   "setting": "offline",
+   "task": "<p>A: 310 de 6 000 (5,17 %); B: 360 de 6 000 (6,00 %). El efecto mínimo relevante es +0,5 puntos. Con tu hoja de cálculo calcula el intervalo de la diferencia y responde: (a) ¿Excluye 0? (b) ¿Respalda que mejore al menos 0,5 puntos? (c) ¿Qué dirías en el canal del equipo en una frase?</p>",
+   "rubric": [
+    "Diferencia = 0,83 puntos; EE ≈ 0,42",
+    "Intervalo ≈ (0,01; 1,65)",
+    "Concluye: excluye 0 por muy poco, pero no respalda ≥ 0,5",
+    "Frase correcta y prudente"
+   ],
+   "solution": "<p>EE ≈ 0,419 puntos; margen ≈ 0,82; intervalo ≈ <strong>(+0,01; +1,65)</strong> puntos. (a) Sí, por un pelo. (b) No: el límite inferior (0,01) está por debajo de 0,5. (c) «B parece mejor (+0,8 puntos), pero el intervalo va de casi 0 a +1,7; no podemos afirmar que supere nuestro mínimo de +0,5; propongo seguir el test o ampliar la muestra».</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "a-c1",
+     "assesses": [
+      "o5"
+     ],
+     "prompt": "En un test A/B, los intervalos del 95 % de A (4,3 %–5,7 %) y B (5,2 %–6,6 %) se solapan. ¿Qué concluyes?",
+     "options": [
+      "Que no hay diferencia",
+      "Nada concluyente: hay que calcular el intervalo de la diferencia",
+      "Que B es mejor porque su centro es mayor"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "El solapamiento de intervalos individuales no demuestra que la diferencia incluya 0.",
+      "2": "Un centro mayor es solo la estimación puntual."
+     },
+     "explanation": "La decisión se toma con el intervalo de la diferencia, no con el solapamiento visual."
+    },
+    {
+     "id": "a-c2",
+     "assesses": [
+      "o5"
+     ],
+     "kind": "numeric",
+     "prompt": "A: 100 de 2 000 (5 %); B: 120 de 2 000 (6 %). ¿Cuál es el margen de error de la diferencia, en puntos porcentuales? (un decimal)",
+     "answer": 1.4,
+     "tolerance": 0.1,
+     "unit": "puntos",
+     "explanation": "EE = √(0,05·0,95/2000 + 0,06·0,94/2000) = √(2,375·10⁻⁵ + 2,82·10⁻⁵) = 0,00721; ×1,96 = 0,01413 → 1,4 puntos.",
+     "feedbackWrong": "Pista: calcula las dos varianzas p(1−p)/n, súmalas, saca la raíz y multiplica por 1,96."
+    },
+    {
+     "id": "a-c3",
+     "assesses": [
+      "o5"
+     ],
+     "prompt": "El informe dice «B convierte un 18 % más (IC 95 % de la diferencia absoluta: −0,1 a +1,9 puntos)». ¿Qué corregirías?",
+     "options": [
+      "Nada, el 18 % es el resultado",
+      "Que «18 % más» es una cifra relativa que sobrestima la evidencia: el intervalo de la diferencia incluye 0",
+      "Que debería ser 9 %"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Una cifra relativa puntual oculta la incertidumbre del intervalo.",
+      "2": "0,9 puntos es la diferencia absoluta; no es el relativo del 18 %, ambos son estimaciones puntuales."
+     },
+     "explanation": "La evidencia se evalúa con el intervalo; el 18 % es la estimación puntual relativa."
+    },
+    {
+     "id": "a-c4",
+     "assesses": [
+      "o5"
+     ],
+     "kind": "open",
+     "prompt": "¿Por qué no basta con decir «B tiene una conversión mayor que A» para respaldar que B sea mejor? Escribe tres o cuatro frases.",
+     "rubric": [
+      "Menciona variabilidad muestral",
+      "Menciona el intervalo de la diferencia y el 0",
+      "Menciona el efecto mínimo relevante o el tamaño del efecto"
+     ],
+     "model": "<p>Porque la conversión observada de cada variante es un estadístico que cambiaría con otra muestra; una diferencia positiva en esta puede deberse al azar. Para respaldar la afirmación hay que calcular el intervalo de la diferencia y comprobar que excluye 0; además hay que mirar el rango de efectos plausibles y compararlo con el efecto mínimo que justifique el cambio.</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "a-t1",
+   "assesses": [
+    "o5"
+   ],
+   "task": "<p><strong>Situación nueva (retención).</strong> Probaste una oferta de retención. Grupo de control: 225 de 1 500 clientes se quedan (15,0 %); grupo con descuento: 255 de 1 500 (17,0 %). El descuento solo compensa si retiene al menos 2 puntos más. El responsable dice: «el descuento funciona». Calcula el intervalo del 95 % de la diferencia, evalúa la afirmación y tu recomendación. (Datos ilustrativos.)</p>",
+   "rubric": [
+    "Diferencia = 2,0 puntos; EE ≈ 1,34; margen ≈ 2,62",
+    "Intervalo ≈ (−0,6; +4,6)",
+    "Concluye que incluye 0 y que el mínimo rentable (2) está dentro del intervalo: no concluyente",
+    "Recomienda ampliar muestra o revisar coste/beneficio, sin afirmar «funciona»"
+   ],
+   "model": "<p>p̂₁ = 0,15, p̂₂ = 0,17; diferencia 0,02; EE = √(0,15·0,85/1500 + 0,17·0,83/1500) ≈ 0,0134; margen ≈ 0,0262; intervalo ≈ (−0,6; +4,6) puntos. Incluye 0, y el umbral de rentabilidad (+2) cae en el centro: los datos son compatibles con que el descuento no retenga más, o con que retenga bastante más. No se puede afirmar que «funciona». Recomendación: ampliar la prueba o mejorar el cálculo de coste/beneficio; con n = 1 500 por grupo y estas tasas el intervalo es ancho para decidir.</p>"
+  },
+  {
+   "type": "reflect",
+   "id": "a-r1",
+   "prompt": "Escribe la frase que usarías en tu equipo para frenar un «¡B es mejor!» basado solo en la diferencia observada."
+  }
+ ],
+ "sources": [
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20",
+   "note": "Error estándar como desviación típica del estadístico; condición éxito-fracaso (≥ 10 éxitos y ≥ 10 fracasos esperados); estimación ± z*×EE; z* = 1,96 para 95 %; advertencia contra «con cierta probabilidad»."
+  },
+  {
+   "title": "OpenIntro Statistics, cap. 5 «Foundations for inference» (secciones 5.1 variabilidad y 5.2 intervalos de confianza)",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://www.openintro.org/book/os/",
+   "accessed": "2026-10-20",
+   "note": "Solo se verificó el índice de capítulos de la página; el texto del PDF no pudo consultarse con las herramientas disponibles."
+  },
+  {
+   "title": "Understanding the margin of error in election polls",
+   "kind": "reference",
+   "author": "Andrew Mercer, Pew Research Center",
+   "date": "2016-09-08",
+   "url": "https://www.pewresearch.org/short-reads/2016/09/08/understanding-the-margin-of-error-in-election-polls/",
+   "accessed": "2026-10-20",
+   "note": "Margen ≈ ±3 con n = 1 067; margen de la ventaja ≈ el doble; subgrupos de ~160 casos con ≈ ±8 (una opción) y ≈ ±16 (ventaja); el efecto de diseño; errores ajenos al muestreo."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 7.1.4 «What are confidence intervals?»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm",
+   "accessed": "2026-10-20",
+   "note": "Intervalo con σ conocida Ȳ ± z·σ/√N y con σ estimada (más ancho); interpretación a la larga."
+  },
+  {
+   "title": "Todos los datos de tests (conversión de pago, retención) son ilustrativos. Se mencionan sin desarrollar ni verificar la asignación aleatoria, la parada anticipada, las comparaciones múltiples y los efectos de novedad: no se contrastaron con una fuente en este curso.",
+   "kind": "pedagogical",
+   "note": "Decisión del curso: ejemplos y cifras ilustrativas inventadas para este curso, no datos reales."
+  }
+ ],
+ "next": "<p>Si has llegado hasta aquí, ya puedes hacer la tarea final. La lección avanzada 7 (opcional) trata de planificar el tamaño de muestra y de cuándo fallan los supuestos.</p>"
+}

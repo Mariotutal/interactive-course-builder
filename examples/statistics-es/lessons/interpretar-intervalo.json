@@ -1,0 +1,319 @@
+{
+ "format": 1,
+ "id": "interpretar-intervalo",
+ "title": "Qué significa de verdad «95 % de confianza»",
+ "summary": "Interpretar el nivel de confianza como propiedad del procedimiento a la larga y desmontar las lecturas incorrectas más comunes.",
+ "level": "core",
+ "minutes": 30,
+ "outcomes": [
+  "o3"
+ ],
+ "prerequisites": [
+  "construir-intervalo"
+ ],
+ "prereqText": "<p>Necesitas saber construir un intervalo (lección 3).</p>",
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>En la presentación trimestral aparece: «importe medio por pedido: IC 95 % = (44,1; 52,3)». El director comenta: «O sea, que hay un 95 % de probabilidad de que la media real esté entre 44,1 y 52,3». Otra persona dice: «No, significa que el 95 % de los pedidos cuesta entre 44 y 52». ¿Tiene razón alguno? Tú tienes que decidir qué te callas y qué corriges, sin parecer pedante y sin permitir que se tome una decisión con una idea falsa en la cabeza. (Datos ilustrativos.)</p>"
+  },
+  {
+   "type": "intuition",
+   "html": "<p>Piensa en un pescador que lanza una red a un pez inmóvil que no ve. Su procedimiento de lanzar la red atrapa al pez el 95 % de las veces. Ya lanzada <em>una</em> red concreta, o atrapó al pez o no lo atrapó: no tiene sentido decir «esta red tiene un 95 % de probabilidad de haberlo atrapado» (ya ocurrió). La confianza es una propiedad del <em>procedimiento de lanzar</em>.</p>",
+   "limits": "<p>El pescador puede ver si la red atrapó al pez. Tú nunca ves si <em>tu</em> intervalo contiene la media verdadera (si la vieras, no necesitarías el intervalo). Además, el pez no se mueve: el parámetro es fijo; lo que cambia de una repetición a otra es el intervalo.</p>"
+  },
+  {
+   "type": "visual",
+   "purpose": "Mostrar que la «confianza» describe la frecuencia con que acierta el procedimiento a lo largo de muchas muestras y que algunos intervalos fallan.",
+   "alt": "Veinte barras horizontales, cada una un intervalo de confianza del 95 % de una muestra distinta. Una línea vertical discontinua marca la media verdadera 50. 18 barras cruzan esa línea y 2 no lo hacen; las que fallan se dibujan con línea discontinua gruesa y una cruz para distinguirse sin depender del color.",
+   "html": "<figure><svg viewBox='0 0 560 245' role='img' aria-labelledby='i4t i4d'><title id='i4t'>20 intervalos del 95 % de 20 muestras</title><desc id='i4d'>Veinte barras horizontales apiladas, cada una un intervalo de confianza de una muestra distinta de 25 datos. Una línea vertical discontinua marca la media verdadera 50. 18 barras la cruzan y 2 no la cruzan (marcadas con línea discontinua gruesa y la etiqueta «no contiene μ»).</desc><line class='edge dashed' x1='280' y1='14' x2='280' y2='230'/><text class='tm' x='280' y='10' text-anchor='middle'>μ = 50 (verdadera)</text><line class='edge' x1='260.4' y1='26' x2='534.3' y2='26' stroke-width='2'/><circle cx='397.4' cy='26' r='2' fill='currentColor'/><line class='edge' x1='80.9' y1='36' x2='384.6' y2='36' stroke-width='2'/><circle cx='232.8' cy='36' r='2' fill='currentColor'/><line class='edge' x1='163.4' y1='46' x2='382.7' y2='46' stroke-width='2'/><circle cx='273.1' cy='46' r='2' fill='currentColor'/><line class='edge' x1='68.9' y1='56' x2='371.6' y2='56' stroke-width='2'/><circle cx='220.3' cy='56' r='2' fill='currentColor'/><line class='edge' x1='188.6' y1='66' x2='414.8' y2='66' stroke-width='2'/><circle cx='301.7' cy='66' r='2' fill='currentColor'/><line class='edge' x1='177.0' y1='76' x2='459.8' y2='76' stroke-width='2'/><circle cx='318.4' cy='76' r='2' fill='currentColor'/><line class='edge' x1='156.3' y1='86' x2='397.8' y2='86' stroke-width='2'/><circle cx='277.0' cy='86' r='2' fill='currentColor'/><line class='edge' x1='256.0' y1='96' x2='516.0' y2='96' stroke-width='2'/><circle cx='386.0' cy='96' r='2' fill='currentColor'/><line class='edge' x1='249.6' y1='106' x2='530.0' y2='106' stroke-width='2'/><circle cx='389.8' cy='106' r='2' fill='currentColor'/><line class='edge' x1='107.9' y1='116' x2='338.6' y2='116' stroke-width='2'/><circle cx='223.3' cy='116' r='2' fill='currentColor'/><line class='edge' x1='169.0' y1='126' x2='347.0' y2='126' stroke-width='2'/><circle cx='258.0' cy='126' r='2' fill='currentColor'/><line class='edge' x1='150.1' y1='136' x2='428.7' y2='136' stroke-width='2'/><circle cx='289.4' cy='136' r='2' fill='currentColor'/><line class='edge' x1='57.9' y1='146' x2='342.1' y2='146' stroke-width='2'/><circle cx='200.0' cy='146' r='2' fill='currentColor'/><line class='edge bad' x1='42.2' y1='156' x2='275.5' y2='156'/><text class='ts' x='281.5' y='160'>× no contiene μ</text><line class='edge' x1='145.0' y1='166' x2='441.3' y2='166' stroke-width='2'/><circle cx='293.1' cy='166' r='2' fill='currentColor'/><line class='edge' x1='120.3' y1='176' x2='366.5' y2='176' stroke-width='2'/><circle cx='243.4' cy='176' r='2' fill='currentColor'/><line class='edge' x1='196.2' y1='186' x2='501.0' y2='186' stroke-width='2'/><circle cx='348.6' cy='186' r='2' fill='currentColor'/><line class='edge bad' x1='38.2' y1='196' x2='242.6' y2='196'/><text class='ts' x='248.6' y='200'>× no contiene μ</text><line class='edge' x1='208.0' y1='206' x2='520.9' y2='206' stroke-width='2'/><circle cx='364.5' cy='206' r='2' fill='currentColor'/><line class='edge' x1='211.4' y1='216' x2='528.1' y2='216' stroke-width='2'/><circle cx='369.7' cy='216' r='2' fill='currentColor'/><text class='tm' x='280' y='240' text-anchor='middle'>Simulación ilustrativa (población normal, μ = 50, σ = 10, n = 25, semilla 6)</text></svg><figcaption>18 de 20 intervalos contienen μ; 2 no. Cada barra es el resultado de una muestra distinta.</figcaption></figure>"
+  },
+  {
+   "type": "explain",
+   "title": "Qué dice y qué no dice el 95 %",
+   "html": "<p>El NIST lo expresa así: el <span class='term' data-term='nivel de confianza'>nivel de confianza</span> está asociado al procedimiento de cálculo del intervalo (no a un intervalo concreto) y es la proporción de muestras de un tamaño dado que se espera que contengan la media verdadera; para un 95 %, a la larga alrededor del 95 % de esos intervalos contendrían la media verdadera. Y añade que el intervalo calculado con una muestra concreta o contiene la media verdadera o no la contiene (e-Handbook, 1.3.5.2). OpenIntro advierte de que describir el intervalo como si capturase el parámetro con cierta probabilidad es uno de los errores más frecuentes.</p>\n<p><strong>Lecturas correctas:</strong></p><ul><li>«Si repitiéramos el proceso completo muchas veces, aproximadamente el 95 % de los intervalos así construidos contendrían la media verdadera.»</li><li>«Estamos 95 % confiados de que μ está entre 44,1 y 52,3» — siempre que «confianza» se entienda como el procedimiento a la larga (es la fórmula que usan los libros de texto; evita cambiarla por «probabilidad»).</li></ul>\n<p><strong>Lecturas incorrectas más habituales:</strong></p><ol><li>«Hay un 95 % de probabilidad de que μ esté en este intervalo.» (μ es fija; el 95 % es del procedimiento.)</li><li>«El 95 % de los datos (pedidos) cae dentro del intervalo.» (El intervalo es sobre la media, no sobre los datos; los pedidos individuales varían mucho más.)</li><li>«Si repito el estudio, el 95 % de las nuevas <em>medias</em> caerán en este intervalo.» (No: la proporción es menor, porque el intervalo está centrado en <em>esta</em> media muestral.)</li><li>«Un intervalo más ancho es más preciso» (justo al revés: más ancho = menos preciso).</li></ol>\n<p><strong>Confianza frente a anchura.</strong> Subir la confianza ensancha el intervalo. Para estrecharlo sin perder confianza hace falta más muestra o menor dispersión. <strong>Aviso de simplificación del curso.</strong> Una lectura «bayesiana» da a los intervalos creíbles la interpretación probabilística que muchos esperan; se trata de otro procedimiento con otros supuestos y no se trata aquí.</p>\n<p><strong>Un 95 % no es 95 % en cada caso concreto.</strong> En la simulación de la figura, 2 de 20 intervalos fallan; con otra semilla serían 0, 1 o 3. A la larga, la fracción tiende a 95 %.</p>"
+  },
+  {
+   "type": "predict",
+   "id": "i-p1",
+   "prompt": "Construyes 100 intervalos del 95 % a partir de 100 muestras independientes de la misma población. ¿Cuántos esperas que contengan la media verdadera?",
+   "options": [
+    "Exactamente 95 en cualquier caso",
+    "Alrededor de 95: típicamente entre 91 y 99",
+    "Todos: si el intervalo es del 95 %, el valor verdadero está siempre dentro",
+    "Alrededor de 50"
+   ],
+   "correct": 1,
+   "feedback": {
+    "0": "El 95 % es una frecuencia a la larga: con 100 intervalos el número real fluctúa (desviación típica ≈ 2,2 intervalos).",
+    "2": "Un nivel del 95 % significa que aproximadamente 5 de cada 100 fallan.",
+    "3": "Confunde confianza con «50/50»; el procedimiento acierta alrededor del 95 % de las veces."
+   },
+   "explanation": "El número de aciertos de 100 sigue aproximadamente una binomial con p = 0,95: media 95, desviación típica √(100·0,95·0,05) ≈ 2,2; entre 91 y 99 ocurre con probabilidad ≈ 0,97 (cálculo propio)."
+  },
+  {
+   "type": "activity",
+   "id": "i-a1",
+   "widget": "sampling-sim",
+   "assesses": [
+    "o3"
+   ],
+   "instructions": "<p><strong>Parte A.</strong> Con los ajustes iniciales (normal, n = 25, 95 %, t), pulsa «Extraer 100» y anota cuántos intervalos contienen μ. Cambia la semilla (p. ej., 1, 2, 3) y repite. <strong>Parte B.</strong> Cambia el nivel a 90 % y a 99 %: ¿cambia el porcentaje de aciertos y la anchura media? <strong>Parte C.</strong> Pon el tipo de intervalo «z», n = 5 y población normal. ¿Sigue acertando el 95 %? Prueba también población «sesgada», n = 10, intervalo t. ¿Y «Sí/No» con n = 10 y z?</p>",
+   "debrief": "<p>A: los aciertos oscilan alrededor de 95 (por ejemplo, 92–98), pero no son siempre 95. B: más confianza → menos fallos y intervalos más anchos. C: con n pequeño el intervalo z <strong>no alcanza</strong> el nivel anunciado (en una simulación mía con 4 000 repeticiones: ≈ 88 %); con población sesgada y n = 10, ≈ 90 %. El «95 %» de la etiqueta solo se cumple si se cumplen los supuestos.</p>",
+   "config": {
+    "title": "¿Cuántos intervalos contienen la media verdadera?",
+    "population": "normal",
+    "n": 25,
+    "level": 0.95,
+    "method": "t",
+    "seed": 1,
+    "assumptions": [
+     "Población artificial con media verdadera conocida; en la vida real nunca la conoces.",
+     "Muestreo aleatorio simple e independiente; sin sesgo de selección ni errores de medida.",
+     "El intervalo usa la desviación típica de la muestra (s) con t o con z.",
+     "Con pocas repeticiones, el porcentaje observado fluctúa alrededor del nivel nominal: es una simulación, no una predicción exacta.",
+     "Las poblaciones sesgada y Sí/No son simplificaciones (exponencial; Bernoulli con p = 0,40)."
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "i-a2",
+   "widget": "classify",
+   "assesses": [
+    "o3"
+   ],
+   "instructions": "<p>Un IC 95 % para el importe medio es (44,1; 52,3). Clasifica cada frase como <strong>interpretación correcta</strong> o <strong>incorrecta</strong>.</p>",
+   "debrief": "<p>Las correctas hablan del <em>procedimiento a la larga</em> o de «confianza» en ese sentido; las incorrectas atribuyen una probabilidad a μ, o hablan de los datos individuales o de nuevas medias.</p>",
+   "config": {
+    "categories": [
+     {
+      "id": "ok",
+      "label": "Interpretación correcta"
+     },
+     {
+      "id": "no",
+      "label": "Interpretación incorrecta"
+     }
+    ],
+    "items": [
+     {
+      "id": "q1",
+      "html": "Hay un 95 % de probabilidad de que la media poblacional esté entre 44,1 y 52,3.",
+      "category": "no",
+      "feedback": "Trata a μ como aleatoria. μ es fija; la probabilidad del 95 % corresponde al procedimiento, no a este intervalo ya calculado."
+     },
+     {
+      "id": "q2",
+      "html": "Si repitiéramos el muestreo muchas veces y calculáramos el intervalo así, alrededor del 95 % de los intervalos contendrían la media poblacional.",
+      "category": "ok",
+      "feedback": "Es la interpretación frecuentista del nivel de confianza (NIST)."
+     },
+     {
+      "id": "q3",
+      "html": "El 95 % de los pedidos individuales cuesta entre 44,1 y 52,3 €.",
+      "category": "no",
+      "feedback": "El intervalo es sobre la media, no sobre los pedidos individuales, que varían mucho más (σ ≫ EE)."
+     },
+     {
+      "id": "q4",
+      "html": "Los valores de μ dentro del intervalo (44,1 a 52,3) son los que mejor concuerdan con los datos según este procedimiento.",
+      "category": "ok",
+      "feedback": "Lectura práctica y razonable: el intervalo recoge los valores de μ compatibles con la muestra bajo el procedimiento."
+     },
+     {
+      "id": "q5",
+      "html": "El 95 % de las medias de futuras muestras caerá entre 44,1 y 52,3.",
+      "category": "no",
+      "feedback": "El intervalo está centrado en <em>esta</em> media muestral, no en μ; las futuras medias se reparten alrededor de μ y caerán menos del 95 % de las veces dentro de este intervalo concreto."
+     },
+     {
+      "id": "q6",
+      "html": "Este intervalo en concreto o contiene a μ o no la contiene; no sabemos cuál, pero el procedimiento acierta el 95 % de las veces.",
+      "category": "ok",
+      "feedback": "Es exactamente la lectura del NIST: el intervalo concreto o contiene o no la media verdadera."
+     }
+    ]
+   }
+  },
+  {
+   "type": "worked",
+   "title": "Evaluar frases sobre un intervalo concreto",
+   "html": "<p>Resultado del ejemplo de satisfacción: IC 95 % para la proporción de clientes muy satisfechos = (38,1 %; 44,3 %), con n = 1 000 (ilustrativo). Una nota interna dice: «el 41 % está satisfecho; seguro que entre el 38 % y el 44 % está la verdad». Corrígela paso a paso.</p>",
+   "steps": [
+    {
+     "html": "<p><strong>1. Qué es 41 %.</strong> La estimación puntual (p̂ = 0,412): un estadístico que cambiaría con otra muestra.</p>"
+    },
+    {
+     "prompt": "<p>¿Qué palabra de la nota («seguro») es incorrecta y por qué?</p>",
+     "selfExplain": true,
+     "html": "<p>«Seguro»: un intervalo del 95 % falla alrededor del 5 % de las veces; nunca hay certeza. Tampoco se sabe si el nuestro es uno de los intervalos que acierta.</p>"
+    },
+    {
+     "html": "<p><strong>3. Reescritura.</strong> «El 41 % de la muestra está muy satisfecho. Con n = 1 000, el intervalo de confianza del 95 % para el porcentaje en todos los clientes va de 38,1 % a 44,3 %.»</p>"
+    },
+    {
+     "html": "<p><strong>4. Qué aporta el 95 %.</strong> Describe la fiabilidad del procedimiento: de cada 100 estudios así, unos 95 darían un intervalo con el valor verdadero dentro.</p>"
+    }
+   ],
+   "result": "<p>La versión correcta evita «seguro» y «probabilidad de que el valor esté» y atribuye el 95 % al procedimiento.</p>"
+  },
+  {
+   "type": "practice",
+   "id": "i-pr1",
+   "level": "guided",
+   "setting": "in-app",
+   "task": "<p>Un informe dice: «La tasa de conversión es 4,2 % (IC 95 %: 3,6 %–4,8 %). Hay un 95 % de probabilidad de que la tasa real esté en ese rango.» Reescribe la segunda frase correctamente.</p>",
+   "hints": [
+    "<p>Atribuye el 95 % al procedimiento de construcción, no al intervalo concreto.</p>",
+    "<p>Puedes usar «Si repitiéramos el estudio muchas veces…».</p>"
+   ],
+   "rubric": [
+    "No dice «probabilidad de que la tasa real esté»",
+    "Habla del procedimiento o de muchas repeticiones",
+    "Mantiene la información del intervalo"
+   ],
+   "solution": "<p>«El procedimiento que usamos produce intervalos que contienen la tasa de conversión verdadera aproximadamente el 95 % de las veces; el intervalo de este estudio va de 3,6 % a 4,8 %.»</p>"
+  },
+  {
+   "type": "practice",
+   "id": "i-pr2",
+   "level": "independent",
+   "setting": "in-app",
+   "task": "<p>El mismo estudio se repite con el doble de usuarios y la misma tasa observada. ¿Qué cambia: el nivel de confianza, la anchura, o ambos? Un colega propone «subir al 99 % para estar más seguros y que además quede más estrecho». Explica por qué esa segunda parte es incorrecta.</p>",
+   "rubric": [
+    "Dice que el nivel no cambia, la anchura baja",
+    "Explica que subir al 99 % ensancha el intervalo",
+    "Relaciona precisión con anchura"
+   ],
+   "solution": "<p>Con más usuarios, el nivel nominal sigue siendo 95 % y el intervalo se estrecha (≈ 1/√2). Subir a 99 % implica un valor crítico mayor (2,576 frente a 1,96): el intervalo se ensancha. Mayor confianza y mayor precisión compiten; solo más datos ayudan a ambas.</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "i-c1",
+     "assesses": [
+      "o3"
+     ],
+     "prompt": "¿Qué describe mejor lo que significa «95 %» en un intervalo de confianza del 95 %?",
+     "options": [
+      "La probabilidad de que el parámetro esté en el intervalo calculado",
+      "La proporción de intervalos construidos con este procedimiento que contendrían el parámetro, a la larga",
+      "El porcentaje de datos que cae dentro del intervalo"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Atribuye probabilidad a un parámetro fijo; el 95 % es del procedimiento.",
+      "2": "Confunde un intervalo para la media con un rango de los datos."
+     },
+     "explanation": "Es la propiedad frecuentista del procedimiento (NIST)."
+    },
+    {
+     "id": "i-c2",
+     "assesses": [
+      "o3"
+     ],
+     "kind": "multi",
+     "prompt": "Selecciona las frases correctas sobre un IC 95 % para una media.",
+     "options": [
+      "Un intervalo más estrecho (con la misma confianza) indica una estimación más precisa",
+      "Si el intervalo es (44,1; 52,3), μ tiene probabilidad 0,95 de estar dentro",
+      "Con más datos, el intervalo tiende a estrecharse",
+      "Dos intervalos del 95 % calculados con muestras distintas pueden ser diferentes entre sí"
+     ],
+     "correct": [
+      0,
+      2,
+      3
+     ],
+     "explanation": "La 1.ª, la 3.ª y la 4.ª son correctas. La (2) atribuye probabilidad a un parámetro fijo."
+    },
+    {
+     "id": "i-c3",
+     "assesses": [
+      "o3"
+     ],
+     "prompt": "En una simulación de 100 intervalos al 95 % observas que 91 contienen μ. ¿Qué concluyes?",
+     "options": [
+      "Que el procedimiento está mal",
+      "Que es compatible con un 95 % de confianza: en 100 intervalos la variación es normal",
+      "Que el nivel real es 91 %"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Con 100 repeticiones, 91 es plausible: 91 está dentro de unas dos desviaciones típicas (≈ 4,4) de 95.",
+      "2": "Con solo 100 repeticiones no se puede afirmar un nivel real de 91 %; faltan más repeticiones para precisar."
+     },
+     "explanation": "El número de aciertos fluctúa con desviación típica ≈ 2,2; 91 está a ≈ 1,8 desviaciones típicas de 95."
+    },
+    {
+     "id": "i-c4",
+     "assesses": [
+      "o3"
+     ],
+     "kind": "open",
+     "prompt": "Explica con tus palabras, a alguien sin formación estadística, qué significa «IC 95 %: 44,1–52,3».",
+     "rubric": [
+      "Habla del procedimiento y de repeticiones, no de «probabilidad de μ»",
+      "Distingue media de datos individuales",
+      "Sin tecnicismos innecesarios"
+     ],
+     "model": "<p>«Calculamos el promedio de una muestra y sumamos y restamos un margen que depende de cuánto varían los datos y de cuántos son. Si repitiéramos el estudio completo muchas veces, alrededor de 95 de cada 100 intervalos así construidos incluirían el promedio real de todos los pedidos. Este intervalo en concreto o lo incluye o no; no sabemos cuál. Los valores entre 44 y 52 son los compatibles con lo que hemos medido.»</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "i-t1",
+   "assesses": [
+    "o3"
+   ],
+   "task": "<p><strong>Situación nueva.</strong> Un equipo de ingeniería informa: «El tiempo medio de carga de la app es de 2,3 s, con un intervalo de confianza del 95 % de (2,1; 2,5). Hay un 95 % de probabilidad de que el tiempo medio real sea menor que 2,5 s, así que el objetivo de 2,5 s está garantizado». Identifica al menos dos problemas en esta frase y reescríbela correctamente. (Datos ilustrativos.)</p>",
+   "rubric": [
+    "Detecta que «95 % de probabilidad» atribuye probabilidad al parámetro",
+    "Detecta que «garantizado» es incorrecto: el 95 % deja un 5 % de fallo del procedimiento",
+    "Distingue media de tiempo de carga individual (muchas cargas pueden superar 2,5 s)",
+    "Reescritura correcta"
+   ],
+   "model": "<p>Problemas: (1) «95 % de probabilidad de que el tiempo medio real sea menor» da una probabilidad al parámetro; (2) «garantizado» ignora el 5 % de intervalos que fallan; (3) una media de 2,3 s no dice nada de las cargas individuales: muchas pueden pasar de 2,5 s. Reescritura: «Con las cargas medidas, el tiempo medio estimado es 2,3 s; el intervalo del 95 % va de 2,1 a 2,5 s. El límite superior (2,5 s) está justo en el objetivo y no se garantiza el cumplimiento; el análisis de la media no describe la experiencia de cada carga.»</p>"
+  },
+  {
+   "type": "reflect",
+   "id": "i-r1",
+   "prompt": "¿Qué frase dirías tú en una reunión para corregir sin pedantería el «hay un 95 % de probabilidad…»? Escríbela como si hablaras."
+  }
+ ],
+ "sources": [
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 1.3.5.2 «Confidence Limits for the Mean»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm",
+   "accessed": "2026-10-20",
+   "note": "Fórmula Ȳ ± t(1−α/2, N−1)·s/√N; el nivel de confianza se asocia al procedimiento; «dentro de un intervalo calculado, la media verdadera está o no está»."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 7.1.4 «What are confidence intervals?»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm",
+   "accessed": "2026-10-20",
+   "note": "Intervalo con σ conocida Ȳ ± z·σ/√N y con σ estimada (más ancho); interpretación a la larga."
+  },
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20",
+   "note": "Error estándar como desviación típica del estadístico; condición éxito-fracaso (≥ 10 éxitos y ≥ 10 fracasos esperados); estimación ± z*×EE; z* = 1,96 para 95 %; advertencia contra «con cierta probabilidad»."
+  },
+  {
+   "title": "La analogía de la red de pesca y la figura de 20 intervalos son ilustrativas (simulación propia con semilla 6). El comentario sobre intervalos creíbles bayesianos es una simplificación pedagógica sin fuente verificada en este curso: verify si quieres profundizar.",
+   "kind": "pedagogical",
+   "note": "Decisión del curso: ejemplos y cifras ilustrativas inventadas para este curso, no datos reales."
+  }
+ ],
+ "next": "<p>Ahora aplicas esa lectura correcta a la situación más frecuente en marketing: el margen de error de una encuesta.</p>"
+}

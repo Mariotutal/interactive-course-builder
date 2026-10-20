@@ -1,0 +1,302 @@
+{
+  "format": 1,
+  "id": "spanish-a1-cafe",
+  "version": "0.1.0",
+  "title": "Spanish A1: Ordering at a café in Spain",
+  "subtitle": "Understand the waiter, order politely, ask for the bill, and choose tú or usted",
+  "language": "en",
+  "locale": "en-US",
+  "learner": {
+    "topic": "Beginner Spanish (CEFR A1): ordering food and drink at a café or bar in Spain",
+    "goals": [
+      "Understand a short café exchange with a waiter",
+      "Order food and drink politely, including quantities and simple preferences",
+      "Ask for the bill and respond to common questions",
+      "Choose correctly between tú and usted in this setting"
+    ],
+    "scope": "CEFR A1, café/bar service encounters in Spain only",
+    "language": "en",
+    "locale": "en-US",
+    "learner": {
+      "startingKnowledge": "True beginner in Spanish",
+      "background": "Synthetic profile: adult English speaker travelling to Madrid in two months",
+      "depth": "intro",
+      "knownGaps": []
+    },
+    "time": {
+      "totalHours": 3,
+      "sessionMinutes": 20
+    },
+    "constraints": [
+      "No microphone-based tools required",
+      "Target language: Spanish as spoken in Spain (es-ES)"
+    ],
+    "presentation": {
+      "visual": "high",
+      "interaction": "high",
+      "reducedMotion": false,
+      "readingLevel": "unknown"
+    },
+    "practice": {
+      "tools": [],
+      "equipment": [],
+      "software": [],
+      "datasets": [],
+      "realWorld": "Weekly speaking practice with a friend who speaks Spanish; no microphone tools"
+    },
+    "sources": {
+      "provided": [],
+      "freshness": "unknown",
+      "evidenceStandard": "Council of Europe CEFR descriptors; Instituto Cervantes Plan curricular; RAE / Diccionario panhispánico de dudas for usage"
+    },
+    "exclusions": [],
+    "accessibility": {
+      "screenReader": false,
+      "notes": ""
+    },
+    "output": {
+      "format": "web+markdown",
+      "host": "unknown"
+    },
+    "diagnostic": true
+  },
+  "assumptions": [
+    "Synthetic learner profile (adult English speaker, true beginner, travelling to Madrid); no personal data.",
+    "Spanish of Spain (es-ES). Other varieties (e.g. Latin American vosotros/ustedes, voseo) are out of scope.",
+    "Primary sources (RAE/DPD, Council of Europe, Instituto Cervantes) could not be fetched when this course was written (HTTP 403 / maintenance redirect). Claims about usage are therefore marked as course decisions or simplifications, not as verified RAE statements. See each lesson's sources.",
+    "Menu items and prices in examples are illustrative, not a real menu. Real cafés differ by region and venue.",
+    "Speech synthesis, where the browser offers it, is a synthetic voice and not a native-speaker model. No microphone tools are used.",
+    "Two lessons (about 40 minutes of content) are developed; the 3-hour target is met only after the planned lessons in PROGRESS.md are written."
+  ],
+  "outcomes": [
+    {
+      "id": "o1",
+      "text": "Understand the gist and the key questions of a short café exchange with a waiter (greeting, \"what will you have\", \"anything else\", \"for here or to go\")",
+      "level": "core"
+    },
+    {
+      "id": "o2",
+      "text": "Order food and drink politely, including quantities (1-4) and simple preferences (with/without, to take away), in a typed or spoken turn",
+      "level": "core"
+    },
+    {
+      "id": "o3",
+      "text": "Ask for the bill, say whether you pay by card or cash, and answer common questions from the waiter",
+      "level": "core"
+    },
+    {
+      "id": "o4",
+      "text": "Choose tú or usted for a given café situation and form the matching verb (quieres/quiere), explaining the choice",
+      "level": "core"
+    }
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "title": "Greeting and ordering",
+      "summary": "Understand the waiter and order drinks and food politely.",
+      "prerequisites": [],
+      "lessons": [
+        "greeting-and-ordering"
+      ]
+    },
+    {
+      "id": "m2",
+      "title": "The bill, and tú vs usted",
+      "summary": "Ask for the bill, answer routine questions, and pick the right form of address.",
+      "prerequisites": [
+        "m1"
+      ],
+      "lessons": [
+        "bill-and-address"
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "tú",
+      "definition": "The informal \"you\" (singular). Verb: second person singular, e.g. quieres."
+    },
+    {
+      "term": "usted",
+      "aka": [
+        "Ud."
+      ],
+      "definition": "The formal \"you\" (singular). Although it means \"you\", its verb is third person singular, e.g. quiere. Source: es.wikipedia (citing RAE/DPD); see lesson sources."
+    },
+    {
+      "term": "tuteo",
+      "definition": "Using tú (and its verb forms) to address someone."
+    },
+    {
+      "term": "camarero",
+      "aka": [
+        "camarera"
+      ],
+      "definition": "Waiter / waitress. Masculine camarero, feminine camarera."
+    },
+    {
+      "term": "la cuenta",
+      "definition": "The bill. Core phrase: \"La cuenta, por favor.\" Not verified against DLE in this course (source blocked)."
+    },
+    {
+      "term": "por favor",
+      "definition": "Please. Works with both tú and usted."
+    },
+    {
+      "term": "cloze",
+      "definition": "A fill-in-the-blank exercise."
+    },
+    {
+      "term": "verb form",
+      "aka": [
+        "conjugation"
+      ],
+      "definition": "The ending a verb takes depending on who does the action. querer: yo quiero, tú quieres, usted quiere."
+    }
+  ],
+  "routes": [
+    {
+      "id": "core",
+      "title": "Core route",
+      "description": "Both lessons in order, then the capstone with your friend.",
+      "lessons": [
+        "greeting-and-ordering",
+        "bill-and-address"
+      ]
+    },
+    {
+      "id": "advanced",
+      "title": "Extended route",
+      "description": "Not yet written. Planned lessons are listed in PROGRESS.md.",
+      "lessons": [
+        "greeting-and-ordering",
+        "bill-and-address"
+      ]
+    }
+  ],
+  "review": {
+    "intervals": [
+      1,
+      3,
+      7,
+      21
+    ]
+  },
+  "intro": "<p>You will be in Madrid in two months. This course trains one real situation: a short service encounter at a café or bar. You will read and hear a waiter's typical questions, order food and drink with quantities and simple preferences, ask for the bill, and decide whether to say <em>tú</em> or <em>usted</em>.</p><p>How it works: each lesson takes about 20 minutes and mixes dialogues, typed answers, fill-in-the-blank exercises and sorting tasks. The app can check typed answers against a list of accepted variants, but it cannot judge pronunciation or tone. For speaking, each lesson ends with a practice task for your weekly session with your Spanish-speaking friend, with criteria your friend can use.</p><p><strong>Status:</strong> version 0.1 contains two complete lessons; more are planned.</p>",
+  "diagnostic": {
+    "intro": "<p>Two quick questions. They only suggest a pace; nothing is hidden.</p>",
+    "fastLabel": "quick pass: predictions and checks",
+    "fullLabel": "study fully",
+    "questions": [
+      {
+        "id": "dg1",
+        "prompt": "Which sentence is the most natural way to ask for a coffee with milk politely?",
+        "options": [
+          "Café con leche, por favor.",
+          "Yo soy un café con leche.",
+          "Tú café leche."
+        ],
+        "correct": 0,
+        "explanation": "A short noun phrase plus \"por favor\" is a normal polite order.",
+        "feedback": {
+          "1": "\"Soy\" means \"I am\": it says you ARE a coffee.",
+          "2": "Missing \"con\" and no article; not a sentence a waiter expects."
+        },
+        "lessons": [
+          "greeting-and-ordering"
+        ]
+      },
+      {
+        "id": "dg2",
+        "prompt": "In \"¿Qué quiere tomar?\" the waiter is using…",
+        "options": [
+          "tú",
+          "usted",
+          "vosotros"
+        ],
+        "correct": 1,
+        "explanation": "\"Quiere\" is third person singular, the verb form that goes with usted.",
+        "feedback": {
+          "0": "The tú form would be \"quieres\".",
+          "2": "The vosotros form would be \"queréis\"."
+        },
+        "lessons": [
+          "bill-and-address"
+        ]
+      }
+    ]
+  },
+  "capstone": {
+    "id": "capstone",
+    "title": "A full café visit with your friend",
+    "task": "<p>With your Spanish-speaking friend playing the waiter, act out a complete visit: greet, order two different drinks and one food item with one preference, answer one question (\"¿Algo más?\" or \"¿Para tomar aquí o para llevar?\"), ask for the bill, and pay. Do it once with the friend using usted and once using tú, and reply appropriately.</p>",
+    "levels": [
+      "Beginning",
+      "Developing",
+      "Proficient"
+    ],
+    "rubric": [
+      {
+        "criterion": "Understanding the waiter",
+        "descriptors": [
+          "Needed most questions repeated or translated",
+          "Understood routine questions after one repeat",
+          "Understood routine questions the first time"
+        ]
+      },
+      {
+        "criterion": "Ordering",
+        "descriptors": [
+          "Single words only, no por favor",
+          "Complete order with por favor, small errors in articles or quantity",
+          "Complete, polite order with correct quantity and one preference"
+        ]
+      },
+      {
+        "criterion": "Bill and answers",
+        "descriptors": [
+          "Could not ask for the bill",
+          "Asked for the bill; answered with prompting",
+          "Asked for the bill and answered card/cash and other questions unprompted"
+        ]
+      },
+      {
+        "criterion": "Tú / usted",
+        "descriptors": [
+          "Mixed forms without noticing",
+          "Correct forms when reminded",
+          "Correct forms and can explain why in one sentence"
+        ]
+      }
+    ],
+    "assesses": [
+      "o1",
+      "o2",
+      "o3",
+      "o4"
+    ],
+    "evaluation": "<p>Self-assessment is only part of the evidence here. Ask your friend to rate each criterion independently and to tell you one thing that sounded unnatural. The app cannot evaluate speech.</p>",
+    "model": "<p>Waiter: Buenas tardes. ¿Qué le pongo? You: Buenas tardes. Un café con leche y una caña, por favor. Y una tortilla. Waiter: ¿Algo más? You: Nada más, gracias. ... You: La cuenta, por favor. Waiter: ¿Efectivo o tarjeta? You: Con tarjeta. (Illustrative; real phrasing varies.)</p>"
+  },
+  "sources": [
+    {
+      "title": "Common European Framework of Reference for Languages: Learning, teaching, assessment (A1 descriptors)",
+      "kind": "official",
+      "author": "Council of Europe",
+      "url": "https://www.coe.int/en/web/common-european-framework-reference-languages",
+      "note": "Not fetched: the site returned HTTP 403 on 2026-10-20. Used only to frame the level as A1.",
+      "accessed": "2026-10-20"
+    },
+    {
+      "title": "Plan curricular del Instituto Cervantes",
+      "kind": "official",
+      "url": "https://cvc.cervantes.es/ensenanza/biblioteca_ele/plan_curricular/",
+      "note": "Not verified: site redirected to a maintenance page on 2026-10-20.",
+      "accessed": "2026-10-20"
+    }
+  ],
+  "theme": {
+    "accent": "#b4452d"
+  }
+}

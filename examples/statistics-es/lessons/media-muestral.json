@@ -1,0 +1,352 @@
+{
+ "format": 1,
+ "id": "media-muestral",
+ "title": "Por qué la media cambia de muestra en muestra",
+ "summary": "La distribución muestral de la media y el error estándar σ/√n: qué la hace más o menos variable.",
+ "level": "core",
+ "minutes": 30,
+ "outcomes": [
+  "o1",
+  "o2"
+ ],
+ "prerequisites": [
+  "variabilidad-datos"
+ ],
+ "prereqText": "<p>Conviene haber hecho la lección 1: población, muestra, parámetro, estadístico y desviación típica.</p>",
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>El equipo de datos ha estimado cinco veces seguidas el importe medio por pedido, cada vez con 25 pedidos distintos: 31,8 €, 34,9 €, 33,1 €, 30,4 € y 36,2 € (cifras ilustrativas). Tu jefa pregunta: «¿cuál es el bueno, y cuántos pedidos necesitamos para que deje de bailar?».</p><p>La respuesta no es «el promedio de los cinco» sin más: hay que entender cuánto se espera que baile una media y qué controla ese baile. Eso es lo que mide el <span class='term' data-term='error estándar'>error estándar</span>.</p>"
+  },
+  {
+   "type": "intuition",
+   "html": "<p>Imagina que lanzas dardos a una diana invisible que es la media verdadera μ. Cada muestra es un dardo (su media x̄). Si tiras con más datos por muestra, los dardos caen más agrupados. El error estándar es lo que se dispersan los dardos entre sí.</p>",
+   "limits": "<p>En la imagen de los dardos la diana existe y se ve desde arriba; en la práctica solo tienes <em>un</em> dardo y no sabes dónde está la diana. Además, la dispersión de los dardos no incluye la <strong>puntería sesgada</strong>: si tu procedimiento de muestreo desplaza todos los dardos hacia un lado (clientes que solo responden si están contentos), agruparlos más no te acerca a la diana.</p>"
+  },
+  {
+   "type": "visual",
+   "purpose": "Comparar la dispersión de los datos individuales con la de las medias de muestras de tamaño 10 y 40.",
+   "alt": "Tres curvas con forma de campana centradas en 50. La curva punteada, ancha, representa los datos individuales con σ = 10. La curva fina más estrecha representa las medias con n = 10 (error estándar 3,2). La curva gruesa más estrecha todavía, las medias con n = 40 (error estándar 1,6). Cuanto mayor la muestra, más se concentran las medias alrededor de la media verdadera.",
+   "html": "<figure><svg viewBox='0 0 560 200' role='img' aria-labelledby='m2t m2d'><title id='m2t'>Distribución de los datos y de las medias muestrales</title><desc id='m2d'>Tres curvas centradas en 50: la de los datos individuales (σ = 10) es ancha, la de las medias con n = 10 (EE = 3,2) es más estrecha y la de las medias con n = 40 (EE = 1,6) es la más estrecha.</desc>\n<line class='edge' x1='30' y1='170' x2='530' y2='170'/><path d='M30.0 169.2L36.3 169.1L42.5 168.8L48.8 168.6L55.0 168.2L61.3 167.8L67.5 167.4L73.8 166.8L80.0 166.2L86.3 165.5L92.5 164.6L98.8 163.6L105.0 162.5L111.3 161.3L117.5 159.9L123.8 158.3L130.0 156.6L136.3 154.7L142.5 152.6L148.8 150.4L155.0 148.0L161.3 145.4L167.5 142.7L173.8 139.9L180.0 137.0L186.3 134.0L192.5 130.9L198.8 127.8L205.0 124.8L211.3 121.7L217.5 118.8L223.8 116.0L230.0 113.4L236.3 110.9L242.5 108.7L248.8 106.8L255.0 105.2L261.3 103.9L267.5 102.9L273.8 102.4L280.0 102.2L286.3 102.4L292.5 102.9L298.8 103.9L305.0 105.2L311.3 106.8L317.5 108.7L323.8 110.9L330.0 113.4L336.3 116.0L342.5 118.8L348.8 121.7L355.0 124.8L361.3 127.8L367.5 130.9L373.8 134.0L380.0 137.0L386.3 139.9L392.5 142.7L398.8 145.4L405.0 148.0L411.3 150.4L417.5 152.6L423.8 154.7L430.0 156.6L436.3 158.3L442.5 159.9L448.8 161.3L455.0 162.5L461.3 163.6L467.5 164.6L473.8 165.5L480.0 166.2L486.3 166.8L492.5 167.4L498.8 167.8L505.0 168.2L511.3 168.6L517.5 168.8L523.8 169.1L530.0 169.2' fill='none' stroke='currentColor' stroke-width='1.6' stroke-dasharray='2 3' opacity='.8'/><path d='M30.0 170.0L36.3 170.0L42.5 170.0L48.8 170.0L55.0 170.0L61.3 170.0L67.5 170.0L73.8 170.0L80.0 170.0L86.3 170.0L92.5 170.0L98.8 170.0L105.0 170.0L111.3 170.0L117.5 170.0L123.8 170.0L130.0 170.0L136.3 170.0L142.5 170.0L148.8 170.0L155.0 170.0L161.3 170.0L167.5 170.0L173.8 169.9L180.0 169.8L186.3 169.6L192.5 169.1L198.8 168.2L205.0 166.3L211.3 162.9L217.5 157.1L223.8 148.0L230.0 134.5L236.3 115.9L242.5 92.1L248.8 63.8L255.0 33.3L261.3 3.5L267.5 -21.6L273.8 -38.5L280.0 -44.5L286.3 -38.5L292.5 -21.6L298.8 3.5L305.0 33.3L311.3 63.8L317.5 92.1L323.8 115.9L330.0 134.5L336.3 148.0L342.5 157.1L348.8 162.9L355.0 166.3L361.3 168.2L367.5 169.1L373.8 169.6L380.0 169.8L386.3 169.9L392.5 170.0L398.8 170.0L405.0 170.0L411.3 170.0L417.5 170.0L423.8 170.0L430.0 170.0L436.3 170.0L442.5 170.0L448.8 170.0L455.0 170.0L461.3 170.0L467.5 170.0L473.8 170.0L480.0 170.0L486.3 170.0L492.5 170.0L498.8 170.0L505.0 170.0L511.3 170.0L517.5 170.0L523.8 170.0L530.0 170.0' class='edge' fill='none' stroke-width='2.2'/><path d='M30.0 170.0L36.3 170.0L42.5 170.0L48.8 170.0L55.0 170.0L61.3 170.0L67.5 170.0L73.8 170.0L80.0 170.0L86.3 170.0L92.5 170.0L98.8 170.0L105.0 170.0L111.3 170.0L117.5 170.0L123.8 170.0L130.0 170.0L136.3 170.0L142.5 170.0L148.8 170.0L155.0 170.0L161.3 170.0L167.5 170.0L173.8 170.0L180.0 170.0L186.3 170.0L192.5 170.0L198.8 170.0L205.0 170.0L211.3 170.0L217.5 170.0L223.8 170.0L230.0 169.7L236.3 168.3L242.5 162.5L248.8 144.2L255.0 99.1L261.3 14.2L267.5 -103.5L273.8 -213.3L280.0 -258.9L286.3 -213.3L292.5 -103.5L298.8 14.2L305.0 99.1L311.3 144.2L317.5 162.5L323.8 168.3L330.0 169.7L336.3 170.0L342.5 170.0L348.8 170.0L355.0 170.0L361.3 170.0L367.5 170.0L373.8 170.0L380.0 170.0L386.3 170.0L392.5 170.0L398.8 170.0L405.0 170.0L411.3 170.0L417.5 170.0L423.8 170.0L430.0 170.0L436.3 170.0L442.5 170.0L448.8 170.0L455.0 170.0L461.3 170.0L467.5 170.0L473.8 170.0L480.0 170.0L486.3 170.0L492.5 170.0L498.8 170.0L505.0 170.0L511.3 170.0L517.5 170.0L523.8 170.0L530.0 170.0' class='edge hl' fill='none'/>\n<line class='edge dashed' x1='280' y1='20' x2='280' y2='170'/>\n<text class='tm' x='280' y='14' text-anchor='middle'>media verdadera μ = 50</text>\n<text class='ts' x='34' y='120'>puntos: datos individuales (σ = 10)</text><text class='ts' x='34' y='136'>fina: medias con n = 10 (EE ≈ 3,2)</text><text class='ts' x='34' y='152'>gruesa naranja: medias con n = 40 (EE ≈ 1,6)</text>\n<text class='tm' x='30' y='190'>20</text><text class='tm' x='280' y='190' text-anchor='middle'>50</text><text class='tm' x='530' y='190' text-anchor='end'>80</text></svg><figcaption>Las medias de muestras grandes se agrupan más cerca de μ (modelo normal, cifras ilustrativas).</figcaption></figure>"
+  },
+  {
+   "type": "explain",
+   "title": "La distribución muestral y el error estándar",
+   "html": "<p>La <span class='term' data-term='distribución muestral'>distribución muestral</span> de la media es el reparto de todos los valores que x̄ tomaría si repitieras el muestreo muchas veces con el mismo n. Resultado básico (OpenIntro; NIST): su centro coincide con la media poblacional μ y su desviación típica es el <span class='term' data-term='error estándar'>error estándar</span>:</p>\n<p style='text-align:center'><strong>EE = σ / √n</strong></p>\n<p>Como σ casi nunca se conoce, se sustituye por la desviación típica de la muestra: <strong>EE ≈ s / √n</strong> (es la cantidad que aparece en la fórmula del intervalo del NIST). Tres consecuencias:</p>\n<ul><li><strong>Cuanto mayor n, menor EE, pero con rendimientos decrecientes</strong>: para reducir el EE a la mitad hay que multiplicar n por 4; para reducirlo a una décima parte, por 100.</li><li><strong>Cuanto más dispersa la población (σ grande), mayor EE</strong>. Puedes mejorar n, pero no puedes cambiar σ.</li><li>El tamaño de la <em>población</em> apenas importa mientras la muestra sea pequeña en comparación (simplificación del curso: la corrección por población finita no se trata).</li></ul>\n<p><strong>No confundas</strong> σ (cómo varían los pedidos individuales) con el EE (cómo varía la media de una muestra): el EE siempre es menor que σ cuando n &gt; 1. <strong>Forma de la distribución.</strong> Aunque los datos sean asimétricos, la distribución de la media se parece cada vez más a una campana al crecer n (teorema central del límite; condiciones: observaciones independientes y n suficientemente grande, algo mayor cuanto más asimétrica sea la población). Es una simplificación: no hay un umbral mágico de n = 30.</p>"
+  },
+  {
+   "type": "worked",
+   "title": "Error estándar y tamaño de muestra necesario",
+   "html": "<p>Datos ilustrativos: la desviación típica de los importes es σ = 10 € y se toman muestras de n = 25.</p>",
+   "steps": [
+    {
+     "html": "<p><strong>EE</strong> = 10 / √25 = 10 / 5 = <strong>2 €</strong>. Las medias de muestras de 25 pedidos se desvían típicamente unos 2 € de μ.</p>"
+    },
+    {
+     "prompt": "<p>Si quieres EE = 1 €, ¿cuántos pedidos necesitas? Haz la cuenta antes de ver el resultado.</p>",
+     "selfExplain": true,
+     "html": "<p>1 = 10/√n → √n = 10 → n = 100. Es 4 veces más pedidos (25 → 100) para reducir el EE a la mitad.</p>"
+    },
+    {
+     "html": "<p><strong>Lectura.</strong> Si la media de una muestra de 25 es 52 €, un valor de μ = 50 € está a 1 EE de distancia: un resultado normal. Si la media fuera 58 €, estaría a 4 EE: muy improbable si μ = 50.</p>"
+    },
+    {
+     "html": "<p><strong>En la hoja de cálculo</strong> con datos en A1:A25: <code>=DESVEST.M(A1:A25)/RAIZ(CONTAR(A1:A25))</code> (inglés: <code>STDEV.S</code>, <code>SQRT</code>, <code>COUNT</code>).</p>"
+    }
+   ],
+   "result": "<p>EE = 2 € con n = 25; para bajar a 1 € hay que cuadruplicar n a 100.</p>"
+  },
+  {
+   "type": "predict",
+   "id": "m-p1",
+   "prompt": "El error estándar de la media con n = 25 es 2 €. Si pasas a n = 100 (4 veces más pedidos), ¿cuánto será el nuevo error estándar?",
+   "options": [
+    "0,5 € (la cuarta parte)",
+    "1 € (la mitad)",
+    "2 € (no cambia porque σ no cambia)"
+   ],
+   "correct": 1,
+   "feedback": {
+    "0": "Se divide por √4 = 2, no por 4: el EE no baja proporcionalmente a n.",
+    "2": "σ no cambia, pero el EE sí: σ/√n baja cuando n sube."
+   },
+   "explanation": "EE = σ/√n: 10/√100 = 1."
+  },
+  {
+   "type": "activity",
+   "id": "m-a1",
+   "widget": "sampling-sim",
+   "instructions": "<p><strong>Experimento.</strong> (1) Predice: con n = 25 y σ = 10, ¿cuál será la desviación típica de las medias de muchas muestras? (2) Pulsa «Extraer 100» y mira la fila «Desviación típica de las medias muestrales» y su valor teórico σ/√n. (3) Cambia n a 100 y vuelve a extraer 100. (4) Prueba la población «sesgada» y observa cómo se comportan las medias. No te fijes todavía en los intervalos: son el tema de la lección 4.</p>",
+   "debrief": "<p>Con n = 25 las medias se desvían unos 2 unidades; con n = 100, aproximadamente 1: la raíz de n manda. Con la población sesgada (σ = 50) el EE es mayor, pero la fórmula σ/√n se sigue cumpliendo. Con 100 repeticiones el valor observado oscila un poco alrededor del teórico: la propia simulación tiene variabilidad.</p>",
+   "assesses": [
+    "o1"
+   ],
+   "config": {
+    "title": "Muestras repetidas de una población artificial",
+    "population": "normal",
+    "n": 25,
+    "level": 0.95,
+    "method": "t",
+    "seed": 2026,
+    "assumptions": [
+     "Población artificial con media y desviación típica conocidas; en la vida real no conoces μ.",
+     "Muestreo aleatorio simple e independiente.",
+     "Generador pseudoaleatorio con semilla: los mismos ajustes y la misma semilla dan los mismos resultados.",
+     "Con pocas repeticiones, los porcentajes observados fluctúan; no son una predicción exacta."
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "m-a2",
+   "widget": "parameter-explorer",
+   "instructions": "<p>Fija σ = 20 y mueve n. Anota n para EE ≈ 4 y para EE ≈ 2. ¿Qué observas en la curva? Después baja σ a 10 y repite.</p>",
+   "debrief": "<p>Pasar de EE 4 a EE 2 cuesta cuadruplicar n (de 25 a 100); la curva cae rápido al principio y se aplana: las primeras decenas de pedidos aportan mucho, los últimos miles aportan poco. Bajar σ también reduce el EE, pero σ depende de la población, no de ti.</p>",
+   "config": {
+    "title": "Error estándar frente al tamaño de muestra",
+    "inputs": [
+     {
+      "id": "n",
+      "label": "Tamaño de muestra n",
+      "min": 4,
+      "max": 400,
+      "step": 1,
+      "value": 25
+     },
+     {
+      "id": "s",
+      "label": "Desviación típica σ",
+      "min": 2,
+      "max": 40,
+      "step": 1,
+      "value": 20
+     }
+    ],
+    "outputs": [
+     {
+      "id": "se",
+      "label": "Error estándar σ/√n",
+      "expr": "s / sqrt(n)",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "n4",
+      "label": "n necesario para reducir el EE a la mitad",
+      "expr": "4 * n",
+      "format": {
+       "digits": 0
+      }
+     },
+     {
+      "id": "n10",
+      "label": "n necesario para reducir el EE a una décima parte",
+      "expr": "100 * n",
+      "format": {
+       "digits": 0
+      }
+     }
+    ],
+    "chart": {
+     "x": {
+      "var": "x",
+      "from": 4,
+      "to": 400
+     },
+     "series": [
+      {
+       "label": "EE = σ/√n",
+       "expr": "s / sqrt(x)"
+      }
+     ],
+     "markers": [
+      {
+       "label": "n actual",
+       "x": "n"
+      }
+     ],
+     "xLabel": "tamaño de muestra n",
+     "yLabel": "error estándar",
+     "ariaLabel": "Error estándar decreciente con n"
+    },
+    "interpret": [
+     {
+      "when": "n < 30",
+      "tone": "warn",
+      "html": "Con n pequeño la fórmula σ/√n sigue valiendo, pero en la práctica σ se estima con s, que también es muy variable."
+     },
+     {
+      "when": "n >= 100",
+      "tone": "ok",
+      "html": "Con n grande, duplicar el esfuerzo de muestreo mejora poco el EE (rendimientos decrecientes)."
+     }
+    ],
+    "assumptions": [
+     "σ se trata como conocida.",
+     "Muestreo aleatorio simple; independencia de las observaciones.",
+     "Se ignora la corrección por población finita."
+    ]
+   }
+  },
+  {
+   "type": "practice",
+   "id": "m-pr1",
+   "level": "guided",
+   "setting": "in-app",
+   "task": "<p>σ = 20 € (ilustrativo) y n = 64. (a) Calcula el error estándar. (b) ¿Qué n necesitas para un EE de 1 €?</p>",
+   "hints": [
+    "<p>EE = σ/√n. √64 = 8.</p>",
+    "<p>Para (b), despeja n: n = (σ/EE)².</p>"
+   ],
+   "rubric": [
+    "Obtengo EE = 2,5 €",
+    "Despejo n con la fórmula, no por tanteo sin razonar",
+    "Obtengo n = 400"
+   ],
+   "solution": "<p>(a) EE = 20/8 = <strong>2,5 €</strong>. (b) n = (20/1)² = <strong>400</strong>: de 64 a 400 es multiplicar por 6,25 para reducir el EE de 2,5 a 1.</p>"
+  },
+  {
+   "type": "practice",
+   "id": "m-pr2",
+   "level": "independent",
+   "setting": "offline",
+   "task": "<p>En tu hoja de cálculo, escribe en A1:A8 los importes 23, 31, 28, 45, 19, 52, 27, 35. Calcula s y el EE = s/√n con fórmulas. Luego responde: si el equipo quisiera un EE de la mitad, ¿cuántos pedidos tomaría? ¿Es realista tomarlos? (Opcional con tus propios datos: repite con un pequeño conjunto de datos reales de tu trabajo que no sean confidenciales.)</p>",
+   "rubric": [
+    "Uso DESVEST.M (o STDEV.S) y RAIZ(CONTAR(…)) con referencias de celda",
+    "Obtengo s ≈ 11,14 y EE ≈ 3,94",
+    "Concluyo n ≈ 32 y discuto el coste de recoger 4 veces más datos"
+   ],
+   "solution": "<p>s = 11,14; EE = 11,14/√8 ≈ <strong>3,94 €</strong>. Para la mitad (≈ 1,97) harían falta 4 × 8 = <strong>32</strong> pedidos. En un comercio online es fácil; en una encuesta con llamadas, 4 veces más entrevistas pueden ser caras.</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "m-c1",
+     "assesses": [
+      "o1",
+      "o2"
+     ],
+     "prompt": "Una colega dice: «la desviación típica de mis 25 pedidos es 10 € así que mi media tiene un error de 10 €». ¿Qué corregirías?",
+     "options": [
+      "Nada: la desviación típica es el error de la media",
+      "Que el error de la media (EE) es σ/√n = 2 €, no 10 €",
+      "Que el error de la media es σ·√n = 50 €"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Confunde la dispersión de los datos individuales con la dispersión de la media muestral.",
+      "2": "Invierte la relación: el EE disminuye con √n; no se multiplica."
+     },
+     "explanation": "EE = σ/√n = 10/5 = 2 €. La media de muchos pedidos fluctúa mucho menos que un pedido individual."
+    },
+    {
+     "id": "m-c2",
+     "assesses": [
+      "o2"
+     ],
+     "kind": "numeric",
+     "prompt": "Calcula el error estándar de la media con σ = 30 € y n = 225 (redondea a dos decimales).",
+     "answer": 2,
+     "tolerance": 0.01,
+     "unit": "€",
+     "explanation": "30/√225 = 30/15 = 2."
+    },
+    {
+     "id": "m-c3",
+     "assesses": [
+      "o1"
+     ],
+     "prompt": "¿Qué ocurre con la variabilidad de la media muestral si n pasa de 50 a 200?",
+     "options": [
+      "Se divide entre 4",
+      "Se divide entre 2",
+      "Aumenta un poco porque hay más datos"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "4 es la razón de los tamaños de muestra; la variabilidad se divide entre √4 = 2.",
+      "2": "Más datos nunca aumentan la variabilidad de la media muestral (suponiendo muestreo aleatorio)."
+     },
+     "explanation": "√200/√50 = 2; el EE se reduce a la mitad."
+    },
+    {
+     "id": "m-c4",
+     "assesses": [
+      "o1"
+     ],
+     "kind": "open",
+     "prompt": "Con tus palabras: explica a una compañera por qué la media de 100 pedidos fluctúa menos que la media de 10 pedidos aunque salgan de la misma población.",
+     "rubric": [
+      "Dice que al promediar más valores los muy altos y muy bajos se compensan más",
+      "Menciona que el error estándar baja como σ/√n",
+      "Distingue la variabilidad de los pedidos de la variabilidad de la media"
+     ],
+     "model": "<p>Al promediar muchos pedidos, los muy altos y los muy bajos se compensan, así que la media se mueve menos de una muestra a otra. Cuantitativamente, la variación de la media es σ/√n: con 100 pedidos es √10 ≈ 3,2 veces menor que con 10. Los pedidos individuales siguen variando igual (σ); lo que se estabiliza es su promedio.</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "m-t1",
+   "assesses": [
+    "o1",
+    "o2"
+   ],
+   "task": "<p><strong>Situación nueva (proporciones).</strong> Se hacen 5 campañas de email a muestras de 500 suscriptores cada una, con la misma lista y el mismo mensaje. Suponiendo que la tasa verdadera de apertura es 22 %, el error estándar de una tasa es √(p(1−p)/n). (a) Calcúlalo para n = 500. (b) Las cinco tasas observadas fueron 19,8 %, 23,4 %, 21,0 %, 24,6 % y 20,2 %. ¿Están dentro de ±2 EE de 22 %? (c) Una compañera concluye «la campaña 4 fue mejor». ¿Qué le respondes? (Datos ilustrativos.)</p>",
+   "rubric": [
+    "Calcula EE ≈ 1,85 puntos porcentuales",
+    "Compara cada tasa con 22 % ± 3,7 puntos (18,3 % a 25,7 %)",
+    "Concluye que todas son compatibles con la misma tasa verdadera y que la diferencia observada puede ser solo variabilidad muestral",
+    "No afirma que la 4 sea mejor sin más evidencia"
+   ],
+   "model": "<p>(a) EE = √(0,22 · 0,78 / 500) = √0,000343 ≈ 0,0185, o 1,85 puntos. (b) 22 % ± 2 EE = 18,3 % a 25,7 %: las cinco tasas caen dentro. (c) Las cinco son compatibles con una tasa verdadera común del 22 %; con n = 500 es normal que las tasas fluctúen ±2 puntos o más, así que no hay base para decir que la campaña 4 fue mejor: la diferencia puede ser solo variabilidad muestral. Haría falta una diferencia mayor o más muestra.</p>"
+  },
+  {
+   "type": "reflect",
+   "id": "m-r1",
+   "prompt": "¿Qué te sorprendió más del comportamiento de √n? ¿Cómo afecta a una decisión de presupuesto de muestreo en tu trabajo?"
+  }
+ ],
+ "sources": [
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 1.3.5.2 «Confidence Limits for the Mean»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm",
+   "accessed": "2026-10-20",
+   "note": "Fórmula Ȳ ± t(1−α/2, N−1)·s/√N; el nivel de confianza se asocia al procedimiento; «dentro de un intervalo calculado, la media verdadera está o no está»."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 7.1.4 «What are confidence intervals?»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm",
+   "accessed": "2026-10-20",
+   "note": "Intervalo con σ conocida Ȳ ± z·σ/√N y con σ estimada (más ancho); interpretación a la larga."
+  },
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20",
+   "note": "Error estándar como desviación típica del estadístico; condición éxito-fracaso (≥ 10 éxitos y ≥ 10 fracasos esperados); estimación ± z*×EE; z* = 1,96 para 95 %; advertencia contra «con cierta probabilidad»."
+  },
+  {
+   "title": "OpenIntro Statistics, cap. 5 «Foundations for inference» (secciones 5.1 variabilidad y 5.2 intervalos de confianza)",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://www.openintro.org/book/os/",
+   "accessed": "2026-10-20",
+   "note": "Solo se verificó el índice de capítulos de la página; el texto del PDF no pudo consultarse con las herramientas disponibles."
+  },
+  {
+   "title": "Simulaciones y cifras (σ = 10, n = 25, campañas de email): inventadas y etiquetadas como ilustrativas; el uso de la imagen de los dardos es una analogía propia del curso.",
+   "kind": "pedagogical",
+   "note": "Decisión del curso: ejemplos y cifras ilustrativas inventadas para este curso, no datos reales."
+  }
+ ],
+ "next": "<p>Ya sabes cuánto se espera que fluctúe una media. En la lección 3 usas el error estándar para construir un intervalo que recoge esa incertidumbre.</p>"
+}

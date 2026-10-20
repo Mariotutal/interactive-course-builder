@@ -1,0 +1,464 @@
+{
+ "format": 1,
+ "id": "encuestas-margen",
+ "title": "El margen de error en encuestas",
+ "summary": "Calcular e interpretar el margen de error de una proporción, de un subgrupo y de la diferencia entre dos opciones, y decidir si respalda una afirmación.",
+ "level": "core",
+ "minutes": 30,
+ "outcomes": [
+  "o4"
+ ],
+ "prerequisites": [
+  "interpretar-intervalo"
+ ],
+ "prereqText": "<p>Necesitas el intervalo para una proporción (lección 3) y la lectura correcta del 95 % (lección 4).</p>",
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>Una nota de prensa de tu cliente dice: «Una encuesta a 600 consumidores muestra que el 52 % prefiere el nuevo envase. ¡La mayoría ha hablado!». Al pie, en letra pequeña: «margen de error ±4 puntos». Y otra: «el candidato A lidera con el 48 % frente al 43 % de B (±3)». Te piden que revises las dos frases antes de publicarlas. (Datos ilustrativos.)</p>"
+  },
+  {
+   "type": "intuition",
+   "html": "<p>El tamaño de la muestra es como la resolución de una fotografía: con pocos píxeles (n pequeño) la imagen es borrosa y no distingues detalles; con muchos, es más nítida, pero doblar los píxeles mejora cada vez menos. El <span class=\"term\" data-term=\"margen de error\">margen de error</span> mide ese desenfoque: el «más o menos» por haber visto solo una muestra.</p>",
+   "limits": "<p>Una foto nítida puede enfocar el objeto equivocado: si preguntas solo a quienes ya compran tu marca, el margen de error puede ser pequeñísimo y la conclusión sobre «todos los consumidores» seguirá siendo falsa. El margen solo cubre el desenfoque por azar de muestreo, no el enfoque erróneo (sesgo, preguntas sugeridas, no respuesta).</p>"
+  },
+  {
+   "type": "visual",
+   "purpose": "Mostrar cómo baja el margen de error con n y los rendimientos decrecientes.",
+   "alt": "Cinco barras verticales: n = 100 con margen ±9,8 puntos; n = 400 con ±4,9; n = 1 067 con ±3,0; n = 2 000 con ±2,2; n = 4 000 con ±1,5. Las barras descienden rápidamente al principio y más despacio después.",
+   "html": "<figure><svg viewBox='0 0 560 225' role='img' aria-labelledby='e5t e5d'><title id='e5t'>Margen de error según el tamaño de muestra</title><desc id='e5d'>Cinco barras: n = 100 da ±9,8 puntos; n = 400, ±4,9; n = 1 067, ±3,0; n = 2 000, ±2,2; n = 4 000, ±1,5. Las barras bajan deprisa al principio y cada vez más despacio.</desc><line class='edge' x1='40' y1='190' x2='540' y2='190'/><rect class='n1' x='60' y='33.19999999999999' width='60' height='156.8'/><text class='t' x='90' y='27.19999999999999' text-anchor='middle'>±9,8</text><text class='ts' x='90' y='208' text-anchor='middle'>n = 100</text><rect class='n1' x='155' y='111.6' width='60' height='78.4'/><text class='t' x='185' y='105.6' text-anchor='middle'>±4,9</text><text class='ts' x='185' y='208' text-anchor='middle'>n = 400</text><rect class='n1' x='250' y='142' width='60' height='48'/><text class='t' x='280' y='136' text-anchor='middle'>±3</text><text class='ts' x='280' y='208' text-anchor='middle'>n = 1067</text><rect class='n1' x='345' y='154.8' width='60' height='35.2'/><text class='t' x='375' y='148.8' text-anchor='middle'>±2,2</text><text class='ts' x='375' y='208' text-anchor='middle'>n = 2000</text><rect class='n1' x='440' y='166' width='60' height='24'/><text class='t' x='470' y='160' text-anchor='middle'>±1,5</text><text class='ts' x='470' y='208' text-anchor='middle'>n = 4000</text><text class='tm' x='300' y='222' text-anchor='middle'>Peor caso p = 50 %, confianza 95 %, muestreo aleatorio simple (cálculo del curso)</text></svg><figcaption>Margen de error en puntos porcentuales: cuadruplicar n lo reduce a la mitad.</figcaption></figure>"
+  },
+  {
+   "type": "explain",
+   "title": "Margen de error de una proporción, de un subgrupo y de una ventaja",
+   "html": "<p>Para una proporción, el <span class='term' data-term='margen de error'>margen de error</span> al 95 % es <strong>1,96 × √(p̂(1−p̂)/n)</strong> (OpenIntro). Como p̂ es desconocida antes de preguntar, las encuestas publican el <em>peor caso</em> p = 0,5, que maximiza p(1−p): margen ≈ 0,98/√n. Con n = 1 067 sale ±3,0 puntos, el ejemplo que da Pew Research Center (Mercer, 2016), y con n = 1 000, ±3,1. Pew añade que el margen depende en especial del tamaño de muestra.</p>\n<p><strong>Qué NO depende de la población.</strong> Mientras la muestra sea una fracción pequeña de la población (simplificación del curso), el margen apenas cambia entre una ciudad de 100 000 habitantes y un país de 10 millones; importa n, no el tamaño de la población.</p>\n<p><strong>Subgrupos.</strong> Cada subgrupo tiene su propio n y, por tanto, su propio margen, mayor. Pew pone el ejemplo de un subgrupo de unos 160 casos dentro de una muestra de 1 067: ≈ ±8 puntos para una opción. Con n = 160 y p = 0,5, 1,96·√(0,25/160) = 0,0775: ±7,7 (cálculo del curso).</p>\n<p><strong>Diferencia entre dos opciones de la misma encuesta (ventaja).</strong> Si dos opciones, con p̂₁ y p̂₂, compiten en la misma muestra (se excluyen entre sí), el error estándar de la <em>diferencia</em> es √((p̂₁ + p̂₂ − (p̂₁ − p̂₂)²)/n). Es aproximadamente el doble del margen de una opción (Pew: «aproximadamente el doble»), porque si una opción gana puntos, la otra los pierde. Por eso una ventaja de 5 puntos con ±3 por candidato <em>no</em> está claramente fuera del margen. (El caso de dos muestras independientes —test A/B— usa otra fórmula: lección 6.)</p>\n<p><strong>Efecto de diseño.</strong> Si la muestra está ponderada, el margen real es mayor que el calculado como si fuera aleatoria simple; el <span class='term' data-term='efecto de diseño'>efecto de diseño</span> reduce el tamaño de muestra efectivo: n_ef = n / deff. Pew lo menciona; un deff concreto debe dárnoslo quien publica la encuesta.</p>\n<p><strong>Lo que el margen no cubre.</strong> Pew recuerda que el error de muestreo es solo una fuente de error; los <span class='term' data-term='error ajeno al muestreo'>errores ajenos al muestreo</span> (cobertura, no respuesta, redacción, modelos de votante probable) son difíciles de cuantificar y rara vez se publican. Una cifra con margen pequeño puede estar muy sesgada.</p>\n<p><strong>Cómo decidir si respalda una afirmación.</strong> (1) Construye el intervalo p̂ ± margen. (2) La afirmación «más del 50 %» solo se respalda si el <em>límite inferior</em> supera el 50 %. (3) «A supera a B» se respalda si el intervalo de la <em>diferencia</em> excluye el 0. (4) Revisa los sesgos que el margen no cubre.</p>"
+  },
+  {
+   "type": "predict",
+   "id": "e-p1",
+   "prompt": "En una encuesta con n = 1 067 (±3 por opción), la opción A tiene el 48 % y la B el 43 %: A lidera por 5 puntos. ¿Qué dirías?",
+   "options": [
+    "A lidera con seguridad: 5 puntos superan los ±3",
+    "Con el margen de la diferencia (≈ ±5,7), la ventaja de 5 puntos no se distingue claramente de un empate",
+    "B lidera, porque su margen es menor"
+   ],
+   "correct": 1,
+   "feedback": {
+    "0": "Comparas la ventaja con el margen de una sola opción; el margen de la diferencia es casi el doble.",
+    "2": "No hay base para decir que B lidere; ambas opciones tienen el mismo margen y A está por delante en la muestra."
+   },
+   "explanation": "SE de la diferencia = √((0,48+0,43−0,05²)/1067) ≈ 0,0292; ×1,96 ≈ 5,7 puntos. El intervalo de la ventaja va de −0,7 a +10,7: incluye 0."
+  },
+  {
+   "type": "worked",
+   "title": "Dos frases de la nota de prensa",
+   "html": "<p>Revisa «el 52 % de 600 prefiere el nuevo envase: ¡la mayoría!» y «A 48 % frente a B 43 % (n = 1 067)». Datos ilustrativos.</p>",
+   "steps": [
+    {
+     "html": "<p><strong>Frase 1. Margen:</strong> 1,96·√(0,52·0,48/600) = 1,96·0,0204 ≈ 0,040 (4,0 puntos). <strong>Intervalo:</strong> 48,0 % a 56,0 %.</p>"
+    },
+    {
+     "prompt": "<p>¿Respalda ese intervalo que «la mayoría» prefiere el nuevo envase? Responde antes de ver el paso siguiente.</p>",
+     "selfExplain": true,
+     "html": "<p>No: el límite inferior (48,0 %) está por debajo del 50 %. Los datos son compatibles con que la mayoría <em>no</em> lo prefiera. Se podría decir «una ligera inclinación a favor, no concluyente».</p>"
+    },
+    {
+     "html": "<p><strong>Frase 2. Diferencia:</strong> 48 − 43 = 5 puntos. SE = √((0,48+0,43−0,0025)/1067) = 0,0292; margen = 1,96·0,0292 = 0,0572. Intervalo de la ventaja: <strong>−0,7 a +10,7 puntos</strong>.</p>"
+    },
+    {
+     "html": "<p><strong>Conclusión.</strong> El intervalo incluye 0: la encuesta no respalda por sí sola que A lidere. Frase correcta: «A y B están dentro del margen de error; A está por delante en la muestra por 5 puntos».</p>"
+    },
+    {
+     "html": "<p><strong>Hoja de cálculo.</strong> Margen = <code>=1,96*RAIZ(B1*(1-B1)/B2)</code> con p̂ en B1 y n en B2; ventaja: <code>=1,96*RAIZ((B1+B3-(B1-B3)^2)/B2)</code> con p̂₂ en B3.</p>"
+    }
+   ],
+   "result": "<p>Ninguna de las dos frases se sostiene como está escrita: la primera por el límite inferior, la segunda porque la ventaja incluye 0.</p>"
+  },
+  {
+   "type": "activity",
+   "id": "e-a1",
+   "widget": "parameter-explorer",
+   "instructions": "<p><strong>Predice y comprueba.</strong> (1) Con p₁ = 48 %, p₂ = 43 % y n = 1 067, ¿cuál es el margen de la ventaja? (2) Sube n hasta que el límite inferior de la ventaja pase de 0: ¿qué n hace falta aproximadamente? (3) Con n = 1 067 aplica deff = 1,5: ¿cambia la conclusión?</p>",
+   "debrief": "<p>Para que una ventaja de 5 puntos se distinga del 0 hace falta n ≈ 1 400 con deff = 1 (despejando 1,96·√(0,9075/n) = 0,05; cálculo del curso). Un efecto de diseño de 1,5 reduce la muestra efectiva a 711 y el margen sube: la ventaja queda aún más lejos de ser concluyente. Los márgenes publicados suelen ya incluir deff, pero conviene preguntarlo.</p>",
+   "config": {
+    "title": "Margen de error de una opción y de la ventaja entre dos opciones",
+    "inputs": [
+     {
+      "id": "p1",
+      "label": "Opción A (%)",
+      "min": 20,
+      "max": 70,
+      "step": 0.5,
+      "value": 48
+     },
+     {
+      "id": "p2",
+      "label": "Opción B (%)",
+      "min": 10,
+      "max": 60,
+      "step": 0.5,
+      "value": 43
+     },
+     {
+      "id": "n",
+      "label": "Tamaño de muestra n",
+      "min": 100,
+      "max": 4000,
+      "step": 50,
+      "value": 1067
+     },
+     {
+      "id": "deff",
+      "label": "Efecto de diseño (deff)",
+      "min": 1,
+      "max": 2.5,
+      "step": 0.1,
+      "value": 1
+     }
+    ],
+    "outputs": [
+     {
+      "id": "neff",
+      "label": "Tamaño de muestra efectivo n/deff",
+      "expr": "n / deff",
+      "format": {
+       "digits": 0
+      }
+     },
+     {
+      "id": "m0",
+      "label": "Margen de error de una opción en el peor caso (puntos)",
+      "expr": "196 * sqrt(0.25 / (n / deff))",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "m1",
+      "label": "Margen de error de A (puntos)",
+      "expr": "196 * sqrt((p1 / 100) * (1 - p1 / 100) / (n / deff))",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "lead",
+      "label": "Ventaja observada A − B (puntos)",
+      "expr": "p1 - p2",
+      "format": {
+       "digits": 1
+      }
+     },
+     {
+      "id": "mlead",
+      "label": "Margen de error de la ventaja (puntos)",
+      "expr": "196 * sqrt((p1 / 100 + p2 / 100 - (p1 / 100 - p2 / 100) ^ 2) / (n / deff))",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "llo",
+      "label": "Ventaja: límite inferior",
+      "expr": "p1 - p2 - 196 * sqrt((p1 / 100 + p2 / 100 - (p1 / 100 - p2 / 100) ^ 2) / (n / deff))",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "lhi",
+      "label": "Ventaja: límite superior",
+      "expr": "p1 - p2 + 196 * sqrt((p1 / 100 + p2 / 100 - (p1 / 100 - p2 / 100) ^ 2) / (n / deff))",
+      "format": {
+       "digits": 2
+      }
+     }
+    ],
+    "chart": {
+     "x": {
+      "var": "x",
+      "from": 100,
+      "to": 4000
+     },
+     "series": [
+      {
+       "label": "margen de una opción (peor caso)",
+       "expr": "196 * sqrt(0.25 / (x / deff))"
+      },
+      {
+       "label": "margen de la ventaja (con p1, p2 actuales)",
+       "expr": "196 * sqrt((p1 / 100 + p2 / 100 - (p1 / 100 - p2 / 100) ^ 2) / (x / deff))"
+      }
+     ],
+     "markers": [
+      {
+       "label": "n actual",
+       "x": "n"
+      }
+     ],
+     "xLabel": "tamaño de muestra n",
+     "yLabel": "margen de error (puntos)",
+     "ariaLabel": "Márgenes de error de una opción y de la ventaja según n"
+    },
+    "interpret": [
+     {
+      "when": "p1 - p2 - 196 * sqrt((p1 / 100 + p2 / 100 - (p1 / 100 - p2 / 100) ^ 2) / (n / deff)) <= 0 && p1 > p2",
+      "tone": "warn",
+      "html": "Aviso: el intervalo de la ventaja incluye 0: la encuesta no respalda por sí sola que A lidere."
+     },
+     {
+      "when": "p1 - p2 - 196 * sqrt((p1 / 100 + p2 / 100 - (p1 / 100 - p2 / 100) ^ 2) / (n / deff)) > 0",
+      "tone": "ok",
+      "html": "Correcto: el intervalo de la ventaja excluye 0 (bajo estos supuestos)."
+     },
+     {
+      "when": "deff > 1",
+      "tone": "warn",
+      "html": "Con efecto de diseño > 1 la muestra efectiva es menor y el margen real, mayor."
+     }
+    ],
+    "assumptions": [
+     "Muestreo aleatorio simple (salvo deff indicado); sin sesgos de no respuesta ni de redacción.",
+     "Confianza del 95 % (1,96); aproximación normal.",
+     "Las dos opciones se excluyen entre sí en la misma muestra (fórmula de la ventaja).",
+     "Cifras ilustrativas; el deff es un parámetro que debe dar quien publica la encuesta."
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "e-a2",
+   "widget": "evidence-case",
+   "assesses": [
+    "o4"
+   ],
+   "instructions": "<p>Revisa la afirmación de la nota de prensa («una mayoría prefiere el nuevo envase»). Abre las pruebas que consideres necesarias, y después elige la conclusión mejor respaldada.</p>",
+   "debrief": "<p>Las pruebas clave eran el tamaño de muestra y el margen resultante, el modo de selección de la muestra y la redacción de la pregunta: dos de ellas son errores que el margen de error no recoge. Un buen revisor pide el procedimiento antes de discutir decimales.</p>",
+   "config": {
+    "situation": "<p>Afirmación publicada: «El 52 % de los consumidores prefiere el nuevo envase: una mayoría». Dispones de la ficha técnica de la encuesta (datos ilustrativos).</p>",
+    "question": "¿Qué conclusión es la mejor respaldada por la ficha técnica?",
+    "evidence": [
+     {
+      "id": "ev1",
+      "label": "Tamaño de muestra y margen",
+      "source": "Ficha técnica (ilustrativa)",
+      "content": "<p>n = 600 respuestas. Margen de error publicado: ±4,0 puntos al 95 %.</p>",
+      "reading": "<p>Intervalo del 52 %: 48,0 % a 56,0 %. Incluye el 50 %.</p>",
+      "key": true
+     },
+     {
+      "id": "ev2",
+      "label": "Cómo se eligió la muestra",
+      "source": "Ficha técnica (ilustrativa)",
+      "content": "<p>Encuesta abierta en la web de la marca durante una semana; respuestas voluntarias. Tasa de participación desconocida.</p>",
+      "reading": "<p>No es una muestra aleatoria: quienes participan pueden ser más afines a la marca. El margen calculado supone muestreo aleatorio; no se aplica con rigor.</p>",
+      "key": true
+     },
+     {
+      "id": "ev3",
+      "label": "Redacción de la pregunta",
+      "source": "Ficha técnica (ilustrativa)",
+      "content": "<p>«¿Prefieres el nuevo envase, moderno y ecológico, o el envase antiguo?»</p>",
+      "reading": "<p>Redacción sugestiva («moderno y ecológico») para una de las opciones: sesgo ajeno al muestreo.</p>",
+      "key": true
+     },
+     {
+      "id": "ev4",
+      "label": "Desglose por edad",
+      "source": "Ficha técnica (ilustrativa)",
+      "content": "<p>18–29 años (n = 90): 61 % prefiere el nuevo envase.</p>",
+      "reading": "<p>El subgrupo es pequeño (margen ≈ ±10 puntos); no cambia la conclusión general.</p>"
+     }
+    ],
+    "conclusions": [
+     {
+      "id": "k1",
+      "label": "Los datos no respaldan por sí solos que haya una mayoría: el intervalo incluye 50 % y hay problemas de muestreo y de redacción que el margen no cubre.",
+      "verdict": "best",
+      "explanation": "Combina el cálculo (límite inferior 48 %) con los sesgos que no cubre el margen."
+     },
+     {
+      "id": "k2",
+      "label": "Hay una ligera inclinación hacia el nuevo envase en la muestra, pero no se puede generalizar a «los consumidores».",
+      "verdict": "defensible",
+      "explanation": "Cierto, aunque conviene decir también que el margen de error no es aplicable estrictamente a una muestra voluntaria."
+     },
+     {
+      "id": "k3",
+      "label": "Hay una mayoría: 52 % es más que 50 %.",
+      "verdict": "wrong",
+      "explanation": "Ignora el margen de error (48–56 %) y el modo de selección."
+     },
+     {
+      "id": "k4",
+      "label": "La mayoría prefiere el envase antiguo.",
+      "verdict": "wrong",
+      "explanation": "La muestra va en sentido contrario; no hay base para esa conclusión."
+     }
+    ],
+    "assumptions": [
+     "Ficha técnica inventada para el ejercicio.",
+     "Se aplica 1,96 con p̂ = 0,52 y n = 600 como si la muestra fuera aleatoria simple."
+    ]
+   }
+  },
+  {
+   "type": "practice",
+   "id": "e-pr1",
+   "level": "guided",
+   "setting": "in-app",
+   "task": "<p>Una encuesta aleatoria de n = 400 clientes da p̂ = 55 % a favor de una medida (ilustrativo). Calcula el margen de error al 95 % y el intervalo; decide si respalda «más de la mitad a favor».</p>",
+   "hints": [
+    "<p>Margen = 1,96·√(0,55·0,45/400).</p>",
+    "<p>Compara el límite inferior con 50 %.</p>"
+   ],
+   "rubric": [
+    "Margen ≈ 4,9 puntos",
+    "Intervalo ≈ 50,1 % a 59,9 %",
+    "Decide que el límite inferior supera 50 % por muy poco: respaldo débil"
+   ],
+   "solution": "<p>√(0,55·0,45/400) = 0,0249; margen = 0,0488 (≈ 4,9 puntos); IC ≈ <strong>50,1 % a 59,9 %</strong>. El límite inferior supera el 50 % por solo 0,1 puntos: la afirmación «más de la mitad» está respaldada, pero con muy poco margen de maniobra y sin cubrir sesgos.</p>"
+  },
+  {
+   "type": "practice",
+   "id": "e-pr2",
+   "level": "independent",
+   "setting": "offline",
+   "task": "<p>Una encuesta de n = 900 da A = 41 %, B = 37 % (el resto indeciso). (a) Calcula el margen de error de la ventaja. (b) ¿Respalda «A va por delante»? (c) Entre las 150 personas de un subgrupo, A = 41 %: ¿qué margen tiene esa cifra? Hazlo en tu hoja de cálculo.</p>",
+   "rubric": [
+    "Ventaja = 4 puntos; SE = √((0,41+0,37−0,04²)/900)",
+    "Margen ≈ 5,8 puntos: intervalo de −1,8 a +9,8; no respalda",
+    "Subgrupo: margen ≈ 7,9 puntos"
+   ],
+   "solution": "<p>(a) SE = √((0,78 − 0,0016)/900) ≈ 0,0294; margen ≈ <strong>5,8 puntos</strong>. (b) Intervalo de la ventaja ≈ −1,8 a +9,8: incluye 0, no se respalda. (c) 1,96·√(0,41·0,59/150) ≈ 0,079 → <strong>±7,9 puntos</strong>.</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "e-c1",
+     "assesses": [
+      "o4"
+     ],
+     "kind": "numeric",
+     "prompt": "Margen de error al 95 % en el peor caso (p = 0,5) para n = 400, en puntos porcentuales (un decimal).",
+     "answer": 4.9,
+     "tolerance": 0.1,
+     "unit": "puntos",
+     "explanation": "1,96·√(0,25/400) = 1,96·0,025 = 0,049 → 4,9 puntos.",
+     "feedbackWrong": "Pista: √(0,25/400) = 0,025; multiplica por 1,96."
+    },
+    {
+     "id": "e-c2",
+     "assesses": [
+      "o4"
+     ],
+     "prompt": "Una encuesta tiene margen ±3 puntos. A lidera 51 % – 47 % (4 puntos). ¿Qué es lo más correcto?",
+     "options": [
+      "A gana: 4 puntos superan ±3",
+      "No se puede afirmar que A lidere: el margen de la ventaja es ≈ el doble del margen de una opción",
+      "Hay empate exacto"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Compara la ventaja con el margen de una opción; el margen de la ventaja es mayor.",
+      "2": "No hay «empate exacto»: A está por delante en la muestra; solo que la diferencia no se distingue claramente de 0."
+     },
+     "explanation": "La ventaja tiene margen ≈ ±6 puntos aquí; 4 < 6."
+    },
+    {
+     "id": "e-c3",
+     "assesses": [
+      "o4"
+     ],
+     "prompt": "Una encuesta tiene n = 1 000 en un país de 10 millones y otra n = 1 000 en una ciudad de 100 000 habitantes. ¿Cuál tiene mayor margen de error?",
+     "options": [
+      "La de la ciudad, porque la población es menor",
+      "La del país, porque la población es mayor",
+      "Aproximadamente el mismo: depende de n, no del tamaño de la población"
+     ],
+     "correct": 2,
+     "feedback": {
+      "0": "El tamaño de la población no entra en la fórmula mientras la muestra sea una fracción pequeña.",
+      "1": "Tampoco: una población mayor no necesita una muestra proporcionalmente mayor."
+     },
+     "explanation": "Margen ≈ 1,96·√(p(1−p)/n); la población no aparece (simplificación para n pequeño frente a N)."
+    },
+    {
+     "id": "e-c4",
+     "assesses": [
+      "o4"
+     ],
+     "kind": "open",
+     "prompt": "¿Qué dos cosas importantes no cubre el margen de error de una encuesta, y por qué importa a quien la lee?",
+     "rubric": [
+      "Menciona errores ajenos al muestreo (sesgo de selección, no respuesta, redacción)",
+      "Explica que un margen pequeño no garantiza una encuesta fiable"
+     ],
+     "model": "<p>No cubre los errores ajenos al muestreo: muestras no aleatorias o con no respuesta alta, preguntas sugeridas, cobertura incompleta, malas mediciones; ni los efectos de diseño si no se informan. Importa porque una encuesta con margen ±2 puede estar muy sesgada: el margen indica solo cuánto varía el resultado por azar de muestreo, no si se midió lo correcto en la población correcta.</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "e-t1",
+   "assesses": [
+    "o4"
+   ],
+   "task": "<p><strong>Situación nueva (clima laboral).</strong> En una encuesta interna aleatoria a 400 empleados de un total de 3 000, 150 dicen estar «muy satisfechos» (37,5 %). La directora afirma: «más de un tercio del personal está muy satisfecho». (a) Calcula el margen de error y el intervalo. (b) ¿Respalda el intervalo la frase? (c) Escribe una frase para el informe que sea correcta. (Datos ilustrativos.)</p>",
+   "rubric": [
+    "Margen ≈ ±4,7 puntos; intervalo ≈ 32,8 % a 42,2 %",
+    "Compara el límite inferior con 33,3 % (un tercio)",
+    "Concluye que no queda respaldado con seguridad (33,3 % está dentro del intervalo)",
+    "Frase correcta con intervalo"
+   ],
+   "model": "<p>(a) p̂ = 0,375; margen = 1,96·√(0,375·0,625/400) = 0,0474; IC ≈ 32,8 % a 42,2 %. (b) «Más de un tercio» significa p &gt; 33,3 %; el límite inferior (32,8 %) está por debajo, así que los datos son compatibles con un valor igual o algo inferior a un tercio: no queda respaldado con seguridad. (c) «El 37,5 % de los 400 encuestados está muy satisfecho; con un intervalo de confianza del 95 % de 33 % a 42 %, la proporción en toda la plantilla está probablemente en torno a un tercio o algo más.» Evita «más de un tercio» sin matices.</p>"
+  },
+  {
+   "type": "reflect",
+   "id": "e-r1",
+   "prompt": "Recuerda una encuesta o dato que hayas visto publicado con margen de error. ¿Con qué pregunta de esta lección la habrías revisado primero?"
+  }
+ ],
+ "sources": [
+  {
+   "title": "Understanding the margin of error in election polls",
+   "kind": "reference",
+   "author": "Andrew Mercer, Pew Research Center",
+   "date": "2016-09-08",
+   "url": "https://www.pewresearch.org/short-reads/2016/09/08/understanding-the-margin-of-error-in-election-polls/",
+   "accessed": "2026-10-20",
+   "note": "Margen ≈ ±3 con n = 1 067; margen de la ventaja ≈ el doble; subgrupos de ~160 casos con ≈ ±8 (una opción) y ≈ ±16 (ventaja); el efecto de diseño; errores ajenos al muestreo."
+  },
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20",
+   "note": "Error estándar como desviación típica del estadístico; condición éxito-fracaso (≥ 10 éxitos y ≥ 10 fracasos esperados); estimación ± z*×EE; z* = 1,96 para 95 %; advertencia contra «con cierta probabilidad»."
+  },
+  {
+   "title": "OpenIntro Statistics, cap. 5 «Foundations for inference» (secciones 5.1 variabilidad y 5.2 intervalos de confianza)",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://www.openintro.org/book/os/",
+   "accessed": "2026-10-20",
+   "note": "Solo se verificó el índice de capítulos de la página; el texto del PDF no pudo consultarse con las herramientas disponibles."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 7.1.4 «What are confidence intervals?»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm",
+   "accessed": "2026-10-20",
+   "note": "Intervalo con σ conocida Ȳ ± z·σ/√N y con σ estimada (más ancho); interpretación a la larga."
+  },
+  {
+   "title": "Ficha técnica, encuestas y cifras de empleados: ilustrativas. El cálculo de la ventaja √((p1+p2−(p1−p2)²)/n) se deriva de la varianza de una multinomial; no se verificó con una fuente textual en este curso: verify con tu referencia estadística de cabecera.",
+   "kind": "pedagogical",
+   "note": "Decisión del curso: ejemplos y cifras ilustrativas inventadas para este curso, no datos reales."
+  }
+ ],
+ "next": "<p>En un test A/B los dos grupos son independientes: la fórmula cambia, pero la idea es la misma. Es el tema de la lección 6.</p>"
+}

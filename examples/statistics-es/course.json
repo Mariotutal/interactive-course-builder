@@ -1,0 +1,490 @@
+{
+ "format": 1,
+ "id": "estadistica-variabilidad-ic",
+ "version": "1.0.0",
+ "title": "Variabilidad muestral e intervalos de confianza",
+ "subtitle": "Estadística introductoria para leer encuestas y tests A/B sin dejarte engañar por una cifra suelta",
+ "language": "es",
+ "locale": "es-ES",
+ "dir": "ltr",
+ "learner": {
+  "topic": "Estadística introductoria: variabilidad muestral e intervalos de confianza",
+  "goals": [
+   "Explicar por qué la media de una muestra varía de una muestra a otra",
+   "Interpretar correctamente un intervalo de confianza del 95 %",
+   "Decidir si un margen de error reportado en una encuesta o un test A/B respalda una afirmación"
+  ],
+  "scope": "Estadística introductoria: media y proporción, intervalo de confianza para una media, una proporción y una diferencia de proporciones; sin contrastes de hipótesis formales",
+  "language": "es",
+  "locale": "es-ES",
+  "learner": {
+   "startingKnowledge": "Sabe calcular medias y porcentajes y usa hojas de cálculo; nunca estudió estadística formal",
+   "background": "Analista de marketing (perfil sintético ficticio); le preocupa malinterpretar encuestas",
+   "depth": "solid",
+   "knownGaps": []
+  },
+  "time": {
+   "totalHours": 4,
+   "sessionMinutes": 30
+  },
+  "presentation": {
+   "visual": "high",
+   "interaction": "high",
+   "reducedMotion": false,
+   "readingLevel": "unknown"
+  },
+  "practice": {
+   "tools": [
+    "Hoja de cálculo"
+   ],
+   "equipment": [],
+   "software": [
+    "Programa de hoja de cálculo; sin software estadístico"
+   ],
+   "datasets": [],
+   "realWorld": "unknown"
+  },
+  "sources": {
+   "provided": [],
+   "freshness": "unknown",
+   "evidenceStandard": "Libros de texto de estadística reconocidos o referencias estadísticas oficiales (p. ej., NIST/SEMATECH e-Handbook, OpenIntro Statistics)"
+  },
+  "diagnostic": true,
+  "exclusions": [],
+  "constraints": [],
+  "accessibility": {
+   "screenReader": false,
+   "notes": ""
+  },
+  "output": {
+   "format": "web+markdown",
+   "host": "unknown"
+  }
+ },
+ "assumptions": [
+  "Perfil de la persona que aprende: sintético (analista de marketing ficticia), usado solo para elegir ejemplos.",
+  "Todos los conjuntos de datos, poblaciones y resultados de encuestas o tests A/B de los ejemplos son ilustrativos e inventados, salvo donde se cita una fuente explícita (por ejemplo, el ejemplo de Pew Research Center con n = 1 067 y ±3 puntos).",
+  "Las simulaciones usan un generador pseudoaleatorio con semilla: mismos ajustes y misma semilla dan los mismos resultados; cambiar la semilla cambia los resultados concretos pero no el comportamiento a la larga.",
+  "Alcance: intervalos de confianza para una media, una proporción y una diferencia de proporciones con muestreo aleatorio simple. No se cubren contrastes de hipótesis formales, regresión ni muestreo complejo (solo se nombra el efecto de diseño).",
+  "Se usan los nombres de funciones de hoja de cálculo de Excel en español y su equivalente en inglés; los nombres exactos varían según programa e idioma y no se han probado aquí en ningún programa concreto: comprueba el nombre en tu hoja de cálculo.",
+  "Unknown: practice.realWorld → se asume que la persona puede usar datos propios de su trabajo solo si lo desea; la práctica obligatoria funciona con datos del curso."
+ ],
+ "intro": "<p>Una encuesta dice que el 52 % de los clientes prefiere tu nuevo envase «±3 puntos». Un test A/B dice que la variante B convierte un 5,9 % frente al 5,0 % de la A. ¿Puedes afirmar algo? Antes de responder hay que entender una idea: <strong>otra muestra habría dado otro número</strong>.</p>\n<p>Este curso, de unas 4 horas en sesiones de 30 minutos, te lleva de la variabilidad de los datos al <span class='term' data-term='intervalo de confianza'>intervalo de confianza</span> y a su uso para decidir si un margen de error respalda una afirmación. Cada lección empieza con una situación real de marketing, pide que predigas antes de ver la respuesta y termina con una tarea de transferencia.</p>\n<p><strong>Cómo está organizado.</strong> Tres módulos: (1) variabilidad y distribución muestral, (2) construir e interpretar intervalos, (3) usar márgenes de error en encuestas y tests A/B. La ruta básica son 6 lecciones (3 horas); la ruta avanzada añade una lección sobre planificación del tamaño de muestra y supuestos (30 minutos más).</p>\n<p><strong>Qué necesitas.</strong> Saber calcular medias y porcentajes y una hoja de cálculo. No hace falta software estadístico. Antes de empezar puedes hacer el diagnóstico corto; solo cambia el ritmo sugerido, nunca oculta contenido.</p>\n<p><strong>Un aviso sobre las simulaciones.</strong> Los simuladores usan poblaciones artificiales con media conocida para poder comprobar si los intervalos aciertan; en la vida real nunca conoces la media verdadera.</p>",
+ "outcomes": [
+  {
+   "id": "o1",
+   "text": "Explicar por qué la media de una muestra varía de una muestra a otra y cómo cambia esa variabilidad con el tamaño de muestra n y la dispersión σ",
+   "level": "core"
+  },
+  {
+   "id": "o2",
+   "text": "Calcular el error estándar y construir un intervalo de confianza del 95 % para una media y para una proporción, a mano y en una hoja de cálculo",
+   "level": "core"
+  },
+  {
+   "id": "o3",
+   "text": "Interpretar correctamente un intervalo de confianza del 95 % y distinguir interpretaciones correctas de incorrectas",
+   "level": "core"
+  },
+  {
+   "id": "o4",
+   "text": "Calcular el margen de error de una encuesta y decidir si una afirmación sobre un porcentaje o una diferencia entre opciones lo supera",
+   "level": "core"
+  },
+  {
+   "id": "o5",
+   "text": "Decidir si el resultado de un test A/B respalda una afirmación a partir del intervalo de confianza de la diferencia de proporciones",
+   "level": "core"
+  },
+  {
+   "id": "o6",
+   "text": "Calcular el tamaño de muestra necesario para un margen de error objetivo y reconocer cuándo fallan los supuestos de un intervalo",
+   "level": "advanced"
+  }
+ ],
+ "modules": [
+  {
+   "id": "m1",
+   "title": "Variabilidad y muestras",
+   "summary": "De la dispersión de los datos a la distribución de la media muestral.",
+   "prerequisites": [],
+   "lessons": [
+    "variabilidad-datos",
+    "media-muestral"
+   ]
+  },
+  {
+   "id": "m2",
+   "title": "Intervalos de confianza",
+   "summary": "Construir un intervalo y saber qué significa realmente el 95 %.",
+   "prerequisites": [
+    "m1"
+   ],
+   "lessons": [
+    "construir-intervalo",
+    "interpretar-intervalo"
+   ]
+  },
+  {
+   "id": "m3",
+   "title": "Usar márgenes de error",
+   "summary": "Encuestas, tests A/B y los límites de lo que un intervalo puede decir.",
+   "prerequisites": [
+    "m2"
+   ],
+   "lessons": [
+    "encuestas-margen",
+    "test-ab",
+    "planificar-supuestos"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "id": "core",
+   "title": "Ruta básica",
+   "description": "Seis lecciones (unas 3 horas) más el diagnóstico y la tarea final: cubre los tres objetivos del curso.",
+   "lessons": [
+    "variabilidad-datos",
+    "media-muestral",
+    "construir-intervalo",
+    "interpretar-intervalo",
+    "encuestas-margen",
+    "test-ab"
+   ]
+  },
+  {
+   "id": "advanced",
+   "title": "Ruta avanzada",
+   "description": "La ruta básica más una lección sobre cómo planificar el tamaño de muestra y cuándo fallan los supuestos (unas 3,5 horas).",
+   "lessons": [
+    "variabilidad-datos",
+    "media-muestral",
+    "construir-intervalo",
+    "interpretar-intervalo",
+    "encuestas-margen",
+    "test-ab",
+    "planificar-supuestos"
+   ]
+  }
+ ],
+ "glossary": [
+  {
+   "term": "población",
+   "definition": "El conjunto completo de individuos o valores sobre el que quieres saber algo (por ejemplo, todos los pedidos de un año o todos los clientes). Casi nunca puedes medirla entera."
+  },
+  {
+   "term": "muestra",
+   "definition": "La parte de la población que realmente observas. Una muestra aleatoria simple es aquella en la que cada individuo tiene la misma probabilidad de ser elegido."
+  },
+  {
+   "term": "parámetro",
+   "definition": "Un número que describe la población (por ejemplo, la media poblacional μ o la proporción verdadera p). Es fijo pero normalmente desconocido."
+  },
+  {
+   "term": "estadístico",
+   "aka": [
+    "estimador",
+    "estimación puntual"
+   ],
+   "definition": "Un número calculado a partir de una muestra (la media muestral x̄, la proporción muestral p̂). Cambia de una muestra a otra y se usa para estimar un parámetro."
+  },
+  {
+   "term": "desviación típica",
+   "aka": [
+    "desviación estándar"
+   ],
+   "definition": "Medida de cuánto se alejan, de media, los valores individuales respecto de su media. La muestral s usa n − 1 en el denominador; la poblacional se escribe σ."
+  },
+  {
+   "term": "variabilidad muestral",
+   "definition": "El hecho de que un estadístico (por ejemplo, la media) tome valores distintos en muestras distintas de la misma población, aunque no haya ningún error al medir."
+  },
+  {
+   "term": "distribución muestral",
+   "definition": "La distribución de los valores que tomaría un estadístico (por ejemplo, la media muestral) si repitieras el muestreo muchas veces con el mismo tamaño de muestra."
+  },
+  {
+   "term": "error estándar",
+   "aka": [
+    "EE",
+    "SE"
+   ],
+   "definition": "La desviación típica de un estadístico en su distribución muestral. Para la media vale σ/√n (en la práctica se estima con s/√n); para una proporción, √(p(1−p)/n)."
+  },
+  {
+   "term": "intervalo de confianza",
+   "aka": [
+    "IC",
+    "intervalos de confianza"
+   ],
+   "definition": "Un intervalo calculado a partir de una muestra con un procedimiento que, usado una y otra vez, contiene el parámetro en una proporción fija de las ocasiones (el nivel de confianza). Su forma habitual es estimación ± valor crítico × error estándar."
+  },
+  {
+   "term": "nivel de confianza",
+   "definition": "La proporción de muestras, a la larga, cuyo intervalo contendría el parámetro verdadero (por ejemplo, 95 %). Es una propiedad del procedimiento, no de un intervalo concreto ya calculado."
+  },
+  {
+   "term": "margen de error",
+   "aka": [
+    "MoE"
+   ],
+   "definition": "La mitad de la anchura de un intervalo de confianza: valor crítico × error estándar. Se escribe «± 3 puntos». Solo recoge el error de muestreo."
+  },
+  {
+   "term": "valor crítico",
+   "aka": [
+    "z*",
+    "t*"
+   ],
+   "definition": "El multiplicador del error estándar que fija el nivel de confianza. Para 95 % con la distribución normal es 1,96 (a menudo redondeado a 2); con la t de Student depende de n − 1."
+  },
+  {
+   "term": "grados de libertad",
+   "aka": [
+    "gl"
+   ],
+   "definition": "Para el intervalo de una media con la t de Student, n − 1. Determina qué distribución t se usa; cuanto más pequeños, mayor el valor crítico."
+  },
+  {
+   "term": "error ajeno al muestreo",
+   "aka": [
+    "sesgo",
+    "errores no muestrales"
+   ],
+   "definition": "Errores que no se arreglan con una muestra mayor: preguntas sesgadas, cobertura incompleta, no respuesta, mala medición. El margen de error no los incluye."
+  },
+  {
+   "term": "efecto de diseño",
+   "aka": [
+    "design effect"
+   ],
+   "definition": "Factor por el que la ponderación u otras características del diseño de una encuesta aumentan la varianza respecto de una muestra aleatoria simple; reduce el tamaño de muestra efectivo."
+  },
+  {
+   "term": "diferencia de proporciones",
+   "definition": "p̂₂ − p̂₁ entre dos grupos independientes (por ejemplo, las conversiones de las variantes A y B). Tiene su propio error estándar: √(p̂₁(1−p̂₁)/n₁ + p̂₂(1−p̂₂)/n₂)."
+  },
+  {
+   "term": "tasa de conversión",
+   "aka": [
+    "conversión"
+   ],
+   "definition": "Proporción de visitantes que completan una acción deseada (compra, registro…). Estadísticamente es una proporción."
+  }
+ ],
+ "diagnostic": {
+  "intro": "<p>Cinco preguntas, sin nota. Sirven para sugerirte un ritmo: «pasada rápida» (predicciones y comprobaciones) o «estudio completo». No ocultan nada y puedes empezar desde cero si quieres.</p>",
+  "fastLabel": "pasada rápida: predicciones y comprobaciones",
+  "fullLabel": "estudio completo desde cero",
+  "questions": [
+   {
+    "id": "dg1",
+    "prompt": "Dos analistas toman cada uno una muestra aleatoria de 100 pedidos del mismo año y calculan el importe medio: 41,2 € y 43,7 €. ¿Qué explica mejor la diferencia?",
+    "options": [
+     "Uno de los dos se equivocó al calcular",
+     "Cada muestra incluye pedidos distintos, así que sus medias difieren de forma natural",
+     "La población cambió entre una muestra y otra"
+    ],
+    "correct": 1,
+    "feedback": {
+     "0": "Ambos pueden haber calculado bien: el cálculo es correcto y aun así las medias difieren.",
+     "2": "La población es la misma; lo que cambia es qué individuos entran en cada muestra."
+    },
+    "explanation": "La variabilidad muestral: muestras distintas contienen individuos distintos y dan estadísticos distintos.",
+    "lessons": [
+     "variabilidad-datos",
+     "media-muestral"
+    ]
+   },
+   {
+    "id": "dg2",
+    "prompt": "Si multiplicas por 4 el tamaño de una muestra, la variabilidad de la media muestral…",
+    "options": [
+     "se divide por 4",
+     "se divide por 2",
+     "no cambia porque la población es la misma"
+    ],
+    "correct": 1,
+    "feedback": {
+     "0": "La variabilidad cae con la raíz de n, no con n.",
+     "2": "La población es la misma, pero la media de una muestra grande fluctúa menos."
+    },
+    "explanation": "El error estándar es σ/√n: con 4n, √(4n) = 2√n.",
+    "lessons": [
+     "media-muestral"
+    ]
+   },
+   {
+    "id": "dg3",
+    "prompt": "Una encuesta publica «el 48 % apoya la medida (IC 95 %: 45 %–51 %)». ¿Qué afirmación es la más defendible?",
+    "options": [
+     "Hay un 95 % de probabilidad de que el apoyo real esté entre 45 % y 51 %",
+     "Si repitiéramos la encuesta muchas veces, alrededor del 95 % de los intervalos así construidos contendrían el apoyo real",
+     "El 95 % de la población apoya la medida con un 45–51 %"
+    ],
+    "correct": 1,
+    "feedback": {
+     "0": "Es la lectura más común y es incorrecta: el apoyo real es un valor fijo; la probabilidad se refiere al procedimiento.",
+     "2": "Confunde el nivel de confianza con un porcentaje de la población."
+    },
+    "explanation": "El 95 % describe el procedimiento a la larga (NIST/SEMATECH).",
+    "lessons": [
+     "interpretar-intervalo"
+    ]
+   },
+   {
+    "id": "dg4",
+    "prompt": "Un sondeo con n = 1 000 da un margen de error de ±3 puntos para un porcentaje. Con n = 250 el margen sería aproximadamente…",
+    "options": [
+     "±6 puntos",
+     "±12 puntos",
+     "±3 puntos, porque el margen no depende de n"
+    ],
+    "correct": 0,
+    "feedback": {
+     "1": "Dividir n por 4 duplica el margen, no lo cuadruplica.",
+     "2": "El margen de error depende directamente del tamaño de muestra."
+    },
+    "explanation": "El margen es proporcional a 1/√n: con n/4 el margen se duplica.",
+    "lessons": [
+     "encuestas-margen"
+    ]
+   },
+   {
+    "id": "dg5",
+    "prompt": "En un test A/B la variante B convierte 0,9 puntos más que la A y el IC 95 % de la diferencia es −0,1 a +1,9 puntos. ¿Qué conclusión es correcta?",
+    "options": [
+     "B es mejor, porque la diferencia observada es positiva",
+     "Los datos son compatibles con que B sea peor, igual o mejor: no respaldan por sí solos que B sea mejor",
+     "B y A son exactamente iguales"
+    ],
+    "correct": 1,
+    "feedback": {
+     "0": "La diferencia observada es solo la estimación puntual; el intervalo incluye valores negativos.",
+     "2": "Que el intervalo incluya 0 no demuestra que sean iguales; solo que 0 es compatible con los datos."
+    },
+    "explanation": "Un IC que incluye 0 no excluye «sin efecto» ni un pequeño efecto negativo.",
+    "lessons": [
+     "test-ab"
+    ]
+   }
+  ]
+ },
+ "capstone": {
+  "id": "capstone",
+  "title": "Informe de lectura crítica: encuesta y test A/B de una campaña",
+  "task": "<p>Tu equipo recibe este resumen (datos ilustrativos e inventados) de una campaña de una marca ficticia de bebidas, «Lumo»:</p>\n<ul>\n<li><strong>Encuesta:</strong> n = 800 consumidores adultos elegidos al azar de un panel. El 54 % dice preferir el nuevo envase al antiguo. Titular de la nota de prensa: «La mayoría prefiere el nuevo envase». Entre los 120 menores de 30 años, la preferencia es del 62 %.</li>\n<li><strong>Test A/B de la web:</strong> variante A: 150 conversiones de 3 000 visitantes (5,0 %); variante B: 192 de 3 000 (6,4 %). Un directivo escribe: «B convierte un 28 % más, el test lo demuestra».</li>\n</ul>\n<p>Escribe un informe de una página (200–350 palabras) que: (1) calcule el margen de error de la encuesta y diga si respalda «la mayoría», (2) valore la cifra de los menores de 30, (3) calcule el IC 95 % de la diferencia del test A/B y diga si respalda «B es mejor» y qué se puede decir del «28 % más», (4) explique en lenguaje llano por qué otra muestra daría otros números, e (5) interprete correctamente uno de los intervalos. Usa tu hoja de cálculo para los cálculos y muestra las fórmulas.</p>",
+  "levels": [
+   "Inicial",
+   "En desarrollo",
+   "Competente"
+  ],
+  "rubric": [
+   {
+    "criterion": "Cálculo del margen y del intervalo",
+    "descriptors": [
+     "Errores de fórmula o cifras sin justificar",
+     "Fórmulas correctas con algún fallo numérico o de redondeo relevante",
+     "Márgenes e IC correctos (encuesta ≈ ±3,5 puntos; diferencia A/B con IC ≈ +0,2 a +2,6 puntos) con fórmulas visibles"
+    ]
+   },
+   {
+    "criterion": "Decisión sobre «la mayoría» y «B es mejor»",
+    "descriptors": [
+     "Decide solo con la estimación puntual",
+     "Usa el intervalo pero la conclusión es ambigua o incompleta",
+     "Razona con el intervalo: «la mayoría» queda cerca del límite y se discute; «B es mejor» respaldado con matices sobre tamaño del efecto"
+    ]
+   },
+   {
+    "criterion": "Subgrupo y cifras relativas",
+    "descriptors": [
+     "No distingue el margen del subgrupo",
+     "Nota que el subgrupo tiene más margen pero no lo cuantifica",
+     "Cuantifica el margen del subgrupo (≈ ±8,7 puntos) y explica por qué el «28 % más» es una cifra relativa con incertidumbre mayor"
+    ]
+   },
+   {
+    "criterion": "Interpretación del 95 %",
+    "descriptors": [
+     "Dice que hay un 95 % de probabilidad de que el valor real esté dentro",
+     "Correcta con vocabulario impreciso",
+     "Interpretación correcta basada en el procedimiento a la larga, distinguiendo el intervalo calculado del proceso"
+    ]
+   },
+   {
+    "criterion": "Variabilidad muestral y límites",
+    "descriptors": [
+     "No la menciona",
+     "La menciona sin ejemplo",
+     "La explica con un ejemplo y señala límites: el margen no cubre sesgos ni errores ajenos al muestreo"
+    ]
+   }
+  ],
+  "assesses": [
+   "o1",
+   "o3",
+   "o4",
+   "o5"
+  ],
+  "evaluation": "<p>Autoevalúate con la rúbrica (es una autoevaluación). Para contraste externo, pide a una persona de tu equipo que lea tu informe sin ver los cálculos y diga qué decisión tomaría; si decide algo distinto de lo que tú concluyes, revisa la redacción. Una persona con formación estadística puede revisar los cálculos.</p>",
+  "model": "<p><strong>Cálculos (aprox.).</strong> Encuesta: p̂ = 0,54, n = 800 → EE = √(0,54·0,46/800) = 0,0176; margen = 1,96·EE ≈ 0,0345, es decir, ±3,5 puntos; IC95 % ≈ 50,5 % a 57,5 %. El intervalo queda por encima del 50 %, así que «más de la mitad prefiere» es compatible con el muestreo aleatorio simple; pero si hay ponderación (efecto de diseño) el margen sería mayor y habría que revisar que el límite inferior sigue por encima de 50 %. Subgrupo: p̂ = 0,62, n = 120 → EE = 0,0443; margen ≈ ±8,7 puntos (IC ≈ 53 % a 71 %): mucha más incertidumbre; no se puede decir que sea «mucho mayor» que el 54 % general. Test A/B: pA = 0,050, pB = 0,064, diferencia = 0,014; EE = √(0,05·0,95/3000 + 0,064·0,936/3000) = 0,0060; margen ≈ 0,0118; IC95 % ≈ +0,2 a +2,6 puntos (excluye 0). El «28 % más» es 0,014/0,05; su incertidumbre es amplia: va de un +5 % a un +51 % relativos aproximadamente (dividiendo los límites entre pA; solo orden de magnitud). Se puede decir que B probablemente convierte más, pero el tamaño del efecto es incierto.</p>\n<p><strong>Interpretación.</strong> «Si repitiéramos este test muchas veces y construyéramos cada vez el intervalo así, alrededor del 95 % de ellos contendrían la diferencia verdadera; el nuestro es uno de esos intervalos y no sabemos si es de los que aciertan.» <strong>Límites.</strong> Otra muestra daría otro porcentaje; el margen no recoge sesgos (panel no representativo, no respuesta) ni que el test se haya mirado repetidamente antes de parar.</p>"
+ },
+ "sources": [
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, sección 1.3.5.2 «Confidence Limits for the Mean»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "date": "2012",
+   "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm",
+   "accessed": "2026-10-20"
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, sección 7.1.4 «What are confidence intervals?»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "date": "2012",
+   "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm",
+   "accessed": "2026-10-20"
+  },
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20"
+  },
+  {
+   "title": "OpenIntro Statistics (índice del libro, capítulo 5 «Foundations for inference»)",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://www.openintro.org/book/os/",
+   "accessed": "2026-10-20",
+   "note": "Solo se verificó el índice de capítulos; el texto del PDF no pudo leerse."
+  },
+  {
+   "title": "Understanding the margin of error in election polls",
+   "kind": "reference",
+   "author": "Andrew Mercer, Pew Research Center",
+   "date": "2016-09-08",
+   "url": "https://www.pewresearch.org/short-reads/2016/09/08/understanding-the-margin-of-error-in-election-polls/",
+   "accessed": "2026-10-20"
+  }
+ ],
+ "review": {
+  "intervals": [
+   1,
+   3,
+   7,
+   21,
+   60
+  ]
+ },
+ "ui": {
+  "start": "Empezar"
+ },
+ "theme": {
+  "accent": "#1f5f8b"
+ }
+}

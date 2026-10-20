@@ -1,0 +1,42 @@
+{
+ "format": 1,
+ "id": "widget-gallery",
+ "version": "1.0.0",
+ "title": "Widget gallery (test fixture)",
+ "language": "en",
+ "locale": "en-US",
+ "assumptions": [
+  "Test fixture: content is placeholder-free but synthetic; not a course"
+ ],
+ "outcomes": [
+  {
+   "id": "o1",
+   "text": "Exercise every built-in interaction pattern",
+   "level": "core"
+  }
+ ],
+ "modules": [
+  {
+   "id": "m1",
+   "title": "Patterns",
+   "lessons": [
+    "gallery"
+   ]
+  }
+ ],
+ "glossary": [
+  {
+   "term": "fixture",
+   "definition": "Synthetic data used only for testing."
+  }
+ ],
+ "routes": [
+  {
+   "id": "core",
+   "title": "Core",
+   "lessons": [
+    "gallery"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,285 @@
+{
+  "format": 1,
+  "id": "corroboration-comparing-accounts",
+  "title": "Corroboration: comparing accounts",
+  "summary": "Compare Captain Preston's account with the 12 March 1770 Boston-Gazette report, explain where and why they disagree, and write a cautious claim.",
+  "level": "core",
+  "minutes": 45,
+  "outcomes": ["o2", "o3"],
+  "prerequisites": ["sourcing-who-and-why"],
+  "prereqText": "<p>Complete <em>Sourcing: who made this and why?</em> first. You need the four sourcing questions and the habit of separating what a source says, what is known about it, and what you infer.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>Two printed accounts of the same few seconds. One says that the officer in charge told his men, in his own words, “Don't fire, stop your Firing”. A week-old newspaper report says “the Captain commanded them to fire”. Both cannot be right about what was said. The podcast version of this story usually picks one without telling you there was a choice.</p><p>Your task in this lesson is not to pick. It is to work out <strong>what the disagreement consists of, why it exists, and what could settle it</strong>, and then to write a claim that is honest about the answer.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Imagine two witnesses at a street accident who each tell a coherent story, and each has a reason to want a particular outcome. A good investigator neither believes the louder one nor splits the difference. She lists exactly where the stories differ, asks what could explain each difference (position, memory, motive, the time of the interview), and looks for evidence that does not depend on either witness: a camera, a measurement, a third person.</p>",
+      "limits": "<p>Unlike an accident investigation, historians rarely get the camera. Often the best available outcome is “the sources cannot settle this”, and that is a legitimate finding, not a failure. Also, the courtroom picture of a lying witness is too simple: accounts differ because of vantage point, fear, selective emphasis, and propaganda aims, not only deliberate falsehood.</p>"
+    },
+    {
+      "type": "explain",
+      "title": "Where accounts disagree: three kinds of difference",
+      "html": "<p><span class=\"term\" data-term=\"corroboration\">Corroboration</span> means testing a claim against other sources, ideally independent ones. Before explaining a disagreement, classify it:</p><ol><li><strong>Direct conflict of fact.</strong> One says X was said or done; another says it was not. (Who ordered the firing.)</li><li><strong>Selection and omission.</strong> Each account foregrounds different actors or events, so they may not conflict at all. (Preston stresses a crowd with “Clubs and other Weapons”; the Gazette report stresses soldiers “with charged bayonets”.)</li><li><strong>Framing and vocabulary.</strong> The same facts are named differently (“parading” versus “protecting”, “Mob” versus “Townsmen”).</li></ol><p>Only type 1 is a contradiction that one account must lose. Types 2 and 3 are often the larger share, and most of the work of reading them is attending to what each author chose to tell you.</p><p><strong>Explaining the difference.</strong> For each disagreement, form hypotheses from your sourcing notes: <em>vantage point</em> (who could see what), <em>purpose and audience</em> (what each author wanted readers to believe), <em>date</em> (what was known when), <em>dependence</em> (did one author draw on the other or on the same rumors). Then ask what evidence could separate the hypotheses.</p><p><strong>Independence matters.</strong> Two accounts that repeat one another confirm nothing. Agreement among sources produced by one side to support its case is weaker than agreement across opposed sides. Here, MHS notes that each side collected <span class=\"term\" data-term=\"deposition\">depositions</span> to support its account, so a pile of depositions from one side is a pile of one side.</p><p><strong>What the courts did and did not decide.</strong> Preston was found not guilty on 24 October 1770; six soldiers were acquitted in the later trial and two were convicted of manslaughter (MHS overview). A verdict is evidence about what a jury found proven at trial. It is not a historian's finding about what happened, and it is not evidence that any single witness was truthful.</p><p><strong>Statuses.</strong> Sort claims as <em>established</em> (supported across independent sources), <span class=\"term\" data-term=\"contested\">contested</span> (sources conflict, or scholars dispute), or <em>unknown</em>. The timeline activity below uses this scheme.</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Lay out where the two accounts agree, conflict and differ in emphasis, so that the type of each disagreement is visible at a glance.",
+      "alt": "A three-row comparison table. Row one, order to fire: Preston says his words were Don't fire, stop your Firing; the Gazette says the Captain commanded them to fire; marked direct conflict. Row two, the crowd: Preston stresses clubs and other weapons; the Gazette report as read does not; marked difference in emphasis. Row three, the troops: Preston stresses danger to a soldier; the Gazette stresses soldiers parading and charged bayonets; marked difference in emphasis and framing.",
+      "html": "<figure><svg viewBox=\"0 0 640 260\" role=\"img\" aria-labelledby=\"cv-t cv-d\"><title id=\"cv-t\">Preston and the Gazette compared</title><desc id=\"cv-d\">Three topics, with each account's wording and the type of disagreement: direct conflict about the order to fire, difference in emphasis about the crowd, and difference in emphasis and framing about the troops.</desc><rect class=\"n-plain\" x=\"10\" y=\"10\" width=\"620\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"20\" y=\"32\">Topic</text><text class=\"ts\" x=\"150\" y=\"32\">Preston (to England, 1770)</text><text class=\"ts\" x=\"340\" y=\"32\">Gazette (12 March)</text><text class=\"ts\" x=\"520\" y=\"32\">Type</text><rect class=\"n1\" x=\"10\" y=\"54\" width=\"620\" height=\"58\" rx=\"6\"/><text class=\"ts\" x=\"20\" y=\"88\">Order to fire</text><text class=\"tm\" x=\"150\" y=\"78\">“Don't fire, stop</text><text class=\"tm\" x=\"150\" y=\"98\">your Firing”</text><text class=\"tm\" x=\"340\" y=\"78\">“the Captain commanded</text><text class=\"tm\" x=\"340\" y=\"98\">them to fire”</text><text class=\"ts hl\" x=\"520\" y=\"88\">1 Conflict</text><rect class=\"n2\" x=\"10\" y=\"122\" width=\"620\" height=\"58\" rx=\"6\"/><text class=\"ts\" x=\"20\" y=\"156\">The crowd</text><text class=\"tm\" x=\"150\" y=\"146\">“Clubs and other</text><text class=\"tm\" x=\"150\" y=\"166\">Weapons”</text><text class=\"tm\" x=\"340\" y=\"156\">not stressed</text><text class=\"ts hl\" x=\"520\" y=\"156\">2 Emphasis</text><rect class=\"n3\" x=\"10\" y=\"190\" width=\"620\" height=\"58\" rx=\"6\"/><text class=\"ts\" x=\"20\" y=\"224\">The troops</text><text class=\"tm\" x=\"150\" y=\"214\">a soldier in danger</text><text class=\"tm\" x=\"340\" y=\"214\">“parading”, “charged</text><text class=\"tm\" x=\"340\" y=\"234\">bayonets”</text><text class=\"ts hl\" x=\"520\" y=\"224\">2+3 Framing</text></svg><figcaption>The disagreements are of different kinds. Only the first is a flat contradiction.</figcaption></figure>"
+    },
+    {
+      "type": "worked",
+      "title": "Comparing the two accounts on the order to fire",
+      "html": "<p>A full model of the method on one disagreement. Cover the steps and try each before opening it.</p>",
+      "steps": [
+        { "prompt": "<p><strong>1. Locate and quote.</strong> What exactly does each source say?</p>", "html": "<p>Preston: “I assured the Men that I gave no such Order, that my Words were, 'Don't fire, stop your Firing:'” (Gilder Lehrman transcription of the MHS-held text; the MHS transcription confirms “Don't fire, stop your Firing”). Gazette: “the Captain commanded them to fire, and more”, with the cry “Damn you, Fire,”. The sentence just before names “Capt. Preston”, so the Gazette attributes the order to him.</p>" },
+        { "prompt": "<p><strong>2. Classify.</strong> What kind of disagreement is this?</p>", "html": "<p>A direct conflict of fact: both cannot be an accurate account of what Preston said. Note also that the Gazette's “the Captain commanded them to fire” and Preston's “Don't fire” do not say the same thing even if both refer to the same few seconds of noise and confusion.</p>" },
+        { "prompt": "<p><strong>3. Explain with hypotheses.</strong> What could produce the difference? List at least three.</p>", "selfExplain": true, "html": "<p>(a) <em>Motive:</em> Preston was jailed and trying to persuade England; the Gazette account was a week-old report to Boston readers (purpose and audience). (b) <em>Vantage point and confusion:</em> in a loud, dark, crowded street, a witness might hear “fire” from several people or mishear “don't fire”. (c) <em>Dependence:</em> the Gazette author may have drawn on witnesses who were hostile to the soldiers; Preston drew on his own memory and loyal soldiers. (d) <em>Timing:</em> a week of rumor versus weeks of preparation to defend himself.</p>" },
+        { "prompt": "<p><strong>4. What evidence could separate them?</strong></p>", "html": "<p>Independent sworn statements from witnesses close enough to hear, from both sides; the trial testimony; evidence of who the Gazette's informants were. None of these is in the two pages we are reading. The archive page itself says the Gazette report names no author; MHS lists the order to fire among points that remain disputed.</p>" },
+        { "prompt": "<p><strong>5. State what can be claimed.</strong></p>", "selfExplain": true, "html": "<p>“The two accounts conflict on whether Preston ordered the soldiers to fire. Preston and the Gazette each had reasons to shape the account, and I have not seen evidence independent of both. On these sources alone I cannot say who gave the order.” That is a precise and useful conclusion.</p>" }
+      ],
+      "result": "<p>The method produced a located disagreement, hypotheses that can be tested, and a claim that says exactly how far the evidence goes.</p>"
+    },
+    {
+      "type": "activity",
+      "id": "ca-a1",
+      "widget": "source-compare",
+      "assesses": ["o2"],
+      "instructions": "<p>Read the two excerpts and their provenance. Then answer the three open questions in your own words <em>before</em> opening the model answers. Tick the rubric criteria you met. Notice that there may be more than one good answer.</p>",
+      "debrief": "<p>You should have noticed: the sharpest conflict is the order to fire; the other differences are emphasis; provenance supplies hypotheses, not a winner; and the best answer to question 3 names evidence independent of both authors. Your own wording may differ from the models and still meet the rubric.</p>",
+      "config": {
+        "title": "Preston and the Boston-Gazette",
+        "sources": [
+          {
+            "id": "preston",
+            "title": "Case of Capt. Thomas Preston of the 29th Regiment",
+            "author": "Captain Thomas Preston",
+            "date": "Published London, April 1770; republished Boston, 25 June 1770",
+            "type": "Printed account by the accused officer",
+            "provenance": "Per MHS, written by Preston while jailed in Boston, hoping to gain support in England; printed in the Public Advertiser in London in April 1770, then republished by Boston printers (Supplement to the Boston Evening-Post, 25 June 1770). MHS item 462.",
+            "excerpt": "<p>Selected phrases from the MHS transcription (spelling and capitals as printed):</p><blockquote><p>“I was soon informed by a Townsman, their Intention was to carry off the Soldier from his Post, and probably murder him.”</p><p>“and with Clubs and other Weapons threatened to execute their Vengeance on him.”</p><p>“Don't fire, stop your Firing”</p></blockquote><p>From the Gilder Lehrman transcription of the same text: “I assured the Men that I gave no such Order, that my Words were, 'Don't fire, stop your Firing:'”</p>",
+            "note": "Short selected phrases only. Read the full text on the MHS page before relying on this lesson."
+          },
+          {
+            "id": "gazette",
+            "title": "Boston, March 12. The Town of Boston affords a recent and melancholy Demonstration",
+            "author": "Not named on the MHS page (The Boston-Gazette, and Country Journal, no. 779)",
+            "date": "12 March 1770, one week after the event",
+            "type": "Newspaper report",
+            "provenance": "MHS Collections Online item 316, pages 2 and 3 of the issue. MHS's overview lists it among the Boston printed accounts; the MHS page names no author or informants.",
+            "excerpt": "<p>Selected phrases from the MHS transcription:</p><blockquote><p>“On the Evening of Monday, being the 5th Current,”</p><p>“several Soldiers of the 29th Regiment were seen parading”</p><p>“Capt. Preston, with a party of men with charged bayonets,”</p><p>“the Captain commanded them to fire, and more”</p><p>“Damn you, Fire,”</p></blockquote>",
+            "note": "Phrases are separated here; their order and punctuation inside the original sentences are not shown. The pages as I fetched them did not mention a sentinel; check the full text."
+          }
+        ],
+        "questions": [
+          {
+            "id": "ca-q1",
+            "prompt": "List the points on which the two excerpts disagree. For each, say whether it is a direct conflict of fact, a difference of emphasis, or a difference of framing.",
+            "rubric": ["Identifies the order to fire as a direct conflict", "Notes at least one difference of emphasis (crowd with clubs versus soldiers with bayonets)", "Notes at least one framing difference (for example 'parading' versus a threatened soldier)", "Does not call everything a contradiction"],
+            "model": "<p>(1) <strong>Direct conflict:</strong> who ordered the shots. Preston says his words were “Don't fire, stop your Firing”; the Gazette says “the Captain commanded them to fire”. (2) <strong>Emphasis:</strong> Preston foregrounds the crowd (“Clubs and other Weapons”) and a threat to a soldier; the Gazette foregrounds soldiers “parading” and a party “with charged bayonets”. These can both be true and still disagree about what matters. (3) <strong>Framing:</strong> a soldier in danger who must be rescued versus soldiers on parade who advance on citizens.</p>"
+          },
+          {
+            "id": "ca-q2",
+            "prompt": "Use author, audience, date and purpose to explain <em>why</em> these accounts differ. Offer at least two hypotheses, and say what each predicts.",
+            "rubric": ["Uses Preston's position (accused, jailed) and audience (England first) to explain his emphasis", "Uses the Gazette's date (one week) and unknown author as limits on what it can tell us", "States hypotheses as hypotheses, not facts", "Says what evidence each hypothesis predicts or what would test it"],
+            "model": "<p><strong>H1, motive.</strong> Preston was facing prosecution and wrote for a British audience, so he foregrounds danger and his own order to stop. Prediction: other participants' accounts will often differ on exactly those points. <strong>H2, vantage and confusion.</strong> In a crowded, loud, dark street, witnesses on different sides heard and saw different things; the difference is honest confusion. Prediction: independent witnesses from the same side will also disagree with each other. <strong>H3, dependence.</strong> The Gazette report may reflect informants hostile to the soldiers, and its author is unnamed; its claim about the order may be rumor. Prediction: if informants are named elsewhere, they will be on one side. These are not exclusive: all three can be partly true.</p>"
+          },
+          {
+            "id": "ca-q3",
+            "prompt": "What sort of evidence, not in these two excerpts, would best help decide who gave the order to fire? Say why it would be better than either account.",
+            "rubric": ["Names independent evidence (witnesses on both sides, sworn statements, trial testimony)", "Explains independence (not produced by one side to support its case)", "Acknowledges that it might not settle the question"],
+            "model": "<p>The best evidence would be statements from several witnesses close enough to hear, taken independently and from people with different loyalties, ideally under oath and cross-examined, plus any record of who spoke to whom immediately afterward. Agreement across opposed sides is more compelling than a heap of statements from one side; each side collected depositions, and MHS says so. Even then, noise and fear might leave the question unresolved, and “not settled” would be the honest conclusion.</p>"
+          }
+        ]
+      }
+    },
+    {
+      "type": "activity",
+      "id": "ca-a2",
+      "widget": "timeline",
+      "assesses": ["o2"],
+      "instructions": "<p>First put five events in order using the ordering challenge, then explore the full timeline. For each event, notice its status: established, contested or uncertain. Ask what would make an uncertain event established.</p>",
+      "debrief": "<p>The interesting item is not a date but a fact: the order to fire is marked contested because the two accounts conflict. The Revere print and Preston's writing date are marked uncertain because I have not confirmed an exact date from an archive page I fetched. Notice the sequence of publications: reports and interpretations reached Boston and London on different dates, which shaped who read what, and when.</p>",
+      "config": {
+        "events": [
+          { "id": "t1", "date": "22 Feb 1770", "sortKey": 1770.14, "title": "Christopher Seider killed", "html": "<p>Eleven-year-old Christopher Seider was killed when customs informer Ebenezer Richardson fired into a crowd. (MHS overview.)</p>", "status": "established", "tags": ["context"] },
+          { "id": "t2", "date": "5 Mar 1770 (evening)", "sortKey": 1770.18, "title": "Shooting in King Street", "html": "<p>British soldiers of the Twenty-ninth Regiment under Captain Thomas Preston fired amid a crowd near the Customs House; three civilians died at once and two more were mortally wounded. (MHS overview.)</p>", "status": "established", "tags": ["event"] },
+          { "id": "t3", "date": "5 Mar 1770", "sortKey": 1770.181, "title": "Who gave the order to fire?", "html": "<p>Preston says his words were “Don't fire, stop your Firing”. The 12 March Gazette report says “the Captain commanded them to fire”. The two accounts conflict. The MHS overview does not state who gave the order.</p>", "status": "contested", "tags": ["dispute"] },
+          { "id": "t4", "date": "12 Mar 1770", "sortKey": 1770.195, "title": "Boston-Gazette report printed", "html": "<p>The Boston-Gazette, and Country Journal, no. 779, publishes “The Town of Boston affords a recent and melancholy Demonstration…” (MHS item 316.)</p>", "status": "established", "tags": ["source"] },
+          { "id": "t5", "date": "16 Mar 1770", "sortKey": 1770.2, "title": "Tory account sent to England", "html": "<p>According to the MHS overview, the Tory account of events was sent to England on 16 March 1770; each side collected depositions.</p>", "status": "established", "tags": ["source"] },
+          { "id": "t6", "date": "After 5 Mar, before April 1770", "sortKey": 1770.22, "title": "Preston writes his account in jail", "html": "<p>MHS says Preston wrote it while jailed in Boston, hoping to gain support in England. The page we read gives no exact writing date.</p>", "status": "uncertain", "tags": ["source"] },
+          { "id": "t7", "date": "Late Mar 1770 (reported)", "sortKey": 1770.23, "title": "Revere engraving appears", "html": "<p>Catalog summaries I could not open directly place the print's release in late March 1770 and say it copied a design by Henry Pelham. Exact date unverified by me; check the Library of Congress record.</p>", "status": "uncertain", "tags": ["source"] },
+          { "id": "t8", "date": "April 1770", "sortKey": 1770.29, "title": "Preston's account printed in London", "html": "<p>Printed in the Public Advertiser (MHS item 462 description).</p>", "status": "established", "tags": ["source"] },
+          { "id": "t9", "date": "25 Jun 1770", "sortKey": 1770.48, "title": "Preston's account republished in Boston", "html": "<p>Supplement to the Boston Evening-Post, no. 1813. (MHS item 462.)</p>", "status": "established", "tags": ["source"] },
+          { "id": "t10", "date": "24 Oct 1770", "sortKey": 1770.8, "title": "Preston's trial opens; not guilty", "html": "<p>The jury returned a not-guilty verdict. (MHS overview.)</p>", "status": "established", "tags": ["trial"] },
+          { "id": "t11", "date": "27 Nov 1770", "sortKey": 1770.9, "title": "Soldiers' trial begins", "html": "<p>Six soldiers were found not guilty and two guilty of manslaughter. (MHS overview.)</p>", "status": "established", "tags": ["trial"] }
+        ],
+        "orderingChallenge": {
+          "prompt": "Put these five in order, earliest first: the Gazette report, the shooting, Preston's trial opening, Preston's account republished in Boston, Preston's account printed in London.",
+          "eventIds": ["t2", "t4", "t8", "t9", "t10"],
+          "debrief": "<p>Shooting (5 March), Gazette (12 March), London printing (April), Boston republication (June), trial (October). Preston's account reached Boston readers only in June, three months after the Gazette framed the event for them, and four months before the trial.</p>"
+        },
+        "statusLabels": { "contested": "contested: sources conflict", "uncertain": "date or detail unverified" }
+      }
+    },
+    {
+      "type": "activity",
+      "id": "ca-a3",
+      "widget": "evidence-case",
+      "assesses": ["o2", "o3"],
+      "instructions": "<p><strong>This case has no single right answer.</strong> Examine the evidence in any order, then choose the conclusion you find best supported. The conclusions are rated <em>best</em>, <em>defensible</em>, <em>weak</em> or <em>wrong</em>; read the explanation for the one you chose and for at least one other. Ask which key evidence you skipped.</p>",
+      "debrief": "<p>The strongest conclusions are the ones that state their limits: the sources conflict, both authors had reasons to persuade, and no independent evidence is in front of us. A defensible reader may lean to either account if they say why and flag how uncertain the lean is. What fails is certainty built on a verdict, a source's tone, or an assumption that persuasive purpose means false.</p>",
+      "config": {
+        "situation": "<p>Two accounts conflict on one fact: did Captain Preston order his soldiers to fire?</p>",
+        "question": "Which conclusion is best supported by the evidence you have?",
+        "evidence": [
+          { "id": "ev1", "label": "Preston's account", "source": "MHS item 462", "content": "<p>“I assured the Men that I gave no such Order, that my Words were, 'Don't fire, stop your Firing:'” (Gilder Lehrman transcription; MHS transcription confirms “Don't fire, stop your Firing”.)</p>", "reading": "<p>A direct denial by the accused. It is exactly the claim an accused person would make, and it is not corroborated by anything in this account. It does not prove the denial false.</p>", "key": true },
+          { "id": "ev2", "label": "The Boston-Gazette report", "source": "MHS item 316", "content": "<p>“Capt. Preston, with a party of men with charged bayonets,” … “the Captain commanded them to fire, and more” … “Damn you, Fire,”</p>", "reading": "<p>An unsigned report a week after the event which attributes the order to Preston. The archive page does not say who wrote it or from whom the information came.</p>", "key": true },
+          { "id": "ev3", "label": "Provenance of Preston's account", "source": "MHS item 462 description", "content": "<p>Written in jail, hoping to gain support in England; printed in London in April 1770, republished in Boston in June 1770.</p>", "reading": "<p>Shows motive and audience. A strong reason to examine his claim with care, and no reason to treat it as false by default.</p>" },
+          { "id": "ev4", "label": "What each side did with depositions", "source": "MHS overview", "content": "<p>MHS says Tories and patriots each blamed the other and collected depositions to support their accounts.</p>", "reading": "<p>Warns that depositions gathered by one side are not independent corroboration. The depositions themselves are not among the evidence here.</p>", "key": true },
+          { "id": "ev5", "label": "The verdicts", "source": "MHS overview", "content": "<p>Preston was found not guilty on 24 October 1770. Six soldiers were found not guilty and two were convicted of manslaughter.</p>", "reading": "<p>A jury's finding at trial. It shows what the jury found proven to its standard, not what a historian can say happened. The trial testimony is not among the evidence here.</p>" }
+        ],
+        "conclusions": [
+          { "id": "k1", "label": "On these sources alone the question is unsettled: the accounts conflict, each author had reasons to persuade, and no independent evidence is in view.", "verdict": "best", "explanation": "It matches the evidence and states its limit. It also names what is missing (independent, cross-side witness evidence)." },
+          { "id": "k2", "label": "Preston probably did not order the firing, because he denies it and a jury acquitted him; but this is a lean, not a proof.", "verdict": "defensible", "explanation": "Defensible if you say it is a lean. The acquittal shows reasonable doubt at trial, not what happened, and the denial comes from the accused. Strengthen it by finding independent witnesses." },
+          { "id": "k3", "label": "Preston probably did give the order, because a Boston paper says so a week after the event; but this is a lean, not a proof.", "verdict": "defensible", "explanation": "Defensible if you acknowledge the report is unsigned and its sources are unknown. A report close in time carries weight, but closeness is not independence." },
+          { "id": "k4", "label": "Preston was acquitted, so he is proven innocent and the Gazette was lying.", "verdict": "weak", "explanation": "An acquittal is not proof of innocence, and it says nothing about whether the Gazette's author was lying rather than mistaken or relying on rumor." },
+          { "id": "k5", "label": "Both accounts had a purpose, so both are worthless and nothing can be said.", "verdict": "wrong", "explanation": "Purpose tells you what to check; it does not make a source useless. Each account is good evidence of how its author presented the event, and the conflict itself is a finding." }
+        ],
+        "assumptions": ["Evidence is limited to the two accounts and MHS descriptions you have read here; other depositions and trial records exist and could change the best answer", "Verdict labels are the course author's judgment, not a scholarly consensus"]
+      }
+    },
+    {
+      "type": "practice",
+      "id": "ca-pr1",
+      "level": "guided",
+      "setting": "in-app",
+      "task": "<p>Write a comparison paragraph of 5 to 7 sentences on one disagreement <em>other than</em> the order to fire: how the two accounts present the crowd or the troops. Use at least one short quotation from each, say what kind of difference it is, give two hypotheses for it, and say what evidence would test them.</p>",
+      "hints": [
+        "<p>Pick the pair: Preston's “Clubs and other Weapons” versus the Gazette's “charged bayonets”.</p>",
+        "<p>Classify first (emphasis or framing?). Then write the hypotheses as 'If … then we would expect …'.</p>",
+        "<p>End with a sentence that says what the comparison can and cannot establish.</p>"
+      ],
+      "rubric": [
+        "Quotes each source briefly and exactly",
+        "Classifies the difference correctly (emphasis, not necessarily contradiction)",
+        "Offers two hypotheses that use author, audience, date or purpose",
+        "States what would test the hypotheses",
+        "Ends with a limited claim, not a verdict"
+      ],
+      "model": "<p>Preston foregrounds a threatening crowd, writing that people “with Clubs and other Weapons threatened to execute their Vengeance on him”, meaning the soldier, while the Gazette foregrounds “several Soldiers of the 29th Regiment” “parading” and “Capt. Preston, with a party of men with charged bayonets,”. This is a difference of emphasis and framing, not a direct contradiction: both could be true. Hypothesis one: Preston, accused and writing to persuade England, picks the details that make the soldiers' conduct look defensive. Hypothesis two: the Gazette's author, writing for Boston readers a week after, picks details that make the soldiers appear aggressive. If these are right, accounts by other participants on each side should each emphasize the other side's behavior; a witness with no stake in either would be the best test. What the comparison shows is how each side framed the event; it cannot, by itself, show what the crowd or the soldiers actually did.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "ca-pr2",
+      "level": "independent",
+      "setting": "in-app",
+      "task": "<p>Write a claim of 3 to 5 sentences about the order to fire. It must cite both sources, state your confidence, present one competing interpretation fairly, and say what evidence would change your mind. No hints. (There is no single correct claim; see the rubric and the model.)</p>",
+      "rubric": [
+        "States a claim and an explicit confidence (for example 'moderate', 'low')",
+        "Cites both accounts with short exact quotations or paraphrase and the archive",
+        "Mentions author, audience or purpose for at least one source",
+        "Presents a competing interpretation without caricaturing it",
+        "Names evidence that would change your mind",
+        "Avoids 'prove', 'obviously', 'clearly lying'"
+      ],
+      "model": "<p><strong>Model A (suspends judgment).</strong> “With low confidence I conclude that these two accounts cannot settle who gave the order. Preston, writing from jail to win support in England, says his words were “Don't fire, stop your Firing”; the unsigned Gazette report of 12 March says “the Captain commanded them to fire”. One could argue that the acquittal favors Preston's account, but a verdict reflects what a jury found proven, not what happened. I would change my view if independent sworn statements from witnesses on both sides agreed on the words used.”</p><p><strong>Model B (leans one way).</strong> “With low-to-moderate confidence I lean toward Preston's account. He denies the order, a jury acquitted him, and the Gazette report is unsigned with unknown sources. The competing reading, that he gave the order, is credible because the Gazette is close in time; I find it less persuasive only because its informants are unnamed. A named, independent eyewitness who heard the order would change my mind.”</p><p>Either could earn full marks. What matters is the reasoning, not the side.</p>"
+    },
+    {
+      "type": "check",
+      "questions": [
+        {
+          "id": "ca-c1",
+          "assesses": ["o2"],
+          "prompt": "Preston stresses “Clubs and other Weapons” in the crowd; the Gazette stresses soldiers “with charged bayonets”. What type of disagreement is this?",
+          "options": [
+            "A direct conflict of fact: one account must be false.",
+            "A difference of emphasis and framing: each foregrounds a different side, and both could be true.",
+            "No disagreement at all.",
+            "Proof that both authors lied."
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "The two statements concern different actors; both can be true. Direct conflict is the order to fire.",
+            "2": "They do disagree about what to foreground, which is exactly what the framing difference reveals.",
+            "3": "Differences of emphasis arise from purpose and vantage point; they do not show lying."
+          },
+          "explanation": "Reserving 'contradiction' for flat conflicts keeps your analysis precise: most disagreements between accounts are choices about what to tell."
+        },
+        {
+          "id": "ca-c2",
+          "assesses": ["o2"],
+          "prompt": "Which is the strongest corroboration of a claim about what happened?",
+          "options": [
+            "Five depositions all collected by the same side to support its case.",
+            "Two statements by opposed witnesses, taken separately, that agree on the key point.",
+            "A newspaper repeating the first newspaper's report.",
+            "A verdict that agrees with one side's account."
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "Statements gathered by one side to support its case are one side's evidence five times, not five independent confirmations.",
+            "2": "A repetition adds reach, not independent confirmation.",
+            "3": "A verdict reflects what was proven to a jury; it is not itself independent testimony about events."
+          },
+          "explanation": "Independence is what gives corroboration weight: agreement among people who had no reason to coordinate and opposed incentives."
+        },
+        {
+          "id": "ca-c3",
+          "assesses": ["o3"],
+          "prompt": "Which of these claims is best calibrated given what you have read?",
+          "options": [
+            "The Gazette proves Preston ordered the firing.",
+            "Preston's acquittal shows the Gazette lied.",
+            "Preston and the Gazette conflict on the order to fire; each had reasons to persuade; on these sources alone I cannot say which is right.",
+            "Nobody can ever know anything about the event."
+          ],
+          "correct": 2,
+          "feedback": {
+            "0": "“Proves” overstates: the Gazette is unsigned and the claim is uncorroborated here.",
+            "1": "An acquittal is a jury's finding, not proof that a newspaper lied; it may reflect doubt, not the truth of the alternative.",
+            "3": "Overcorrecting into total skepticism ignores established facts such as the date, place and trial outcomes."
+          },
+          "explanation": "A calibrated claim states the conflict, the reasons for caution and the limit of the evidence, while leaving established facts standing."
+        },
+        {
+          "id": "ca-c4",
+          "assesses": ["o2", "o3"],
+          "kind": "open",
+          "prompt": "In your own words: why is “the jury acquitted Preston” not enough to conclude that he did not order the firing? Then say what you can conclude from the verdict.",
+          "rubric": ["Says a verdict reflects what a jury found proven under its standard, not necessarily what happened", "Says the verdict is not a historian's finding and not testimony", "Names something it does show (that the prosecution did not persuade the jury; the outcome of the trial)"],
+          "model": "<p>A verdict tells you what twelve jurors decided had or had not been proven at that trial, with the evidence presented, under a standard that favors the accused. It is not a record of what happened and does not show that any witness was truthful. What I can conclude is that the prosecution did not persuade the jury that Preston was guilty; that is relevant, but I still need the evidence the jury heard to say anything about the order.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "ca-t1",
+      "assesses": ["o2", "o3"],
+      "task": "<p><strong>Illustrative scenario (invented, not a real event).</strong> After a loud late-night clash outside a stadium, a police statement says: “Officers acted only after being attacked with bottles.” A local newspaper report the next day says: “Witnesses say officers charged at a peaceful crowd without warning.” The newspaper does not name its witnesses. A city council later says it will investigate.</p><p>In 6 to 8 sentences: (1) say where the accounts disagree and of which type; (2) give two hypotheses grounded in author, audience and purpose; (3) say what independent evidence you would look for; (4) write a calibrated one-sentence claim you could make today.</p>",
+      "rubric": [
+        "Separates a direct conflict (who attacked first) from differences of framing (attacked / charged, bottles / peaceful)",
+        "Gives two hypotheses tied to author, audience, purpose or vantage",
+        "Names independent evidence (video, neutral witnesses, medical or damage records)",
+        "Ends with a calibrated claim that does not overreach and does not refuse to say anything",
+        "Does not treat the later investigation as a verdict on truth"
+      ],
+      "model": "<p>(1) The accounts conflict on who acted first (a direct conflict) and differ in framing: “attacked with bottles” versus “peaceful crowd”. (2) Hypothesis one: the police statement is written to justify the use of force and to protect the force's position; hypothesis two: the newspaper's witnesses may have seen only the officers' charge and not what preceded it, and the unnamed witnesses leave their vantage point unknown. (3) I would seek video from independent cameras, statements from neutral bystanders and from people on both sides, and records of injuries or damage. (4) Claim: “Both accounts have reasons to frame events as they did and neither is yet corroborated; on today's evidence I cannot say who acted first.” The council investigation would be one more source, not an automatic verdict.</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "ca-r1",
+      "prompt": "Write 3 to 4 sentences: which hypothesis about the Preston/Gazette disagreement did you find most persuasive, and what is the weakest point in your own reasoning?"
+    }
+  ],
+  "sources": [
+    { "title": "Case of Capt. Thomas Preston of the 29th Regiment (Supplement to the Boston Evening-Post, 25 June 1770)", "kind": "primary", "author": "Capt. Thomas Preston", "date": "1770", "url": "https://www.masshist.org/database/viewer.php?item_id=462", "accessed": "2026-10-20", "note": "MHS transcription view confirmed “I was soon informed by a Townsman…”, “Don't fire, stop your Firing” and the Clubs sentence. The longer 'I assured the Men…' sentence was read on the Gilder Lehrman transcription." },
+    { "title": "The Case of Capt. Thomas Preston of the 29th Regiment, 1770 (Hamilton Education Program)", "kind": "reference", "author": "Gilder Lehrman Institute of American History", "url": "https://hamilton.gilderlehrman.org/supporting-document/case-capt-thomas-preston-29th-regiment-1770", "accessed": "2026-10-20", "note": "Teaching transcription; source note cites MHS holding. Used for the 'I assured the Men…' sentence." },
+    { "title": "Boston, March 12. The Town of Boston affords a recent and melancholy Demonstration (The Boston-Gazette, and Country Journal, no. 779)", "kind": "primary", "date": "12 March 1770", "url": "https://www.masshist.org/database/viewer.php?item_id=316&img_step=1&pid=2&mode=dual", "accessed": "2026-10-20", "note": "Phrases quoted were returned by the fetching tool from the MHS transcription; verify against the page image." },
+    { "title": "The Coming of the American Revolution: Boston Massacre", "kind": "secondary", "author": "Massachusetts Historical Society", "url": "https://www.masshist.org/revolution/massacre.php", "accessed": "2026-10-20", "note": "Source for trial dates and outcomes, the claim that each side collected depositions, the Tory account sent to England on 16 March 1770, and Christopher Seider." },
+    { "title": "Course decisions in this lesson", "kind": "pedagogical", "note": "The three-type scheme (conflict, emphasis, framing) and the verdict labels in the evidence-case are the course author's teaching simplifications, not a scholarly consensus. The ca-t1 scenario is invented. Not verified: whether the Gazette report mentions a sentinel; the Revere print's release date; the Gazette's political alignment." }
+  ],
+  "next": "<p>The capstone asks you to write a 250 to 350 word argument on whether 5 March 1770 is better understood as a deliberate massacre or a chaotic confrontation. You will use sourcing, comparison and calibrated claims together.</p>"
+}

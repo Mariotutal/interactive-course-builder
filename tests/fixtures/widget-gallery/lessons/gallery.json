@@ -1,0 +1,515 @@
+{
+ "format": 1,
+ "id": "gallery",
+ "title": "All patterns",
+ "level": "core",
+ "minutes": 30,
+ "outcomes": [
+  "o1"
+ ],
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>Fixture start.</p>"
+  },
+  {
+   "type": "explain",
+   "html": "<p>Fixture <span class='term' data-term='fixture'>fixture</span>.</p>"
+  },
+  {
+   "type": "visual",
+   "html": "<figure><svg viewBox='0 0 300 120' role='img' aria-label='Two boxes'><rect id='box-a' class='n1' x='10' y='20' width='120' height='60' rx='6'/><text class='ts' x='20' y='55'>Part A</text><rect id='box-b' class='n2' x='160' y='20' width='120' height='60' rx='6'/><text class='ts' x='170' y='55'>Part B</text></svg><figcaption>Boxes</figcaption></figure>",
+   "alt": "Two boxes labelled Part A and Part B, side by side, used as a fixture.",
+   "purpose": "test"
+  },
+  {
+   "type": "worked",
+   "steps": [
+    {
+     "html": "<p>a</p>"
+    },
+    {
+     "html": "<p>b</p>",
+     "selfExplain": true,
+     "prompt": "<p>Why?</p>"
+    }
+   ]
+  },
+  {
+   "type": "predict",
+   "id": "g-p",
+   "prompt": "Pick 1",
+   "options": [
+    "0",
+    "1"
+   ],
+   "correct": 1,
+   "explanation": "It is 1.",
+   "feedback": {
+    "0": "No."
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-ev",
+   "widget": "evidence-case",
+   "instructions": "<p>Gather evidence.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Evidence",
+    "situation": "<p>A plant wilts.</p>",
+    "question": "Why?",
+    "evidence": [
+     {
+      "id": "e1",
+      "label": "Check soil",
+      "content": "<p>Soil is dry.</p>",
+      "reading": "<p>Water is low.</p>",
+      "key": true
+     },
+     {
+      "id": "e2",
+      "label": "Check light",
+      "terminal": true,
+      "content": "lux=20000"
+     }
+    ],
+    "conclusions": [
+     {
+      "id": "c1",
+      "label": "Too little water",
+      "verdict": "best",
+      "explanation": "Dry soil."
+     },
+     {
+      "id": "c2",
+      "label": "Too much light",
+      "verdict": "weak",
+      "explanation": "Light is normal."
+     }
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-sc",
+   "widget": "scenario",
+   "instructions": "<p>Decide.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Scenario",
+    "start": "n1",
+    "nodes": {
+     "n1": {
+      "html": "<p>Start.</p>",
+      "choices": [
+       {
+        "label": "Go left",
+        "next": "n2",
+        "quality": "good",
+        "feedback": "Good."
+       },
+       {
+        "label": "Go right",
+        "next": "n3",
+        "quality": "poor",
+        "feedback": "Poor."
+       }
+      ]
+     },
+     "n2": {
+      "html": "<p>Left end.</p>",
+      "end": true,
+      "debrief": "<p>Well done.</p>"
+     },
+     "n3": {
+      "html": "<p>Right end.</p>",
+      "end": true,
+      "debrief": "<p>Try again.</p>"
+     }
+    }
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-cl",
+   "widget": "classify",
+   "instructions": "<p>Sort.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Classify",
+    "categories": [
+     {
+      "id": "f",
+      "label": "Fruit"
+     },
+     {
+      "id": "v",
+      "label": "Vegetable"
+     }
+    ],
+    "items": [
+     {
+      "id": "i1",
+      "html": "Apple",
+      "category": "f",
+      "feedback": "Seed-bearing."
+     },
+     {
+      "id": "i2",
+      "html": "Carrot",
+      "category": "v",
+      "feedback": "Root."
+     },
+     {
+      "id": "i3",
+      "html": "Tomato",
+      "category": "f",
+      "feedback": "Botanically a fruit."
+     }
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-tl",
+   "widget": "timeline",
+   "instructions": "<p>Explore.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Timeline",
+    "events": [
+     {
+      "id": "t1",
+      "date": "1900",
+      "sortKey": 1900,
+      "title": "First",
+      "html": "<p>One.</p>",
+      "tags": [
+       "a"
+      ]
+     },
+     {
+      "id": "t2",
+      "date": "c. 1910",
+      "sortKey": 1910,
+      "title": "Second",
+      "html": "<p>Two.</p>",
+      "status": "contested",
+      "tags": [
+       "b"
+      ]
+     },
+     {
+      "id": "t3",
+      "date": "1920",
+      "sortKey": 1920,
+      "title": "Third",
+      "html": "<p>Three.</p>",
+      "tags": [
+       "a"
+      ]
+     }
+    ],
+    "orderingChallenge": {
+     "prompt": "Order them",
+     "eventIds": [
+      "t3",
+      "t1",
+      "t2"
+     ],
+     "debrief": "<p>Chronology.</p>"
+    }
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-src",
+   "widget": "source-compare",
+   "instructions": "<p>Compare.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Sources",
+    "sources": [
+     {
+      "id": "s1",
+      "title": "Letter",
+      "author": "A",
+      "date": "1900",
+      "excerpt": "<p>Text one.</p>"
+     },
+     {
+      "id": "s2",
+      "title": "Diary",
+      "author": "B",
+      "date": "1901",
+      "excerpt": "<p>Text two.</p>"
+     }
+    ],
+    "questions": [
+     {
+      "id": "q1",
+      "prompt": "Differences?",
+      "rubric": [
+       "Names one"
+      ],
+      "model": "<p>Model.</p>"
+     }
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-dl",
+   "widget": "dialogue",
+   "instructions": "<p>Listen.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Dialogue",
+    "targetLang": "es-ES",
+    "lines": [
+     {
+      "speaker": "A",
+      "text": "Hola, ¿qué tal?",
+      "translation": "Hi, how are you?"
+     },
+     {
+      "speaker": "B",
+      "text": "Bien, gracias.",
+      "translation": "Fine, thanks."
+     }
+    ],
+    "comprehension": [
+     {
+      "prompt": "How is B?",
+      "options": [
+       "Fine",
+       "Bad"
+      ],
+      "correct": 0,
+      "explanation": "Bien = fine.",
+      "feedback": {
+       "1": "Mal would be bad."
+      }
+     }
+    ],
+    "production": [
+     {
+      "prompt": "Say thanks",
+      "accept": [
+       "gracias"
+      ],
+      "tips": "<p>gracias</p>"
+     }
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-cz",
+   "widget": "cloze",
+   "instructions": "<p>Fill.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Cloze",
+    "text": "<p>Yo [[soy::ser]] estudiante y [[estoy::estar]] aquí.</p>",
+    "accentSensitive": true,
+    "debrief": "<p>Ser vs estar.</p>"
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-hs",
+   "widget": "hotspot-diagram",
+   "instructions": "<p>Explore parts.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Hotspots",
+    "svg": "<svg viewBox='0 0 300 120' role='img' aria-label='Two boxes'><rect id='box-a' class='n1' x='10' y='20' width='120' height='60' rx='6'/><text class='ts' x='20' y='55'>Part A</text><rect id='box-b' class='n2' x='160' y='20' width='120' height='60' rx='6'/><text class='ts' x='170' y='55'>Part B</text></svg>",
+    "alt": "Two boxes labelled Part A and Part B side by side.",
+    "hotspots": [
+     {
+      "id": "a",
+      "label": "Part A",
+      "target": "box-a",
+      "html": "<p>About A.</p>"
+     },
+     {
+      "id": "b",
+      "label": "Part B",
+      "target": "box-b",
+      "html": "<p>About B.</p>"
+     }
+    ],
+    "quiz": [
+     {
+      "ask": "Find B",
+      "answer": "b",
+      "feedback": "Yes."
+     }
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-st",
+   "widget": "stepper",
+   "instructions": "<p>Step.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Stepper",
+    "steps": [
+     {
+      "title": "One",
+      "html": "<p>Step one.</p>"
+     },
+     {
+      "title": "Two",
+      "html": "<p>Step two.</p>",
+      "predict": {
+       "prompt": "Next?",
+       "options": [
+        "X",
+        "Y"
+       ],
+       "correct": 1,
+       "explanation": "Y."
+      }
+     },
+     {
+      "title": "Three",
+      "html": "<p>Step three.</p>"
+     }
+    ]
+   }
+  },
+  {
+   "type": "activity",
+   "id": "g-pe",
+   "widget": "parameter-explorer",
+   "instructions": "<p>Change.</p>",
+   "debrief": "<p>Debrief.</p>",
+   "config": {
+    "title": "Explorer",
+    "inputs": [
+     {
+      "id": "a",
+      "label": "a",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "value": 2
+     }
+    ],
+    "outputs": [
+     {
+      "id": "y",
+      "label": "a squared",
+      "expr": "a^2"
+     }
+    ],
+    "chart": {
+     "x": {
+      "var": "x",
+      "from": 0,
+      "to": 10
+     },
+     "series": [
+      {
+       "label": "x^2",
+       "expr": "x^2"
+      },
+      {
+       "label": "a*x",
+       "expr": "a*x"
+      }
+     ],
+     "markers": [
+      {
+       "label": "a",
+       "x": "a"
+      }
+     ],
+     "xLabel": "x"
+    },
+    "assumptions": [
+     "Pure function"
+    ]
+   }
+  },
+  {
+   "type": "practice",
+   "id": "g-pr1",
+   "level": "guided",
+   "task": "<p>Do it.</p>",
+   "hints": [
+    "<p>h</p>"
+   ],
+   "solution": "<p>s</p>"
+  },
+  {
+   "type": "practice",
+   "id": "g-pr2",
+   "level": "independent",
+   "task": "<p>Do it alone.</p>",
+   "solution": "<p>s</p>",
+   "setting": "real-world",
+   "externalFeedback": "<p>Ask someone.</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "g-c1",
+     "assesses": [
+      "o1"
+     ],
+     "kind": "multi",
+     "prompt": "Pick evens",
+     "options": [
+      "2",
+      "3",
+      "4"
+     ],
+     "correct": [
+      0,
+      2
+     ],
+     "explanation": "2 and 4."
+    },
+    {
+     "id": "g-c2",
+     "assesses": [
+      "o1"
+     ],
+     "kind": "open",
+     "prompt": "Explain",
+     "rubric": [
+      "One point"
+     ],
+     "model": "<p>m</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "g-t",
+   "assesses": [
+    "o1"
+   ],
+   "task": "<p>New case.</p>",
+   "rubric": [
+    "r"
+   ],
+   "model": "<p>m</p>"
+  }
+ ],
+ "sources": [
+  {
+   "title": "Fixture",
+   "kind": "pedagogical",
+   "note": "Synthetic"
+  }
+ ],
+ "next": "<p>End.</p>"
+}

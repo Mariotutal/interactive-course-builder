@@ -1,0 +1,432 @@
+{
+ "format": 1,
+ "id": "construir-intervalo",
+ "title": "Construir un intervalo de confianza del 95 %",
+ "summary": "De «estimación ± valor crítico × error estándar» a un intervalo para una media y para una proporción, con hoja de cálculo.",
+ "level": "core",
+ "minutes": 30,
+ "outcomes": [
+  "o2"
+ ],
+ "prerequisites": [
+  "variabilidad-datos",
+  "media-muestral"
+ ],
+ "prereqText": "<p>Necesitas el error estándar de la lección 2 (σ/√n, estimado con s/√n).</p>",
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>Has medido 36 pedidos elegidos al azar y la media es 48,2 € con s = 12 €. Si pones «el pedido medio es 48,2 €» en la presentación, nadie sabrá si es 48,2 ± 1 o ± 10. La media muestral es una estimación puntual y casi seguro no es exactamente μ. Un buen informe dice <em>cuánta</em> incertidumbre acompaña a esa cifra. (Datos ilustrativos.)</p>"
+  },
+  {
+   "type": "intuition",
+   "html": "<p>Piensa en un mapa: en vez de marcar un punto exacto donde crees que está un objeto, dibujas un círculo alrededor del punto. El <span class=\"term\" data-term=\"intervalo de confianza\">intervalo de confianza</span> hace lo mismo con un número: «mi mejor estimación es 48,2 €, pero el valor verdadero podría razonablemente ser algo menor o mayor». El tamaño del círculo lo marca cuánto se espera que fluctúe la estimación (el error estándar).</p>",
+   "limits": "<p>Un círculo en un mapa sugiere que «el objeto está dentro, seguro». Un intervalo de confianza <strong>no garantiza</strong> contener el valor verdadero; el nivel de confianza (95 %) describe con qué frecuencia el <em>procedimiento</em> acierta a la larga. Y tampoco es el rango donde caen el 95 % de los pedidos individuales: eso sería un intervalo sobre los datos, no sobre la media.</p>"
+  },
+  {
+   "type": "visual",
+   "purpose": "Mostrar las partes de un intervalo: estimación puntual, margen de error y límites.",
+   "alt": "Recta numérica con la media muestral 48,2 euros marcada con un punto, una barra horizontal gruesa desde 44,14 hasta 52,26 euros, y dos flechas que indican que el margen de error de 4,06 se extiende a cada lado de la media.",
+   "html": "<figure><svg viewBox='0 0 560 170' role='img' aria-labelledby='c3t c3d'><title id='c3t'>Anatomía de un intervalo de confianza</title><desc id='c3d'>Una recta numérica de 36 a 60 euros con la media muestral 48,2 en el centro, una barra horizontal desde 44,14 hasta 52,26 y dos tramos iguales de 4,06 a cada lado que son el margen de error.</desc>\n<defs><marker id='arrow' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='7' markerHeight='7' orient='auto-start-reverse'><path d='M0 0L10 5L0 10z'/></marker></defs>\n<line class='edge' x1='20' y1='120' x2='540' y2='120'/>\n<line class='edge' x1='20' y1='116' x2='20' y2='124'/><text class='tm' x='20' y='140' text-anchor='middle'>36</text><line class='edge' x1='106.66666666666667' y1='116' x2='106.66666666666667' y2='124'/><text class='tm' x='106.66666666666667' y='140' text-anchor='middle'>40</text><line class='edge' x1='193.33333333333334' y1='116' x2='193.33333333333334' y2='124'/><text class='tm' x='193.33333333333334' y='140' text-anchor='middle'>44</text><line class='edge' x1='280' y1='116' x2='280' y2='124'/><text class='tm' x='280' y='140' text-anchor='middle'>48</text><line class='edge' x1='366.6666666666667' y1='116' x2='366.6666666666667' y2='124'/><text class='tm' x='366.6666666666667' y='140' text-anchor='middle'>52</text><line class='edge' x1='453.33333333333337' y1='116' x2='453.33333333333337' y2='124'/><text class='tm' x='453.33333333333337' y='140' text-anchor='middle'>56</text><line class='edge' x1='540' y1='116' x2='540' y2='124'/><text class='tm' x='540' y='140' text-anchor='middle'>60</text>\n<line class='edge hl' x1='196.3666666666667' y1='80' x2='372.29999999999995' y2='80'/><line class='edge hl' x1='196.3666666666667' y1='72' x2='196.3666666666667' y2='88'/><line class='edge hl' x1='372.29999999999995' y1='72' x2='372.29999999999995' y2='88'/>\n<circle cx='284.3333333333334' cy='80' r='6' fill='currentColor'/>\n<text class='t' x='284.3333333333334' y='60' text-anchor='middle'>x̄ = 48,2 €</text>\n<text class='ts' x='196.3666666666667' y='104' text-anchor='middle'>44,14</text><text class='ts' x='372.29999999999995' y='104' text-anchor='middle'>52,26</text>\n<line class='edge' x1='284.3333333333334' y1='28' x2='372.29999999999995' y2='28' marker-end='url(#arrow)'/><line class='edge' x1='284.3333333333334' y1='28' x2='196.3666666666667' y2='28' marker-end='url(#arrow)'/>\n<text class='ts' x='284.3333333333334' y='20' text-anchor='middle'>margen de error = 4,06 a cada lado</text>\n<text class='tm' x='280' y='162' text-anchor='middle'>Cifras ilustrativas: n = 36, s = 12, valor crítico t = 2,030</text></svg><figcaption>Intervalo = estimación ± margen de error (datos ilustrativos).</figcaption></figure>"
+  },
+  {
+   "type": "explain",
+   "title": "La receta general y sus dos variantes",
+   "html": "<p>Casi todos los intervalos de este curso tienen la misma forma:</p><p style='text-align:center'><strong>estimación ± valor crítico × error estándar</strong></p>\n<p>El producto <em>valor crítico × EE</em> es el <span class='term' data-term='margen de error'>margen de error</span>. El <span class='term' data-term='valor crítico'>valor crítico</span> fija el nivel de confianza: cuanto mayor la confianza, más ancho el intervalo.</p>\n<p><strong>Media (variante t).</strong> El NIST da el intervalo Ȳ ± t(1−α/2, N−1) · s/√N, donde t es el percentil de la distribución t de Student con N − 1 <span class='term' data-term='grados de libertad'>grados de libertad</span>. Se usa t y no z porque σ se estima con s; esto añade incertidumbre y hace los intervalos algo más anchos (NIST, 7.1.4). Para n grande t se parece a z: con 35 grados de libertad t ≈ 2,030 frente a z = 1,96. Si σ fuese realmente conocida: Ȳ ± z·σ/√N.</p>\n<p><strong>Proporción.</strong> Con una proporción muestral p̂ de n individuos: p̂ ± z* · √(p̂(1−p̂)/n), con z* = 1,96 para el 95 % (OpenIntro). La aproximación normal requiere independencia y la <em>condición éxito–fracaso</em>: al menos 10 éxitos y 10 fracasos en la muestra.</p>\n<p><strong>Valores críticos habituales (normal):</strong> 90 % → 1,645; 95 % → 1,96; 99 % → 2,576. En la práctica se redondea 1,96 a 2.</p>\n<p><strong>Hoja de cálculo (nombres en español de Excel / inglés; comprueba en tu programa):</strong> media <code>PROMEDIO</code>/<code>AVERAGE</code>; s <code>DESVEST.M</code>/<code>STDEV.S</code>; n <code>CONTAR</code>/<code>COUNT</code>; valor crítico t <code>INV.T.2C(0,05; n-1)</code>/<code>T.INV.2T(0.05, n-1)</code>; valor crítico z <code>INV.NORM.ESTAND(0,975)</code>/<code>NORM.S.INV(0.975)</code>; raíz <code>RAIZ</code>/<code>SQRT</code>. Por ejemplo, margen = <code>INV.T.2C(0,05; B2-1)*B3/RAIZ(B2)</code> con n en B2 y s en B3. En programas con separador decimal punto, usa punto.</p>\n<p><strong>Supuestos.</strong> Muestra aleatoria (o que se comporte como tal), observaciones independientes, y para una media con n pequeño, datos no muy asimétricos. Si fallan, el intervalo puede no tener realmente el nivel que anuncia (lección 7).</p>"
+  },
+  {
+   "type": "activity",
+   "id": "c-a1",
+   "widget": "stepper",
+   "assesses": [
+    "o2"
+   ],
+   "instructions": "<p>Sigue los cinco pasos con tu propia hoja de cálculo al lado. En cada paso, <strong>predice</strong> el resultado antes de revelarlo.</p>",
+   "debrief": "<p>Notaste que el único paso «nuevo» respecto de la lección 2 es elegir el multiplicador; el resto es aritmética. Y que el resultado final es una frase con dos extremos, no un único número.</p>",
+   "config": {
+    "steps": [
+     {
+      "title": "1. Datos y objetivo",
+      "html": "<p>n = 36 pedidos elegidos al azar; x̄ = 48,2 €; s = 12,0 €. Objetivo: IC del 95 % para la media μ de todos los pedidos. Condiciones: muestra aleatoria; n = 36 y datos sin valores extremos (supuesto del ejemplo).</p>"
+     },
+     {
+      "title": "2. Error estándar",
+      "html": "<p>EE = s/√n = 12/√36 = 12/6 = <strong>2,0 €</strong>.</p>",
+      "predict": {
+       "prompt": "¿Qué valor tiene el error estándar?",
+       "options": [
+        "12 €",
+        "2 €",
+        "6 €"
+       ],
+       "correct": 1,
+       "explanation": "EE = 12/6 = 2. Los otros valores son s (12) o √n (6)."
+      }
+     },
+     {
+      "title": "3. Valor crítico",
+      "html": "<p>Con t de Student y n − 1 = 35 gl, el percentil 97,5 % es <strong>t = 2,030</strong> (hoja de cálculo: <code>INV.T.2C(0,05;35)</code>). Con z sería 1,96.</p>",
+      "predict": {
+       "prompt": "¿El valor crítico t con 35 grados de libertad será mayor, menor o igual que 1,96?",
+       "options": [
+        "Menor que 1,96",
+        "Igual que 1,96",
+        "Algo mayor que 1,96"
+       ],
+       "correct": 2,
+       "explanation": "t tiene colas más pesadas que z porque s es una estimación; con 35 gl es algo mayor (2,030) y se acerca a 1,96 al crecer n."
+      }
+     },
+     {
+      "title": "4. Margen y límites",
+      "html": "<p>Margen = 2,030 × 2,0 = <strong>4,06 €</strong>. Límites: 48,2 − 4,06 = <strong>44,14 €</strong> y 48,2 + 4,06 = <strong>52,26 €</strong>.</p>",
+      "predict": {
+       "prompt": "¿Qué límite superior obtienes?",
+       "options": [
+        "50,2 €",
+        "52,26 €",
+        "60,2 €"
+       ],
+       "correct": 1,
+       "explanation": "48,2 + 4,06 = 52,26. 50,2 sumaría solo 1 EE; 60,2 sumaría 1 s (12)."
+      }
+     },
+     {
+      "title": "5. Dilo en una frase",
+      "html": "<p>«Con una muestra de 36 pedidos, el IC 95 % para el importe medio de todos los pedidos es de 44,14 € a 52,26 € (margen ±4,06 €).» En la lección 4 verás qué significa exactamente el 95 %.</p>"
+     }
+    ]
+   }
+  },
+  {
+   "type": "worked",
+   "title": "Intervalo para una proporción: satisfacción de clientes",
+   "html": "<p>Datos ilustrativos: de 1 000 clientes elegidos al azar, 412 dicen estar «muy satisfechos».</p>",
+   "steps": [
+    {
+     "html": "<p><strong>Estimación:</strong> p̂ = 412/1000 = 0,412.</p>"
+    },
+    {
+     "prompt": "<p>¿Se cumple la condición éxito–fracaso? Compruébalo antes de ver el resultado.</p>",
+     "selfExplain": true,
+     "html": "<p>Éxitos = 412 ≥ 10 y fracasos = 588 ≥ 10: sí, la aproximación normal es razonable.</p>"
+    },
+    {
+     "html": "<p><strong>EE</strong> = √(0,412 · 0,588 / 1000) = √0,000242 ≈ 0,01556 (1,56 puntos).</p>"
+    },
+    {
+     "html": "<p><strong>Margen</strong> = 1,96 × 0,01556 ≈ 0,0305 (3,05 puntos). <strong>Intervalo</strong> = 0,412 ± 0,0305 → <strong>38,1 % a 44,3 %</strong>.</p>"
+    },
+    {
+     "html": "<p><strong>Hoja de cálculo:</strong> con n en B1 y p̂ en B2, margen <code>=INV.NORM.ESTAND(0,975)*RAIZ(B2*(1-B2)/B1)</code>.</p>"
+    }
+   ],
+   "result": "<p>Entre el 38,1 % y el 44,3 % de todos los clientes estaría «muy satisfecho» según este procedimiento; se diría «41 % ± 3 puntos».</p>"
+  },
+  {
+   "type": "predict",
+   "id": "c-p1",
+   "prompt": "Con la misma media y s, pasas de n = 36 a n = 144 (4 veces más pedidos). ¿Qué pasa con la anchura del intervalo de confianza del 95 %?",
+   "options": [
+    "Se reduce aproximadamente a la mitad",
+    "Se reduce a la cuarta parte",
+    "Se mantiene igual porque la confianza sigue siendo 95 %"
+   ],
+   "correct": 0,
+   "feedback": {
+    "1": "La anchura depende de 1/√n, no de 1/n: 4 veces más datos → mitad de anchura.",
+    "2": "El nivel de confianza fija el multiplicador, pero el EE (y por tanto la anchura) sí baja con n."
+   },
+   "explanation": "El margen es (valor crítico) × s/√n. √144 = 12 frente a √36 = 6: el margen se reduce a la mitad (el valor crítico t también baja un poco)."
+  },
+  {
+   "type": "activity",
+   "id": "c-a2",
+   "widget": "parameter-explorer",
+   "instructions": "<p><strong>Predice:</strong> ¿qué tendrá más efecto sobre la anchura del intervalo: pasar de 90 % a 99 % de confianza o duplicar n? Mueve los controles y comprueba.</p>",
+   "debrief": "<p>Subir la confianza de 90 % a 99 % ensancha el intervalo un 57 % (2,576/1,645); duplicar n solo lo estrecha un 29 % (1/√2). Más confianza cuesta anchura; más datos la devuelven, pero lentamente.</p>",
+   "config": {
+    "title": "Anchura del intervalo según n, s y nivel de confianza",
+    "inputs": [
+     {
+      "id": "xbar",
+      "label": "Media muestral x̄",
+      "min": 20,
+      "max": 80,
+      "step": 0.1,
+      "value": 48.2
+     },
+     {
+      "id": "s",
+      "label": "Desviación típica muestral s",
+      "min": 2,
+      "max": 30,
+      "step": 0.5,
+      "value": 12
+     },
+     {
+      "id": "n",
+      "label": "Tamaño de muestra n",
+      "min": 5,
+      "max": 500,
+      "step": 1,
+      "value": 36
+     },
+     {
+      "id": "conf",
+      "label": "Nivel de confianza (%)",
+      "min": 80,
+      "max": 99.5,
+      "step": 0.5,
+      "value": 95
+     }
+    ],
+    "outputs": [
+     {
+      "id": "se",
+      "label": "Error estándar s/√n",
+      "expr": "s / sqrt(n)",
+      "format": {
+       "digits": 3
+      }
+     },
+     {
+      "id": "z",
+      "label": "Valor crítico z",
+      "expr": "norminv((1 + conf / 100) / 2, 0, 1)",
+      "format": {
+       "digits": 3
+      }
+     },
+     {
+      "id": "t",
+      "label": "Valor crítico t aproximado",
+      "expr": "norminv((1 + conf / 100) / 2, 0, 1) + (pow(norminv((1 + conf / 100) / 2, 0, 1), 3) + norminv((1 + conf / 100) / 2, 0, 1)) / (4 * (n - 1))",
+      "format": {
+       "digits": 3
+      }
+     },
+     {
+      "id": "moe",
+      "label": "Margen de error (con t aproximado)",
+      "expr": "(norminv((1 + conf / 100) / 2, 0, 1) + (pow(norminv((1 + conf / 100) / 2, 0, 1), 3) + norminv((1 + conf / 100) / 2, 0, 1)) / (4 * (n - 1))) * s / sqrt(n)",
+      "format": {
+       "digits": 3
+      }
+     },
+     {
+      "id": "lo",
+      "label": "Límite inferior",
+      "expr": "xbar - (norminv((1 + conf / 100) / 2, 0, 1) + (pow(norminv((1 + conf / 100) / 2, 0, 1), 3) + norminv((1 + conf / 100) / 2, 0, 1)) / (4 * (n - 1))) * s / sqrt(n)",
+      "format": {
+       "digits": 2
+      }
+     },
+     {
+      "id": "hi",
+      "label": "Límite superior",
+      "expr": "xbar + (norminv((1 + conf / 100) / 2, 0, 1) + (pow(norminv((1 + conf / 100) / 2, 0, 1), 3) + norminv((1 + conf / 100) / 2, 0, 1)) / (4 * (n - 1))) * s / sqrt(n)",
+      "format": {
+       "digits": 2
+      }
+     }
+    ],
+    "chart": {
+     "x": {
+      "var": "x",
+      "from": 5,
+      "to": 500
+     },
+     "series": [
+      {
+       "label": "margen de error vs n (z)",
+       "expr": "norminv((1 + conf / 100) / 2, 0, 1) * s / sqrt(x)"
+      }
+     ],
+     "markers": [
+      {
+       "label": "n actual",
+       "x": "n"
+      }
+     ],
+     "xLabel": "tamaño de muestra n",
+     "yLabel": "margen de error",
+     "ariaLabel": "Margen de error decreciente con n"
+    },
+    "interpret": [
+     {
+      "when": "n < 15",
+      "tone": "warn",
+      "html": "Con n tan pequeño la aproximación del valor crítico t es burda y el intervalo es muy sensible a la forma de los datos."
+     },
+     {
+      "when": "conf > 98",
+      "tone": "warn",
+      "html": "Confianza muy alta: el intervalo es tan ancho que puede dejar de ser informativo."
+     }
+    ],
+    "assumptions": [
+     "El valor t es una aproximación de primer orden (z + (z³ + z)/(4·gl)); error de unas milésimas con gl ≥ 15. En una hoja de cálculo usa la función exacta.",
+     "La curva del gráfico usa z (no t).",
+     "Muestreo aleatorio simple; datos aproximadamente simétricos si n es pequeño.",
+     "Cifras ilustrativas."
+    ]
+   }
+  },
+  {
+   "type": "practice",
+   "id": "c-pr1",
+   "level": "guided",
+   "setting": "in-app",
+   "task": "<p>n = 49 clientes, tiempo medio en la web x̄ = 75 s, s = 15 s (ilustrativo). Construye el IC 95 % para la media usando t con 48 gl (t ≈ 2,011).</p>",
+   "hints": [
+    "<p>EE = 15/√49 = 15/7.</p>",
+    "<p>Margen = 2,011 × EE; luego x̄ ± margen.</p>"
+   ],
+   "rubric": [
+    "EE ≈ 2,14",
+    "Margen ≈ 4,31",
+    "Intervalo ≈ 70,7 a 79,3 s"
+   ],
+   "solution": "<p>EE = 15/7 ≈ 2,143; margen = 2,011 × 2,143 ≈ 4,31; IC95 % ≈ <strong>70,7 a 79,3 s</strong> (con z = 1,96 saldría 70,8 a 79,2: casi igual).</p>"
+  },
+  {
+   "type": "practice",
+   "id": "c-pr2",
+   "level": "independent",
+   "setting": "offline",
+   "task": "<p>De 150 clientes elegidos al azar, 57 respondieron «sí» a «¿recomendarías la marca?» (ilustrativo). En tu hoja de cálculo, comprueba la condición éxito–fracaso, calcula el error estándar, el margen de error y el IC del 95 %, y escribe una frase que lo comunique para un informe.</p>",
+   "rubric": [
+    "Comprueba 57 ≥ 10 y 93 ≥ 10",
+    "p̂ = 0,38; EE ≈ 0,0396; margen ≈ 0,0777",
+    "Frase con intervalo y n, sin decir «95 % de probabilidad»"
+   ],
+   "solution": "<p>p̂ = 0,38; EE = √(0,38·0,62/150) ≈ 0,0396; margen = 1,96·0,0396 ≈ 0,078; IC95 % ≈ <strong>30,2 % a 45,8 %</strong>. Frase: «Con 150 respuestas, el 38 % recomienda la marca; el intervalo de confianza del 95 % va de 30 % a 46 %.» Es un intervalo ancho: con n = 150 la estimación es poco precisa.</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "c-c1",
+     "assesses": [
+      "o2"
+     ],
+     "prompt": "Un intervalo se obtiene como…",
+     "options": [
+      "estimación ± error estándar",
+      "estimación ± valor crítico × error estándar",
+      "estimación ± desviación típica"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "Sin el valor crítico no hay nivel de confianza definido: ± 1 EE cubre menos del 95 %.",
+      "2": "La desviación típica describe datos individuales, no la incertidumbre de la media."
+     },
+     "explanation": "El valor crítico (≈ 1,96 para 95 %) fija el nivel de confianza."
+    },
+    {
+     "id": "c-c2",
+     "assesses": [
+      "o2"
+     ],
+     "kind": "numeric",
+     "prompt": "Con x̄ = 100, s = 20 y n = 100, usando 1,96 como valor crítico, ¿cuál es el límite superior del intervalo del 95 % para la media? (redondea a un decimal)",
+     "answer": 103.9,
+     "tolerance": 0.1,
+     "explanation": "EE = 20/10 = 2; margen = 1,96 × 2 = 3,92; límite superior = 103,92 ≈ 103,9.",
+     "feedbackWrong": "Pista: EE = s/√n = 2; margen = 1,96·2."
+    },
+    {
+     "id": "c-c3",
+     "assesses": [
+      "o2"
+     ],
+     "prompt": "En una encuesta a 8 personas, 3 dicen «sí». ¿Es adecuado el intervalo normal p̂ ± 1,96·√(p̂(1−p̂)/n)?",
+     "options": [
+      "Sí, siempre que haya muestra aleatoria",
+      "No: no se cumple la condición éxito–fracaso (menos de 10 éxitos y fracasos)",
+      "Sí, porque p̂ es cercano a 0,5"
+     ],
+     "correct": 1,
+     "feedback": {
+      "0": "El muestreo aleatorio es necesario pero no suficiente; con tan pocos casos la normal es una mala aproximación.",
+      "2": "La cercanía a 0,5 no compensa un n tan pequeño: hay 3 éxitos y 5 fracasos, ambos por debajo de 10."
+     },
+     "explanation": "Con 3 éxitos y 5 fracasos (< 10) la aproximación normal no es fiable."
+    },
+    {
+     "id": "c-c4",
+     "assesses": [
+      "o2"
+     ],
+     "kind": "open",
+     "prompt": "Explica con tus palabras por qué un intervalo del 99 % es más ancho que uno del 95 % con los mismos datos.",
+     "rubric": [
+      "Dice que el valor crítico es mayor al querer más confianza",
+      "Relaciona mayor confianza con menor precisión (más anchura)"
+     ],
+     "model": "<p>Para que el procedimiento acierte más a menudo (99 % en lugar de 95 %), hay que multiplicar el error estándar por un valor crítico mayor (2,576 frente a 1,96), lo que alarga el intervalo. Más confianza se paga con menos precisión.</p>"
+    }
+   ]
+  },
+  {
+   "type": "transfer",
+   "id": "c-t1",
+   "assesses": [
+    "o2"
+   ],
+   "task": "<p><strong>Situación nueva (servicio de atención).</strong> Se midieron los tiempos de espera de 16 llamadas elegidas al azar: media 6,8 min, s = 3,2 min (ilustrativo). La dirección afirma «esperan menos de 5 minutos de media». (a) Construye el IC 95 % (t con 15 gl ≈ 2,131). (b) ¿Respalda el intervalo la afirmación? (c) ¿Qué precauciones hay con n = 16 y tiempos de espera?</p>",
+   "rubric": [
+    "EE = 0,8; margen ≈ 1,71; IC ≈ 5,09 a 8,51 min",
+    "Concluye que 5 min queda justo por debajo del intervalo: los datos no respaldan «menos de 5»",
+    "Menciona que con n pequeño y tiempos asimétricos el intervalo es poco fiable (supuestos)"
+   ],
+   "model": "<p>(a) EE = 3,2/4 = 0,8; margen = 2,131 × 0,8 ≈ 1,71; IC95 % ≈ 5,1 a 8,5 min. (b) El intervalo entero está por encima de 5, de modo que los datos no apoyan que la media sea menor de 5 minutos. (c) Los tiempos de espera suelen ser muy asimétricos; con n = 16 el intervalo t puede no tener el nivel real anunciado, y 16 llamadas pueden no ser una muestra representativa (hora del día, tipo de consulta).</p>"
+  },
+  {
+   "type": "reflect",
+   "id": "c-r1",
+   "prompt": "¿Qué parte de la construcción del intervalo te resultó menos intuitiva: el EE, el valor crítico o la lectura del resultado? Escribe una pregunta que aún te quede."
+  }
+ ],
+ "sources": [
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 1.3.5.2 «Confidence Limits for the Mean»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/eda/section3/eda352.htm",
+   "accessed": "2026-10-20",
+   "note": "Fórmula Ȳ ± t(1−α/2, N−1)·s/√N; el nivel de confianza se asocia al procedimiento; «dentro de un intervalo calculado, la media verdadera está o no está»."
+  },
+  {
+   "title": "NIST/SEMATECH e-Handbook of Statistical Methods, 7.1.4 «What are confidence intervals?»",
+   "kind": "official",
+   "author": "NIST/SEMATECH",
+   "url": "https://www.itl.nist.gov/div898/handbook/prc/section1/prc14.htm",
+   "accessed": "2026-10-20",
+   "note": "Intervalo con σ conocida Ȳ ± z·σ/√N y con σ estimada (más ancho); interpretación a la larga."
+  },
+  {
+   "title": "Introduction to Modern Statistics (2.ª ed.), cap. 13 «Inference with mathematical models»",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://openintrostat.github.io/ims/foundations-mathematical.html",
+   "accessed": "2026-10-20",
+   "note": "Error estándar como desviación típica del estadístico; condición éxito-fracaso (≥ 10 éxitos y ≥ 10 fracasos esperados); estimación ± z*×EE; z* = 1,96 para 95 %; advertencia contra «con cierta probabilidad»."
+  },
+  {
+   "title": "OpenIntro Statistics, cap. 5 «Foundations for inference» (secciones 5.1 variabilidad y 5.2 intervalos de confianza)",
+   "kind": "textbook",
+   "author": "OpenIntro",
+   "url": "https://www.openintro.org/book/os/",
+   "accessed": "2026-10-20",
+   "note": "Solo se verificó el índice de capítulos de la página; el texto del PDF no pudo consultarse con las herramientas disponibles."
+  },
+  {
+   "title": "Todas las cifras de pedidos, clientes y tiempos de espera son ilustrativas. Los valores t se calcularon con una implementación propia del cuantil t (comprobada contra valores tabulados conocidos: 2,262 con 9 gl; 2,045 con 29 gl).",
+   "kind": "pedagogical",
+   "note": "Decisión del curso: ejemplos y cifras ilustrativas inventadas para este curso, no datos reales."
+  }
+ ],
+ "next": "<p>Sabes construir el intervalo. La lección 4 trata la parte más malentendida: qué significa «95 %».</p>"
+}
