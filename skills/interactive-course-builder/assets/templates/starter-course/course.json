@@ -1,0 +1,44 @@
+{
+  "format": 1,
+  "id": "fermi-starter",
+  "version": "1.0.0",
+  "title": "Fermi estimation (starter template)",
+  "subtitle": "A one-lesson course that exercises every lesson function. Copy it, then replace everything.",
+  "language": "en",
+  "locale": "en-US",
+  "learner": { "topic": "Fermi estimation", "learner": { "startingKnowledge": "Multiplication and powers of ten", "background": "Synthetic demo profile", "depth": "intro" }, "time": { "sessionMinutes": 30 } },
+  "assumptions": ["Synthetic learner profile used only to demonstrate the format", "Population and usage figures in the activity are illustrative round numbers, not data"],
+  "intro": "<p>This template shows the format: one module, one lesson, an optional diagnostic and a final task. It is not meant to be a complete course on estimation.</p>",
+  "outcomes": [
+    { "id": "o1", "text": "Decompose an unfamiliar quantity into factors you can estimate", "level": "core" },
+    { "id": "o2", "text": "Judge whether an estimate is within a factor of ten and say which factor dominates the uncertainty", "level": "core" }
+  ],
+  "modules": [ { "id": "m1", "title": "Order-of-magnitude reasoning", "summary": "Estimating by decomposition", "prerequisites": [], "lessons": ["fermi-decompose"] } ],
+  "routes": [ { "id": "core", "title": "Core route", "description": "The single lesson plus the final task.", "lessons": ["fermi-decompose"] } ],
+  "glossary": [
+    { "term": "order of magnitude", "aka": ["orders of magnitude"], "definition": "The power of ten nearest to a quantity; 3,000 and 7,000 are both of order 10^3 to 10^4." },
+    { "term": "geometric mean", "definition": "For two bounds a and b, the square root of a × b; a good single guess when you only know a range that spans several powers of ten." }
+  ],
+  "diagnostic": {
+    "intro": "<p>Two quick questions.</p>",
+    "fastLabel": "quick pass: predictions and checks",
+    "fullLabel": "study fully",
+    "questions": [
+      { "id": "dg1", "prompt": "Roughly how many seconds are in a year?", "options": ["About 3 × 10^5", "About 3 × 10^7", "About 3 × 10^9"], "correct": 1, "explanation": "365 × 24 × 3600 ≈ 3.15 × 10^7.", "feedback": { "0": "That is about 3.5 days of seconds.", "2": "That is about a century of seconds." }, "lessons": ["fermi-decompose"] }
+    ]
+  },
+  "capstone": {
+    "id": "capstone",
+    "title": "Estimate something nobody has told you",
+    "task": "<p>Estimate how many litres of water all the people in your town drink in a day. Show your factors, the range for each, your final estimate, and which factor dominates the uncertainty.</p>",
+    "levels": ["Beginning", "Developing", "Proficient"],
+    "rubric": [
+      { "criterion": "Decomposition", "descriptors": ["One guessed number", "Factors listed but some not estimable", "Every factor is estimable and justified"] },
+      { "criterion": "Uncertainty", "descriptors": ["Not discussed", "Ranges given", "Ranges given and the dominant factor identified"] }
+    ],
+    "assesses": ["o1", "o2"],
+    "evaluation": "<p>Self-assess with the rubric, or ask a friend to estimate independently and compare your factor lists.</p>",
+    "model": "<p>Example for a town of ~50,000: 50,000 people × ~2 L/day ≈ 10^5 L. The population is known within ±20 %; daily drinking varies between 1 and 3 L, so consumption per person dominates.</p>"
+  },
+  "review": { "intervals": [1, 3, 7] }
+}

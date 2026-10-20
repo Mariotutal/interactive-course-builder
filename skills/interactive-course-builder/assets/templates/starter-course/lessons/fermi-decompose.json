@@ -1,0 +1,235 @@
+{
+  "format": 1,
+  "id": "fermi-decompose",
+  "title": "Estimating by decomposition",
+  "summary": "Turn a quantity you cannot look up into a product of quantities you can estimate.",
+  "level": "core",
+  "minutes": 30,
+  "outcomes": [
+    "o1",
+    "o2"
+  ],
+  "prerequisites": [],
+  "prereqText": "<p>You only need multiplication and powers of ten.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>A colleague claims the city needs 2,000 new piano tuners. Before you can argue, you need a sense of how many pianos and tuners exist. No table lists these numbers, but you can reason towards them.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Think of the estimate as a chain of links. Each link is a quantity you can guess within a factor of a few. Multiply the links and the errors partly cancel, because some guesses are too high and others too low.</p>",
+      "limits": "<p>Errors cancel only when they are independent. If every factor is biased the same way (for example, you assume the whole city is like your neighbourhood), they compound instead.</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Show the estimate as a product of factors, each with its own range.",
+      "html": "<figure><svg viewBox='0 0 560 120' role='img' aria-labelledby='fd-t fd-d'><title id='fd-t'>Decomposition chain</title><desc id='fd-d'>Population times pianos per household times tunings per year, divided by tunings per tuner per year.</desc><rect class='n1' x='10' y='30' width='120' height='50' rx='8'/><text class='ts' x='20' y='60'>people</text><rect class='n2' x='150' y='30' width='130' height='50' rx='8'/><text class='ts' x='160' y='60'>pianos / person</text><rect class='n3' x='300' y='30' width='120' height='50' rx='8'/><text class='ts' x='310' y='60'>tunings / year</text><rect class='n4' x='440' y='30' width='110' height='50' rx='8'/><text class='ts' x='450' y='60'>÷ per tuner</text></svg><figcaption>Each box is a factor you can estimate.</figcaption></figure>",
+      "alt": "Four boxes in a row: number of people, pianos per person, tunings per piano per year, and division by the number of tunings one tuner does per year."
+    },
+    {
+      "type": "explain",
+      "html": "<p>Write the target as a formula of factors whose units cancel. For each factor, give a low and a high value you would be surprised to see exceeded. Use the <span class='term' data-term='geometric mean'>geometric mean</span> of the bounds as your point estimate. The <span class='term' data-term='order of magnitude'>order of magnitude</span> of the result is usually right even when individual factors are off by a factor of two.</p>"
+    },
+    {
+      "type": "worked",
+      "title": "Piano tuners in a city of 1 million",
+      "steps": [
+        {
+          "html": "<p>Pianos: about 1 in 20 households, about 2.5 people per household → 1,000,000 / 2.5 / 20 = 20,000 pianos.</p>"
+        },
+        {
+          "prompt": "<p>How many tunings per year does that imply?</p>",
+          "selfExplain": true,
+          "html": "<p>About one per piano per year → 20,000 tunings.</p>"
+        },
+        {
+          "html": "<p>One tuner does about 4 per day × 250 days = 1,000 per year → 20,000 / 1,000 ≈ 20 tuners.</p>"
+        }
+      ],
+      "result": "<p>About 20 tuners, so 2,000 is off by a factor of 100. The claim needs a very different assumption to survive.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "fd-p1",
+      "prompt": "If you double the share of households with a piano, what happens to the estimate?",
+      "options": [
+        "It doubles",
+        "It barely changes",
+        "It quadruples"
+      ],
+      "correct": 0,
+      "feedback": {
+        "1": "Every factor multiplies the result, so no factor is negligible.",
+        "2": "Only factors that appear squared would quadruple it."
+      },
+      "explanation": "The estimate is a product of the factors, so it scales linearly with each one."
+    },
+    {
+      "type": "activity",
+      "id": "fd-a1",
+      "widget": "parameter-explorer",
+      "instructions": "<p>Change each factor and watch which one moves the answer most across its plausible range.</p>",
+      "debrief": "<p>Factors with the widest relative range dominate the uncertainty. Spend your research effort there.</p>",
+      "config": {
+        "title": "Piano tuners estimator",
+        "inputs": [
+          {
+            "id": "pop",
+            "label": "Population",
+            "min": 100000,
+            "max": 5000000,
+            "step": 100000,
+            "value": 1000000
+          },
+          {
+            "id": "share",
+            "label": "Households with a piano (%)",
+            "min": 1,
+            "max": 20,
+            "step": 1,
+            "value": 5
+          },
+          {
+            "id": "perday",
+            "label": "Tunings per tuner per day",
+            "min": 1,
+            "max": 8,
+            "step": 1,
+            "value": 4
+          }
+        ],
+        "outputs": [
+          {
+            "id": "tuners",
+            "label": "Estimated tuners",
+            "expr": "pop / 2.5 * share / 100 / (perday * 250)",
+            "format": {
+              "digits": 0
+            }
+          }
+        ],
+        "interpret": [
+          {
+            "when": "pop / 2.5 * share / 100 / (perday * 250) > 200",
+            "tone": "warn",
+            "html": "Over 200 tuners needs a very high piano share or very slow tuners. Check your assumptions."
+          }
+        ],
+        "assumptions": [
+          "2.5 people per household",
+          "One tuning per piano per year",
+          "250 working days"
+        ]
+      }
+    },
+    {
+      "type": "practice",
+      "id": "fd-pr1",
+      "level": "guided",
+      "task": "<p>Estimate how many litres of coffee an office of 200 people drinks per week.</p>",
+      "hints": [
+        "<p>Factors: people × share who drink coffee × cups per day × volume per cup × days.</p>"
+      ],
+      "rubric": [
+        "Lists at least four factors",
+        "Gives a range for each"
+      ],
+      "solution": "<p>200 × 0.6 × 2 cups × 0.2 L × 5 days ≈ 240 L per week.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "fd-pr2",
+      "level": "independent",
+      "task": "<p>Estimate the number of words you will read this year, with no hints. Name the factor you are least sure about.</p>",
+      "rubric": [
+        "Every factor is estimable",
+        "Names the dominant uncertainty"
+      ],
+      "solution": "<p>One answer: 250 words per minute × 60 minutes per day × 365 days ≈ 5 × 10^6 words. Reading time per day dominates the uncertainty.</p>"
+    },
+    {
+      "type": "check",
+      "questions": [
+        {
+          "id": "fd-c1",
+          "assesses": [
+            "o1"
+          ],
+          "prompt": "Which decomposition can you actually estimate for “litres of fuel sold in a country per day”?",
+          "options": [
+            "Cars × kilometres per car per day × litres per km",
+            "GDP × fuel price",
+            "Number of petrol stations × 42"
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "GDP and price do not combine into a volume without more assumptions.",
+            "2": "42 is not an estimable factor; you would need litres per station."
+          },
+          "explanation": "Each factor is a quantity you can reason about, and the units cancel to litres per day."
+        },
+        {
+          "id": "fd-c2",
+          "assesses": [
+            "o2"
+          ],
+          "kind": "numeric",
+          "prompt": "Your bounds for a factor are 10 and 1,000. What point estimate does the geometric mean give?",
+          "answer": 100,
+          "tolerance": 1,
+          "explanation": "√(10 × 1,000) = 100.",
+          "feedbackWrong": "<p>505 is the arithmetic mean: it ignores that the bounds differ by a factor of 100. Multiply the bounds, then take the square root.</p>"
+        },
+        {
+          "id": "fd-c3",
+          "assesses": [
+            "o2"
+          ],
+          "kind": "open",
+          "prompt": "Explain in your own words why multiplying several rough guesses can still give a usable answer.",
+          "rubric": [
+            "Mentions errors partly cancelling",
+            "Mentions when they do not (shared bias)"
+          ],
+          "model": "<p>If errors are independent, some guesses are too high and others too low, so the product drifts less than each factor's error suggests. Shared bias breaks this.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "fd-t1",
+      "assesses": [
+        "o1",
+        "o2"
+      ],
+      "task": "<p>A news story says a festival “used 3 million plastic cups”. Attendance was 80,000 over three days. Is the figure plausible? Show your factors.</p>",
+      "rubric": [
+        "Builds a decomposition from attendance",
+        "Compares the estimate with the claim within a factor of 10",
+        "Names the dominant factor"
+      ],
+      "model": "<p>80,000 × 3 days × ~5 drinks ≈ 1.2 million cups. 3 million is within a factor of 3, so it is plausible if cups were not reused; drinks per person dominate the uncertainty.</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "fd-r1",
+      "prompt": "When would a Fermi estimate mislead you rather than help?"
+    }
+  ],
+  "sources": [
+    {
+      "title": "Guesstimation: Solving the World's Problems on the Back of a Cocktail Napkin",
+      "author": "Lawrence Weinstein and John A. Adam",
+      "date": "2008",
+      "kind": "textbook",
+      "note": "Its opening chapters present estimation by decomposition and by bounding factors; check the chapter numbers in your edition."
+    },
+    {
+      "title": "Template numbers",
+      "kind": "pedagogical",
+      "note": "Household size, tunings per year and the other inputs are illustrative round numbers chosen for the example."
+    }
+  ],
+  "next": "<p>Use the final task to practise on a quantity of your own choice.</p>"
+}

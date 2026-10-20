@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{{LANG}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<meta name="generator" content="interactive-course-builder {{KIT_VERSION}}">
+<link rel="stylesheet" href="runtime/lk.css">
+</head>
+<body>
+<a class="skip" id="skip" href="#main">Skip</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs></svg>
+<header class="topbar">
+  <button class="iconbtn menu-btn" id="menuBtn" aria-controls="sidebar" aria-expanded="false">☰</button>
+  <a class="brand" href="#/" id="brand">{{TITLE}}</a>
+  <form class="search" role="search" id="searchForm"><label for="q" class="sr-only" id="qlabel">Search</label><input id="q" type="search" autocomplete="off"></form>
+  <button class="iconbtn" id="themeBtn" type="button">◐</button>
+</header>
+<div class="layout">
+  <nav class="sidebar" id="sidebar" aria-label="Contents"></nav>
+  <main id="main" tabindex="-1"><noscript><p>This course needs JavaScript. A Markdown version is in the <code>markdown/</code> folder next to this site.</p></noscript></main>
+</div>
+<script src="runtime/lk-i18n.js"></script>
+<script src="runtime/lk-expr.js"></script>
+<script src="runtime/lk-widgets.js"></script>
+<script src="content.js"></script>
+{{CUSTOM_WIDGETS}}
+<script src="runtime/lk-app.js"></script>
+</body>
+</html>

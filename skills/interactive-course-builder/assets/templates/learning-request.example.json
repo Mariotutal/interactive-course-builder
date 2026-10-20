@@ -1,0 +1,10 @@
+{
+  "topic": "Fermi estimation: reasoning to order-of-magnitude answers",
+  "goals": ["Break an unfamiliar quantity into estimable factors", "Judge whether an estimate is within a factor of 10"],
+  "scope": "One short lesson; arithmetic only",
+  "language": "en",
+  "learner": { "startingKnowledge": "Comfortable with multiplication and powers of ten", "background": "Synthetic demo profile", "depth": "intro" },
+  "time": { "totalHours": 1, "sessionMinutes": 30 },
+  "presentation": { "visual": "high", "interaction": "high" },
+  "sources": { "evidenceStandard": "Recognized textbooks or reference works" }
+}
