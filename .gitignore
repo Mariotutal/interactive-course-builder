@@ -1,0 +1,8 @@
+# Generated course output
+**/site/
+**/markdown/
+**/COVERAGE.md
+**/request.normalized.json
+
+# Local operating-system files
+.DS_Store
