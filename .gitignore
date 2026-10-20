@@ -3,6 +3,7 @@
 **/markdown/
 **/COVERAGE.md
 **/request.normalized.json
+tests/out/
 
 # Local operating-system files
 .DS_Store
