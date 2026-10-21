@@ -50,7 +50,7 @@ This is a manual review by the package author based on spot checks. It is not ev
 
 ### Automated
 
-`node tests/run-tests.mjs`: **91 passed, 0 failed**. The suite covers:
+`node tests/run-tests.mjs`: **97 passed, 0 failed**. The suite covers:
 
 - **Expression evaluator:** precedence, stats and t functions, rejection of code-like input.
 - **Request normalization:** blocking gaps, defaults, invalid values.
@@ -70,7 +70,7 @@ This is a manual review by the package author based on spot checks. It is not ev
 - **Visual options:** unknown keys warn; token pairs below WCAG AA 4.5:1 against the light or dark background are errors.
 - **function-lab sandbox:** failing `testCases` are build errors; the widget is copied into the build.
 - **Evaluation harness:** `auto` metrics, the manual template, `report`, and `pilot` rejecting exports from another course.
-- **Export and validator details:** code in question prompts survives the Markdown export; questions with `type` instead of `kind` are errors; citation labels that do not match the source position warn; lessons that add up to much more than the requested total time warn; a full lesson whose first prediction follows its first explanation warns.
+- **Export and validator details:** code in question prompts survives the Markdown export; questions with `type` instead of `kind` are errors; citation labels that do not match the source position warn; lessons that add up to much more than the requested total time warn; a full lesson whose first prediction follows its first explanation warns. A lesson below the depth floor (about 25 words of learner-facing prose per declared minute for `full`, 10 for `focused`, after crediting time spent in activities) warns. Words are counted with `Intl.Segmenter` in the course language, so Chinese or Japanese text is not counted as one word per paragraph; on the existing courses it flags none of the benchmarks or examples and all 16 lessons of a deliberately checked course that averaged about 420 words per 45-minute session.
 - **Package hygiene:** the frontmatter keys are limited to the strict set accepted by the stricter skill validators (`name`, `description`, `license`, `allowed-tools`, `metadata`). `quick_validate.py` from the `skill-creator` plugin reports the skill as valid. No personal or original-course terms appear in the package.
 
 ### Browser (Chromium pane, served over local HTTP)

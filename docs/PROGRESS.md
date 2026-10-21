@@ -14,7 +14,7 @@ Status as of 2026-10-20: **implemented and verified, within the limits listed in
   - CLI `lk.mjs` with `check-request`, `init`, `validate`, `build`, `coverage` and `serve`.
 - **Learner intake, optional knowledge architecture, concept review with format 1 → 2 migration, one maths sandbox (`function-lab`), limited visual options with contrast validation.**
 - **Evaluation harness** (`evaluation/`): four benchmarks, rubric, automatic metrics, report, pilot protocol. Manual scores are self-reviews.
-- **Tests:** 90 automated tests, a widget-gallery fixture, browser tests, a headless Chrome `file://` render test.
+- **Tests:** 97 automated tests, a widget-gallery fixture, browser tests, a headless Chrome `file://` render test.
 - **Examples from fresh contexts:** statistics (complete), history (partial by design), Spanish A1 (partial by design).
 - **Docs:** README (install, use, remove), adding-a-subject guide, evaluation.
 

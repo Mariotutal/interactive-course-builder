@@ -289,6 +289,16 @@ t('validate: question written with "type" instead of "kind" is an error (benchma
 t('validate: citation label that does not match the source position warns', () => { const v = withCourse((c, l) => { l.sources = [{ id: 'a', title: 'A', kind: 'official', url: 'https://example.org/a', accessed: '2026-10-20' }, { id: 'b', title: 'B', kind: 'official', url: 'https://example.org/b', accessed: '2026-10-20' }]; l.blocks[3].html += '<p>Claim <a data-source="b">[1]</a></p>'; }); ok(v.warns.some(w => /label \[1\] points to "b", which is source 2/.test(w)), v.warns.join('; ')); });
 t('validate: lessons longer than the requested total time warn', () => { const v = withCourse(c => { c.learner = Object.assign({}, c.learner, { time: { totalHours: 0.1 } }); }); ok(v.warns.some(w => /more than the 0.1 h the learner asked for/.test(w)), v.warns.join('; ')); });
 t('validate: a full lesson whose first prediction follows the explanation warns', () => { const v = withCourse((c, l) => { const i = l.blocks.findIndex(b => b.type === 'predict'); const [p] = l.blocks.splice(i, 1); l.blocks.push(p); l.blocks = l.blocks.filter(b => b.type !== 'activity'); }); ok(v.warns.some(w => /first prediction comes after the first explain/.test(w)), v.warns.join('; ')); });
+t('validate: a lesson far below the words-per-minute floor warns', () => { const v = withCourse((c, l) => { l.minutes = 180; }); ok(v.warns.some(w => /too thin for a full lesson/.test(w)), v.warns.join('; ')); });
+t('validate: the starter lesson meets the depth floor', () => { const v = lk.validateCourse(STARTER); ok(!v.warns.some(w => /too thin/.test(w)), v.warns.join('; ')); });
+t('lessonWords: counts prose and ignores SVG, code and markup', () => eq(lk.lessonWords({ blocks: [{ type: 'explain', html: '<p>One <b>two</b> three.</p><svg><text>no</text></svg><pre>x = 1</pre>' }] }), 3));
+t('lessonWords: segments languages written without spaces', () => { const l = { blocks: [{ type: 'explain', html: '<p>社区心理学研究个人与社区环境之间的关系，并强调参与和赋权。</p>' }] }; const n = lk.lessonWords(l, 'zh'); ok(n >= 10, `Chinese sentence counted as ${n} word(s)`); eq(lk.lessonWords({ blocks: [{ type: 'explain', html: '<p>Uno, dos y tres.</p>' }] }, 'es'), 4); });
+t('interactionMinutes: activities earn time, block minutes override, capped at half the lesson', () => {
+  eq(lk.interactionMinutes({ minutes: 40, blocks: [{ type: 'activity' }, { type: 'activity' }] }), 2 * lk.ACTIVITY_MINUTES);
+  eq(lk.interactionMinutes({ minutes: 40, blocks: [{ type: 'activity', minutes: 10 }, { type: 'practice', minutes: 5 }] }), 15);
+  eq(lk.interactionMinutes({ minutes: 20, blocks: Array(8).fill({ type: 'activity' }) }), 10);
+});
+t('validate: activity time lowers the depth floor', () => { const floor = v => +((v.warns.find(w => /too thin/.test(w)) || '').match(/at least (\d+)/) || [0, 0])[1]; const set = m => withCourse((c, l) => { l.minutes = 200; l.blocks.filter(b => b.type === 'activity').forEach((b, k) => { if (k === 0) b.minutes = m; else delete b.minutes; }); }); const a = set(undefined), b = set(60); ok(floor(a) > 0 && floor(b) > 0, a.warns.concat(b.warns).join('; ')); eq(floor(a) - floor(b), (60 - lk.ACTIVITY_MINUTES) * lk.MIN_WORDS_PER_MINUTE.full); });
 
 // --- Package hygiene ---
 t('skill: SKILL.md frontmatter follows the Agent Skills constraints', () => {

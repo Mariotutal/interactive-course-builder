@@ -22,7 +22,7 @@ This method comes from a complete, validated course built with this approach. It
 - Not every lesson needs every block. Use the `full` profile for lessons that introduce or develop an idea. Use `focused` for short review, drill, listening or reading lessons, which need an authentic start, an explanation, a check and sources. Across the course, every outcome still needs a transfer task.
 
 - Depth means explanation, worked examples, realistic practice, misconception analysis, verification and transfer. Length is not depth, and many thin modules are not depth either.
-- Aim for lessons that fit the learner's `sessionMinutes`. A typical lesson takes 25–45 minutes, with 1,500–4,000 words of learner-facing text excluding SVG. Split a lesson that runs longer, but do not cut its practice.
+- Aim for lessons that fit the learner's `sessionMinutes`. A typical lesson takes 25–45 minutes, with 1,500–4,000 words of learner-facing text excluding SVG. Split a lesson that runs longer, but do not cut its practice. `validate` warns when a lesson falls below a floor of about 25 words per declared minute (`full`) or 10 (`focused`), after subtracting time spent in activities (4 minutes each, or the block's own `minutes`, at most half the lesson). The floor catches summaries; it is not a target.
 - Advanced material must be substantive, with the same functions as a core lesson. A reading list does not count as advanced material.
 
 ## Prerequisites and routes
