@@ -67,7 +67,7 @@ The other options exist only where they serve learning. The `//` comments in thi
   "profile": "mathematics",
   "typeScale": "large",          // compact | standard | large — legibility (e.g. younger learners, long formulas)
   "diagramStyle": "outline",     // filled | outline | high-contrast — diagram clarity; high-contrast for low vision
-  "layout": "reading",           // standard | reading | wide — line length; reading for prose-heavy courses
+  "layout": "reading",           // standard | reading | wide — line length; reading for prose-heavy courses, wide fills the whole content area
   "codeTheme": "auto",           // auto | light | dark — code readability
   "tokens": { "light": { "accent": "#5b3f9e" }, "dark": { "accent": "#c9b6ff" } }
 }

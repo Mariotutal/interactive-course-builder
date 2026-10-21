@@ -101,7 +101,7 @@ main { padding: 24px clamp(16px, 4vw, 48px) 80px; max-width: 980px; width: 100%;
 
 /* Componentes */
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin: 16px 0; }
-.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 .badge { display: inline-block; font-size: 0.78rem; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface-2); color: var(--text); margin: 0 4px 4px 0; white-space: nowrap; }
 .badge.esencial { border-color: var(--accent-2); }
 .badge.avanzada, .badge.avanzado { border-style: dashed; border-color: var(--accent); }
@@ -369,7 +369,7 @@ input[type="range"] { width: 12em; accent-color: var(--accent-2); }
 :root[data-type="large"] body { font-size: 18px; line-height: 1.7; }
 :root[data-type="large"] svg .ts { font-size: 13px; }
 :root[data-layout="reading"] main { max-width: 760px; }
-:root[data-layout="wide"] main { max-width: 1180px; }
+:root[data-layout="wide"] main { max-width: none; }
 :root[data-diagram="outline"] svg .n1, :root[data-diagram="outline"] svg .n2, :root[data-diagram="outline"] svg .n3, :root[data-diagram="outline"] svg .n4 { fill: var(--surface); stroke-width: 2; }
 :root[data-diagram="high-contrast"] svg .edge { stroke: var(--text); stroke-width: 2.2; }
 :root[data-diagram="high-contrast"] svg .n1, :root[data-diagram="high-contrast"] svg .n2, :root[data-diagram="high-contrast"] svg .n3, :root[data-diagram="high-contrast"] svg .n4, :root[data-diagram="high-contrast"] svg .n-plain { fill: var(--surface); stroke: var(--text); stroke-width: 2.2; }
