@@ -37,3 +37,7 @@ Score each criterion 0–2 for every lesson: 0 = absent or wrong, 1 = present bu
    - what you reviewed manually;
    - what remains unverified;
    - known limitations.
+
+If your tools cannot perform a check (for example a 375 px viewport, keyboard-only navigation, or export/import in a browser pane), report it as **not tested** with the reason. Never mark an untested item as passed.
+
+App routes, for manual checks: `#/` home, `#/l/<lesson-id>` lesson (`#/l/<lesson-id>/<activity-id>` jumps to an activity), `#/map`, `#/routes`, `#/review`, `#/progress`, `#/glossary`, `#/sources`, `#/capstone`, `#/diagnostic` and `#/print`.

@@ -1,0 +1,37 @@
+{
+  "benchmark": "mathematics",
+  "reviewer": "Claude Sonnet subagent (same model family as generator)",
+  "date": "2026-10-20",
+  "independent": false,
+  "note": "Read all three lessons, glossary and capstone, checked visuals/alt text, activity configs and widget source, recomputed worked numbers, and spot-checked claims against the three cited OpenStax pages via WebFetch; did not open the built site in a browser, so keyboard, 375 px and live activity behaviour were judged from source only.",
+  "scores": {
+    "factual-accuracy": {
+      "score": 2,
+      "rationale": "Spot-checked against the cited OpenStax 4.1, 6.1 and 6.8 pages (WebFetch): the f(x)=ab^x conditions, the same-amount vs same-percentage wording, the 100(1+0.5)^x growth rate/factor example, the y=0 asymptote, the interpolation/extrapolation caveat and logistic carrying capacity all match, and every worked number I recomputed is right (e.g. 1.05^12 \u2248 1.796, 1.08^120 \u2248 10,253, capstone Y overtakes X at month 9). Small blemishes: the where-models-break chart alt says the exponential passes 100 'at about x = 9' when 2\u00b71.5^9 \u2248 77 (it crosses near x \u2248 9.6), and the 'domain should match the context' claim is generalised from a single train example in 4.1."
+    },
+    "instructional-sequencing": {
+      "score": 1,
+      "rationale": "Order across lessons is sound and prerequisites are explicit (prereqText, glossary links), but in build-the-models the Visual model and its text description state 'a factor of 1.05 means a 5 percent rate' before the Predict-first question asking for exactly that factor, and in where-models-break the chart text description gives exponential \u2248173 vs logistic \u224864 before the Predict-first question about divergence. Terms are also used before definition: 'logistic' appears in the where-models-break prediction and chart before the 'Limits to growth' section, and 'asymptote' is used in tell-them-apart 'Reading a graph' with no glossary entry."
+    },
+    "visual-purpose": {
+      "score": 1,
+      "rationale": "Each of the three visuals has a stated purpose and a text description (tell-them-apart A vs B chart; build-the-models parameter map; where-models-break window chart), and the where-models-break chart does show divergence that prose conveys less well. However the build-the-models parameter map is just boxed text that repeats the following prose and its alt text, and the where-models-break alt text misstates the x at which the exponential passes 100 (about 9, actually about 9.6); there are only three static visuals for a 'high visual' learner."
+    },
+    "interaction-relevance": {
+      "score": 1,
+      "rationale": "From source only (no browser, controls not exercised): classify (tell-them-apart) has per-item feedback that explains the constant difference/ratio and a debrief on the squares trap; function-lab has predict-gated slider tasks and lists assumptions; parameter-explorer states assumptions and has conditional interpretation messages. But function-lab tasks t3 and t4 are plain evaluations (2\u00b72^4, 3+2\u00b74) with one-line arithmetic explanations, and classify feedback is per item rather than naming the specific misconception for each wrong choice, so feedback is thinner than the 2 descriptor requires."
+    },
+    "accessibility": {
+      "score": 1,
+      "rationale": "Source-only check: built index.html has lang=\"en\" and a viewport meta; every visual has an alt text and aria-label, series are distinguished by dashes and marker shapes plus direct labels (not colour alone); classify uses native select elements and function-lab uses labelled range/number inputs, a :focus-visible outline and aria-live readouts. I did not run keyboard navigation, a 375 px layout or a screen reader, and figures rely on overflow-x scrolling, so I score conservatively."
+    },
+    "source-quality": {
+      "score": 1,
+      "rationale": "All 12 source entries across lessons are three OpenStax Algebra and Trigonometry 2e sections (textbook, accessed 2026-10-20) plus course-decision entries; they are authoritative for secondary-school maths and I could open all three, but the course rests on a single textbook read through a summarising fetch tool and no official curriculum reference is cited (Common Core was unverified and only disclosed in course.json assumptions). The '#Table_04_01_01' fragment used in tell-them-apart citations is unconfirmed (fetch tool could not verify it), and the logistic formula is the author's own simplification, labelled as a course decision."
+    },
+    "transfer-coverage": {
+      "score": 1,
+      "rationale": "Every outcome has a transfer task with a model answer/rubric (tell-them-apart o1, build-the-models o2 draining tanks, where-models-break o3 bike-share, plus the capstone), and the o2 and o3 tasks use genuinely new contexts. But the o1 transfer task is again about app users, the same context as the lesson's opening and visual, and the capstone uses savings plans, which is the opening context of build-the-models, so not every transfer is a genuinely new situation."
+    }
+  }
+}

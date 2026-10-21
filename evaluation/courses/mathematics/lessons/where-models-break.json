@@ -1,0 +1,350 @@
+{
+  "format": 1,
+  "id": "where-models-break",
+  "title": "Where each model stops being reasonable",
+  "summary": "Check domain, range and the constancy assumption, separate interpolation from extrapolation, and see how limits bend an exponential curve.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 30,
+  "outcomes": [
+    "o3"
+  ],
+  "prerequisites": [
+    "tell-them-apart",
+    "build-the-models"
+  ],
+  "prereqText": "<p>Lessons 1 and 2: classifying tables and writing y = m·x + b and y = a·b^x.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>A lab colony starts with 500 cells and, in the first days, doubles every day (invented numbers). Someone plugs in day 40: 500·2<sup>40</sup> ≈ 5.5 × 10<sup>14</sup> cells. The equation fits the first week perfectly. Does that make the day-40 number a prediction? What would the dish need to hold, and what would you ask before believing it?</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Show that two models can agree on the observed data and still disagree sharply outside it, because of a limit the exponential ignores.",
+      "alt": "A chart with a shaded window marking observed data from x = 0 to 5. A solid exponential curve and a dashed logistic curve both start at 2 and nearly overlap inside the window. After x = 5 the exponential keeps rising ever more steeply, passing 100 at about x = 9 and reaching about 173 at x = 11, while the logistic bends over and flattens toward a dashed horizontal line at 100, the capacity, reaching about 64 at x = 11.",
+      "html": "<figure><svg viewBox=\"0 0 420 260\" role=\"img\" aria-label=\"Exponential and logistic curves that agree for x from 0 to 5 and then separate\"><rect class=\"n-plain\" x=\"50\" y=\"20\" width=\"155\" height=\"200\"/><text class=\"tm\" x=\"56\" y=\"36\">observed data</text><line class=\"edge\" x1=\"50\" y1=\"220\" x2=\"400\" y2=\"220\"/><line class=\"edge\" x1=\"50\" y1=\"220\" x2=\"50\" y2=\"20\"/><line class=\"edge dashed\" x1=\"50\" y1=\"108.88888888888889\" x2=\"400\" y2=\"108.88888888888889\"/><text class=\"tm\" x=\"260\" y=\"104.88888888888889\">capacity K = 100</text><polyline class=\"edge\" fill=\"none\" points=\"50,218 81,217 112,215 143,213 174,209 205,203 236,195 267,182 298,163 329,135 360,92 391,28\"/><polyline class=\"edge dashed\" fill=\"none\" points=\"50,218 81,217 112,215 143,213 174,210 205,205 236,199 267,191 298,182 329,171 360,160 391,149\"/><text class=\"t\" x=\"304.2\" y=\"152.2359436560061\">exponential (solid)</text><text class=\"t\" x=\"298\" y=\"203.84244962051818\">logistic (dashed)</text><text class=\"ts\" x=\"170\" y=\"248\">x (steps)</text><text class=\"tm\" x=\"46\" y=\"236\">0</text><text class=\"tm\" x=\"202\" y=\"236\">5</text><text class=\"tm\" x=\"354\" y=\"236\">10</text><text class=\"tm\" x=\"20\" y=\"112.88888888888889\">100</text></svg><figcaption>Illustrative model curves, not data. Exponential: y = 2·1.5^x. Logistic: y = 100 ÷ (1 + 49·1.5^(−x)). Both start at 2; inside the shaded window they differ by less than 2 units, outside it they separate. Drawn for this course; values recomputed by script. Logistic limits come from space or nutrients as described in the textbook <a data-source=\"openstax68\">[2]</a>.</figcaption></figure>"
+    },
+    {
+      "type": "predict",
+      "id": "p-agree",
+      "prompt": "In the chart both models match the observed data (x from 0 to 5; values 2 to about 15 and 13). At x = 12, which statement is most likely true?",
+      "options": [
+        "They still agree within about 10%",
+        "The exponential gives more than three times the logistic value",
+        "The logistic is larger, because it is \"curved\"",
+        "You cannot say anything without more data"
+      ],
+      "correct": 1,
+      "feedback": {
+        "0": "Agreement inside the data window does not carry over. Models that share early values can diverge arbitrarily.",
+        "2": "The logistic bends toward its capacity; it ends below the exponential.",
+        "3": "Both equations are given, so you can compute: the point is that data alone, without the equation, would not tell you."
+      },
+      "explanation": "Exponential: 2·1.5^12 ≈ 259.5. Logistic: about 72.6. The exponential is about 3.6 times larger, and the gap keeps growing."
+    },
+    {
+      "type": "activity",
+      "id": "a-limits-explorer",
+      "widget": "parameter-explorer",
+      "instructions": "First predict: if you lower the capacity K, will the exponential value at the current step change? Then change K, the start a, the growth factor g and the step t. Watch where the exponential crosses K, and note how long the two curves stay close.",
+      "debrief": "<p>You should have noticed that the exponential value does not depend on K at all, so it can pass the capacity and go on climbing. The logistic follows it while the total is small compared with K, then bends over. A larger factor g makes the curves separate earlier. The lesson: the data that first look exponential cannot tell you whether a limit is coming; knowledge of the situation has to.</p>",
+      "config": {
+        "title": "Exponential versus limited growth",
+        "inputs": [
+          {
+            "id": "a",
+            "label": "start a",
+            "min": 1,
+            "max": 5,
+            "step": 1,
+            "value": 2
+          },
+          {
+            "id": "g",
+            "label": "growth factor g",
+            "min": 1.1,
+            "max": 1.6,
+            "step": 0.1,
+            "value": 1.5
+          },
+          {
+            "id": "K",
+            "label": "capacity K",
+            "min": 20,
+            "max": 200,
+            "step": 10,
+            "value": 100
+          },
+          {
+            "id": "t",
+            "label": "current step t",
+            "min": 0,
+            "max": 11,
+            "step": 1,
+            "value": 5
+          }
+        ],
+        "outputs": [
+          {
+            "id": "e",
+            "label": "exponential a·g^t",
+            "expr": "a*g^t"
+          },
+          {
+            "id": "l",
+            "label": "limited (logistic) value",
+            "expr": "K/(1+((K-a)/a)*g^(-t))"
+          },
+          {
+            "id": "r",
+            "label": "exponential ÷ limited",
+            "expr": "(a*g^t)/(K/(1+((K-a)/a)*g^(-t)))"
+          }
+        ],
+        "chart": {
+          "x": {
+            "var": "x",
+            "from": 0,
+            "to": 11
+          },
+          "y": {
+            "from": 0,
+            "to": 250
+          },
+          "series": [
+            {
+              "label": "exponential a·g^x",
+              "expr": "a*g^x"
+            },
+            {
+              "label": "limited K/(1+((K−a)/a)·g^(−x))",
+              "expr": "K/(1+((K-a)/a)*g^(-x))"
+            }
+          ],
+          "current": {
+            "label": "step t",
+            "x": "t"
+          },
+          "xLabel": "x (steps)",
+          "yLabel": "quantity",
+          "ariaLabel": "Exponential and limited growth curves with the current step marked"
+        },
+        "interpret": [
+          {
+            "when": "a*g^t > K",
+            "tone": "warn",
+            "html": "The exponential value is now above the capacity K: a quantity this large could not exist in this model's world."
+          },
+          {
+            "when": "(a*g^t)/(K/(1+((K-a)/a)*g^(-t))) < 1.2",
+            "tone": "info",
+            "html": "At this step the two models are within 20% of each other. Data from this region could not tell them apart."
+          }
+        ],
+        "assumptions": [
+          "The limited curve is a logistic: K/(1 + ((K − a)/a)·g^(−x)), which equals a at x = 0 and approaches K",
+          "Both use the same start a and factor g",
+          "Illustrative parameters, not fitted to real data; a course simplification of the logistic models in the textbook"
+        ]
+      }
+    },
+    {
+      "type": "explain",
+      "title": "Three questions before you trust a model",
+      "html": "<ol><li><strong>Domain: which x values make sense?</strong> The textbook notes that the domain should match the context, for example time cannot be negative <a data-source=\"openstax41\">[1]</a>. A tank that drains cannot be drained for ever.</li><li><strong>Range: which y values make sense?</strong> A line that keeps falling gives negative water or money. An exponential that keeps rising gives counts or sizes that no real system could hold.</li><li><strong>Is the constancy assumption plausible?</strong> A line assumes the same <em>amount</em> per step; an exponential assumes the same <em>percentage</em> per step. Ask what in the situation would keep that true, and what would change it.</li></ol><p><strong>Interpolation and extrapolation.</strong> The textbook says that it is not reasonable to assume an exponential regression model represents a situation indefinitely: estimates inside the observed range (<span class=\"term\" data-term=\"interpolation\">interpolation</span>) are usually reasonable, but predictions far outside it (<span class=\"term\" data-term=\"extrapolation\">extrapolation</span>) require reasoning about whether the model still makes sense <a data-source=\"openstax68\">[2]</a>. The book gives no numeric cutoff for \"far\", and neither does this course.</p><p><strong>Limits to growth.</strong> For situations with constraints such as living space or nutrients, the textbook offers the logistic model: growth accelerates and then slows as it approaches an upper limit, the <span class=\"term\" data-term=\"carrying capacity\">carrying capacity</span> <a data-source=\"openstax68\">[2]</a>. Course decision: this lesson uses a simple logistic formula only as a preview of the idea; fitting logistic models is beyond the scope here. Real systems can also stop growing for other reasons (policy changes, competition), and the right model has to come from knowledge of the context, not just the data.</p><p><strong>Decay never quite reaches zero.</strong> An exponential with 0 &lt; b &lt; 1 approaches the horizontal asymptote y = 0 without reaching it <a data-source=\"openstax61\">[3]</a>. A line crosses zero at a definite x.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>A model is a <strong>map of a region</strong>. Inside the surveyed area, the map is reliable; outside it the map simply has no information, even if the roads drawn on it continue to the edge of the paper.</p>",
+      "limits": "A map has a known edge, but the \"edge\" of a model is not visible in its equation. Also, some models are reliable well outside their data because a physical law supports them. Data fit alone is never the reason to trust an extrapolation."
+    },
+    {
+      "type": "worked",
+      "title": "Worked example: check a linear forecast",
+      "html": "<p>Illustrative: a tank holds 60 cm of water and the level falls 3 cm per day. Someone asks for the level on day 30.</p>",
+      "steps": [
+        {
+          "prompt": "Write the model.",
+          "html": "<p>L(x) = 60 − 3x, with x in days: initial value 60 cm, slope −3 cm per day.</p>"
+        },
+        {
+          "prompt": "Find where the model reaches zero.",
+          "html": "<p>60 − 3x = 0 gives x = 20. The tank is empty on day 20.</p>"
+        },
+        {
+          "prompt": "State the sensible domain.",
+          "html": "<p>0 ≤ x ≤ 20 days: before x = 0 the story has not started, and after x = 20 there is no water to lose.</p>"
+        },
+        {
+          "prompt": "Evaluate the requested value and interpret it.",
+          "selfExplain": true,
+          "html": "<p>L(30) = 60 − 90 = −30 cm, a level below the tank bottom. That is outside the sensible range, so the question \"level on day 30\" has the answer \"0 cm (empty since day 20)\", not −30. The line is a good model inside its domain and meaningless beyond it.</p>"
+        }
+      ],
+      "result": "The linear model is valid for 0 to 20 days; day 30 is outside it."
+    },
+    {
+      "type": "practice",
+      "id": "pr3-guided",
+      "level": "guided",
+      "setting": "in-app",
+      "task": "<p>Illustrative: a gift card starts at $50 and you spend $8 a day. (a) Write the balance model. (b) On which day does it reach zero? (c) State the domain where the model is sensible. (d) What does the model say at day 8, and how would you interpret that?</p>",
+      "hints": [
+        "The balance falls by 8 each day: the slope is negative.",
+        "Set 50 − 8x = 0 and solve.",
+        "Substitute x = 8 and ask whether a balance like that can exist on a gift card."
+      ],
+      "rubric": [
+        "I wrote B(x) = 50 − 8x",
+        "I found 6.25 days",
+        "I stated 0 ≤ x ≤ 6.25 (or: spending stops when the card is empty)",
+        "I interpreted −14 as outside the model"
+      ],
+      "solution": "<p>(a) B(x) = 50 − 8x. (b) 50 ÷ 8 = 6.25 days. (c) 0 ≤ x ≤ 6.25. (d) B(8) = 50 − 64 = −14, which the card cannot hold (you would run out on day 7, having spent only $50): the model has left its domain.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "pr3-independent",
+      "level": "independent",
+      "setting": "in-app",
+      "task": "<p>Illustrative: a quantity was measured for x = 0 to 6 and fitted by V(x) = 3·1.4<sup>x</sup>. (a) Compute V(6) and V(20). (b) Label an estimate at x = 3 and one at x = 20 as interpolation or extrapolation. (c) Name one real-world constraint that could bend the curve, and describe the shape you would expect instead.</p>",
+      "hints": [],
+      "rubric": [
+        "V(6) ≈ 22.6 and V(20) ≈ 2,510",
+        "x = 3 is interpolation; x = 20 is extrapolation",
+        "Names a specific constraint tied to some context",
+        "Describes growth that slows toward a ceiling (or states another justified change)"
+      ],
+      "solution": "<p>V(6) = 3·1.4<sup>6</sup> ≈ 22.59; V(20) = 3·1.4<sup>20</sup> ≈ 2,510. x = 3 is inside the data (interpolation); x = 20 is far outside it (extrapolation), more than three times further than the measured range. A limit such as space, food or market size would make the growth slow and level toward a capacity (an S-shaped curve) rather than keep multiplying by 1.4.</p>"
+    },
+    {
+      "type": "check",
+      "questions": [
+        {
+          "id": "ck3-interp",
+          "assesses": [
+            "o3"
+          ],
+          "prompt": "A fitted model uses data for x between 0 and 6. Which estimate is the most trustworthy?",
+          "options": [
+            "The value at x = 3",
+            "The value at x = 20",
+            "The value at x = −10",
+            "All three equally: the equation is the same"
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "x = 20 is far beyond the data (extrapolation).",
+            "2": "x = −10 is far outside the data on the other side.",
+            "3": "The same equation does not mean the same reliability; the evidence only covers the observed range."
+          },
+          "explanation": "x = 3 is interpolation, inside the observed range. The others extrapolate."
+        },
+        {
+          "id": "ck3-neg",
+          "assesses": [
+            "o3"
+          ],
+          "prompt": "A linear model of a gift card's balance gives −$14 at day 8. What is the best reading?",
+          "options": [
+            "The card is $14 in debt",
+            "The model has left its sensible domain: the balance stops at $0",
+            "The slope must have been calculated wrongly",
+            "Negative balances are mathematically impossible"
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "A gift card cannot go into debt (a credit card might), so the context rules this out.",
+            "2": "The slope can be right for the days it covers; the problem is using the model beyond day 6.25.",
+            "3": "Negative numbers are fine mathematically; it is the situation that forbids them."
+          },
+          "explanation": "The model describes spending only while there is money; the context ends the domain at 6.25 days."
+        },
+        {
+          "id": "ck3-doub",
+          "assesses": [
+            "o3"
+          ],
+          "kind": "numeric",
+          "prompt": "A quantity starts at 1 and doubles each step. After how many doublings does it first exceed 1,000,000? (Try powers of 2; no logarithms are needed.)",
+          "answer": 20,
+          "tolerance": 0,
+          "unit": "doublings",
+          "explanation": "2^19 = 524,288 is below a million; 2^20 = 1,048,576 is above.",
+          "feedbackWrong": "Keep doubling: 2, 4, 8, … 2^10 = 1,024; 2^20 = 1,048,576. Check the step just before."
+        },
+        {
+          "id": "ck3-own",
+          "assesses": [
+            "o3"
+          ],
+          "kind": "open",
+          "prompt": "In your own words: why can a model fit the observed data perfectly and still give a bad prediction far outside it?",
+          "rubric": [
+            "Distinguishes fit inside the data from reliability outside",
+            "Mentions a constraint or changing rate the equation does not contain",
+            "Uses an example"
+          ],
+          "model": "<p>The data only tell you about the range you observed. Two different models can agree there and diverge elsewhere (an exponential and a logistic curve both fit the first days of a colony). Outside the range, whether the model still applies depends on things the equation does not contain, such as limited space, so I need knowledge of the situation, not only the fit.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "tr3-bikes",
+      "assesses": [
+        "o3"
+      ],
+      "task": "<p>New context, invented numbers. A bike-share service in a city of about 700,000 people had 1,000 members, and then grew 8% a month for its first six months. A manager forecasts 1,000·1.08<sup>120</sup> members in ten years. (1) Compute the forecast (a calculator is fine). (2) Is this interpolation or extrapolation, and by how much? (3) Name two reasons the exponential model should stop applying. (4) Describe a more reasonable shape and one thing you would collect before forecasting.</p>",
+      "rubric": [
+        "Forecast ≈ 10.25 million",
+        "Identifies 120 months as extrapolation from 6 months of data",
+        "Compares to city population or names another real limit",
+        "Proposes slowing, capped growth and names a data need (for example later months)"
+      ],
+      "model": "<p>1.08<sup>120</sup> ≈ 10,253, so the model says about 10.25 million members, roughly fourteen times the city's population. It extrapolates 120 months from six months of observations, twenty times the observed range. Reasons it should stop: the number of potential members is bounded (people in the city, and visitors), and competition, prices and market saturation change the rate. A more reasonable shape is S-shaped growth that slows toward a ceiling below the population. Before forecasting, collect more months (is the percentage already falling?), and the number of people who could plausibly use the service.</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "rf3",
+      "prompt": "Pick a quantity in your own life that has grown or shrunk (savings, followers, a skill, water in a bottle). Which model fits, and where would it stop applying?"
+    }
+  ],
+  "sources": [
+    {
+      "id": "openstax41",
+      "title": "Algebra and Trigonometry 2e, section 4.1 Linear Functions",
+      "kind": "textbook",
+      "author": "OpenStax",
+      "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/4-1-linear-functions",
+      "accessed": "2026-10-20",
+      "note": "Domain should match the context (time cannot be negative)."
+    },
+    {
+      "id": "openstax68",
+      "title": "Algebra and Trigonometry 2e, section 6.8 Fitting Exponential Models to Data",
+      "kind": "textbook",
+      "author": "OpenStax",
+      "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-8-fitting-exponential-models-to-data",
+      "accessed": "2026-10-20",
+      "note": "Statements on interpolation vs extrapolation, and on logistic models for constrained growth. Paraphrased from a summarising fetch tool, not quoted."
+    },
+    {
+      "id": "openstax61",
+      "title": "Algebra and Trigonometry 2e, section 6.1 Exponential Functions",
+      "kind": "textbook",
+      "author": "OpenStax",
+      "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-1-exponential-functions",
+      "accessed": "2026-10-20",
+      "note": "Horizontal asymptote y = 0 of f(x) = ab^x."
+    },
+    {
+      "id": "invented",
+      "title": "Invented colony, tank, gift card and bike-share numbers; chart curves",
+      "kind": "pedagogical",
+      "note": "All numbers made up for teaching; values recomputed by script. The logistic formula is a simplified form chosen for this course."
+    }
+  ],
+  "next": "<p>The capstone brings all three outcomes together: given two datasets and a claim, you will classify, model and bound them in a short advisory note.</p>"
+}

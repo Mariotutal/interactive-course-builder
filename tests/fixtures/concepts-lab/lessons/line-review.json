@@ -1,0 +1,74 @@
+{
+ "format": 1,
+ "id": "line-review",
+ "title": "Review: evaluating lines",
+ "summary": "Short retrieval practice.",
+ "profile": "focused",
+ "level": "core",
+ "minutes": 15,
+ "outcomes": [
+  "o2"
+ ],
+ "prerequisites": [
+  "slope-intercept"
+ ],
+ "blocks": [
+  {
+   "type": "motivate",
+   "html": "<p>Quick check before moving on.</p>"
+  },
+  {
+   "type": "explain",
+   "html": "<p>Substitute x, multiply by m, add b.</p>"
+  },
+  {
+   "type": "check",
+   "questions": [
+    {
+     "id": "r1",
+     "assesses": [
+      "o2"
+     ],
+     "concepts": [
+      "evaluate-linear"
+     ],
+     "kind": "numeric",
+     "prompt": "y = −x + 4 at x = 1?",
+     "answer": 3,
+     "tolerance": 0,
+     "explanation": "−1 + 4 = 3.",
+     "feedbackWrong": "Watch the sign of m."
+    },
+    {
+     "id": "r2",
+     "assesses": [
+      "o1"
+     ],
+     "concepts": [
+      "slope",
+      "rate-of-change"
+     ],
+     "prompt": "A negative slope means…",
+     "options": [
+      "y decreases as x increases",
+      "y is always negative"
+     ],
+     "correct": 0,
+     "explanation": "The sign of m gives the direction of change.",
+     "feedback": {
+      "1": "The sign of m is about direction, not the sign of y."
+     }
+    }
+   ]
+  }
+ ],
+ "sources": [
+  {
+   "title": "OpenStax Algebra and Trigonometry 2e, section 4.1",
+   "kind": "textbook",
+   "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/4-1-linear-functions",
+   "accessed": "2026-10-20"
+  }
+ ],
+ "next": "<p>End of fixture.</p>"
+}

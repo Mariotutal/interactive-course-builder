@@ -1,0 +1,117 @@
+{
+  "course": "evaluation/courses/kubernetes",
+  "date": "2026-10-21",
+  "validate": {
+    "errors": 0,
+    "warnings": 0,
+    "errorList": [],
+    "warningList": []
+  },
+  "integrity": {
+    "built": true,
+    "problems": []
+  },
+  "metrics": {
+    "language": "en",
+    "lessons": 3,
+    "minutes": 90,
+    "profiles": {
+      "full": 3
+    },
+    "words": {
+      "total": 4349,
+      "perLesson": [
+        1399,
+        1357,
+        1593
+      ]
+    },
+    "activities": {
+      "count": 5,
+      "patterns": [
+        "system-flow",
+        "parameter-explorer",
+        "code-trace",
+        "evidence-case",
+        "classify"
+      ],
+      "custom": []
+    },
+    "questions": {
+      "total": 14,
+      "byKind": {
+        "mcq": 10,
+        "open": 3,
+        "numeric": 1
+      },
+      "mcqWithFullMisconceptionFeedbackPct": 100
+    },
+    "practice": {
+      "guided": 3,
+      "independent": 3,
+      "realWorld": 0
+    },
+    "transfer": {
+      "tasks": 3,
+      "capstone": true,
+      "outcomesWithTransferPct": 100
+    },
+    "outcomes": {
+      "count": 3,
+      "minAssessingItems": 5,
+      "detail": [
+        {
+          "id": "o1",
+          "assessedBy": 12,
+          "transfer": true
+        },
+        {
+          "id": "o2",
+          "assessedBy": 12,
+          "transfer": true
+        },
+        {
+          "id": "o3",
+          "assessedBy": 5,
+          "transfer": true
+        }
+      ]
+    },
+    "visuals": {
+      "count": 3,
+      "withPurposePct": 100
+    },
+    "sources": {
+      "count": 26,
+      "byKind": {
+        "official": 23,
+        "pedagogical": 3
+      },
+      "unverified": 0,
+      "webWithAccessDatePct": 100
+    },
+    "knowledgeArchitecture": null,
+    "intake": {
+      "present": true,
+      "decisions": 4
+    },
+    "theme": {
+      "profile": "systems",
+      "layout": "standard",
+      "diagramStyle": "outline",
+      "codeTheme": "auto",
+      "tokens": {
+        "light": {
+          "accent": "#0b5d7a"
+        },
+        "dark": {
+          "accent": "#7cc8e6"
+        }
+      }
+    },
+    "density": {
+      "interactionsPer1000Words": 4.4,
+      "assessmentItemsPerOutcome": 9.7
+    }
+  }
+}

@@ -56,9 +56,58 @@ All ids are stable lowercase slugs. Learner state is keyed by these ids, so **ne
 
 Every outcome must be **taught** by at least one lesson (`lesson.outcomes`) and **assessed** by at least one check question, transfer task or the capstone (`assesses`). The validator enforces both.
 
-### Visual profile
+### Visual profile and options
 
-`theme.profile` changes the palette and emphasis of the offline app without changing the course data. Choose one based on the material: `mathematics`, `systems`, `programming`, `social-science`, `science` or `languages`; use `general` when no profile fits. `theme.accent` remains an optional course-specific override. See [domain-toolkit.md](domain-toolkit.md) for the visual grammar and interactions that match each profile.
+`theme.profile` changes the palette and emphasis of the offline app without changing the course data. Choose one based on the material: `mathematics`, `systems`, `programming`, `social-science`, `science` or `languages`; use `general` when no profile fits. See [domain-toolkit.md](domain-toolkit.md) for the visual grammar and interactions that match each profile.
+
+The other options exist only where they serve learning. The `//` comments in this example are explanations only; remove them in `course.json`:
+
+```json
+"theme": {
+  "profile": "mathematics",
+  "typeScale": "large",          // compact | standard | large — legibility (e.g. younger learners, long formulas)
+  "diagramStyle": "outline",     // filled | outline | high-contrast — diagram clarity; high-contrast for low vision
+  "layout": "reading",           // standard | reading | wide — line length; reading for prose-heavy courses
+  "codeTheme": "auto",           // auto | light | dark — code readability
+  "tokens": { "light": { "accent": "#5b3f9e" }, "dark": { "accent": "#c9b6ff" } }
+}
+```
+
+- **`tokens`.** Overrides `accent`, `accent2`, `ok`, `warn` and `danger`, separately for the light and the dark mode. These colours are used for text such as links and status, so the validator rejects any value below 4.5:1 contrast (WCAG AA) against that mode's backgrounds.
+- **`theme.accent`.** Still accepted. It must reach 4.5:1 against the light backgrounds.
+- **Unknown keys.** They are ignored with a warning. There is no illustration-style option: decoration without a learning job does not belong in the theme.
+
+## Knowledge architecture (optional)
+
+Add `knowledgeArchitecture` to `course.json` when knowledge is not a single chain, for example several interacting topics, cross-cutting lenses, or dispositional goals. Skip it for short procedural courses: lesson prerequisites still work without it.
+
+```json
+"knowledgeArchitecture": {
+  "summary": "One sentence on how the knowledge is structured.",
+  "concepts": [
+    { "id": "slope", "label": "Slope", "type": "hierarchical", "lessons": ["slope-intercept"] },
+    { "id": "rate-of-change", "label": "Rate of change as a lens", "type": "horizontal", "lessons": ["slope-intercept", "line-review"] }
+  ],
+  "prerequisites": [ { "from": "slope", "to": "evaluate-linear" } ],
+  "hubs": [ { "id": "change", "label": "Change", "lens": "Every model describes how one quantity changes with another", "concepts": ["slope", "rate-of-change"] } ],
+  "dispositions": [ { "id": "check-models", "label": "Checking a model against known values", "lessons": ["slope-intercept"],
+                      "bands": [ { "level": 1, "descriptor": "Accepts results unchecked" }, { "level": 2, "descriptor": "Checks when prompted" }, { "level": 3, "descriptor": "Checks and states limits unprompted" } ] } ],
+  "assessmentModes": { "slope": "auto", "rate-of-change": "rubric", "check-models": "observation" }
+}
+```
+
+- **Rule for horizontal concepts.** Do not draw prerequisite edges to or from them (the validator warns); connect them through `hubs`.
+- **Concept types.** A `hierarchical` concept builds on prerequisites (an algebra procedure, a Kubernetes object model). A `horizontal` concept is a lens that reappears across topics (causation, rate of change, trade-offs). It is usually assessed by reasoning and connected through hubs rather than prerequisite edges.
+- **Dispositions.** Dispositions (habits of mind) have at least two progression bands. They are never auto-scored.
+- **Assessment modes.** Every concept and disposition needs one:
+  - `auto`: tagged non-open questions;
+  - `rubric`: tagged open questions, transfer tasks, rubric practice or the capstone;
+  - `observation`: a tagged real-world practice, or one with `externalFeedback`. One such task per disposition is the minimum the validator accepts. A real progression needs the bands to be observed more than once, so plan at least one task per module that teaches the disposition.
+- **Errors.** The validator rejects unknown ids, prerequisite cycles, hubs with fewer than two concepts, missing modes, and auto-scored dispositions.
+- **Warnings.** It warns when a prerequisite is taught after its dependent, and when a mode has no matching evidence.
+- **Concept tags.** Tag items with `concepts: [ids]` on `check` questions, `predict`, `practice`, `transfer`, `activity` and `capstone`. Tagged auto-checked questions feed the learner's concept review. Each concept's evidence appears in `COVERAGE.md`.
+- **In the app.** The Map page shows the architecture as tables, not a decorative graph. Progress shows the retrieval history per concept. Review schedules due concepts.
+
 
 ## lessons/&lt;id&gt;.json
 
@@ -98,7 +147,7 @@ Transfer is also checked across the whole course: each outcome should be assesse
 
 `COVERAGE.md` shows each lesson's profile and marks every function as present (✓), missing (✗), exempt, or not required (—).
 
-Use `intuition` blocks, with their `limits`, wherever an analogy helps. Order blocks as the learning requires. The usual order is motivate → intuition → visual → explain → worked → predict/activity → practice (guided → independent) → check → transfer → reflect, but prediction often belongs *before* the explanation.
+Use `intuition` blocks, with their `limits`, wherever an analogy helps. Order blocks as the learning requires. The usual order is motivate → predict/activity → intuition → visual → explain → worked → practice (guided → independent) → check → transfer → reflect. In a `full` lesson the first prediction comes **before** the first `explain` or `worked` block; `validate` warns otherwise. A prediction is only a prediction if nothing earlier gives the answer away: keep the answer out of earlier visuals, their text equivalents and worked examples, and do not use a term in the prediction that the lesson has not defined yet (link it to the glossary or define it in the prompt). A later predict block is fine when it asks about a new case.
 
 ### Block types
 
@@ -111,7 +160,7 @@ All `html` fields are HTML fragments. No `<script>`, `<style>`, inline `on…=` 
 | `visual` | `html` (a `<figure>` containing an SVG, labelled local image, comparison or chart), `alt` (text equivalent), `purpose` |
 | `explain` | `html`, optional `title` |
 | `worked` | `title`, optional `html`, `steps: [{ prompt?, html, selfExplain? }]`, optional `result`. A `selfExplain: true` step hides its `html` behind "show" so the learner explains the step first. |
-| `predict` | `id`, `prompt`, then **either** `options`, `correct`, `feedback: {"<wrong index>": "misconception explained"}`, `explanation` **or** `kind: "open"` with `model`/`rubric` |
+| `predict` | `id`, `prompt`, then **either** `options`, `correct`, `feedback: {"<wrong index>": "misconception explained"}`, `explanation` **or** `kind: "open"` with `model`/`rubric`. Prediction is formative: it does not count as assessing an outcome (use `check` or `transfer` for that), but it may carry `concepts` |
 | `activity` | `id`, `widget`, `config`, `instructions` (what to try and what to think about), `debrief` (what they should have noticed), optional `assesses` |
 | `practice` | `id`, `level` (`guided`/`independent`), `task`, `hints[]`, `rubric[]` (self-check criteria), `solution` or `model`, `setting` (`in-app`/`offline`/`real-world`), `externalFeedback` (how to get feedback the browser cannot give) |
 | `check` | optional `html`, `questions: [question]` |
@@ -123,6 +172,8 @@ All `html` fields are HTML fragments. No `<script>`, `<style>`, inline `on…=` 
 
 Questions appear in `check.questions`, in `predict`, and in `diagnostic.questions`.
 
+The field is **`kind`**, not `type`; the validator rejects `type`.
+
 - **`mcq`** (the default when `options` is present): `id`, `prompt`, `options[]`, `correct` (index), `explanation` (reasoning), `feedback` (per wrong option: which misconception it reveals), `assesses[]`.
 - **`multi`:** `correct` is an array of indexes.
 - **`numeric`:** `answer`, `tolerance`, `unit`, `explanation`, optional `feedbackWrong`.
@@ -133,6 +184,7 @@ The learner's **first attempt** is recorded as performance; later attempts are p
 ### Inline helpers inside html
 
 - **Inline original-source citation:** give the lesson source an `id` and `url`, then cite beside the claim with `<a data-source="source-a">[1]</a>`. The builder verifies the id and resolves the link in the site and Markdown. Link to a specific section, figure or timestamp when possible. Ordinary explicit `<a href="https://…">…</a>` links also work.
+  If the link text is a number in brackets (`[2]`), it must be the source's 1-based position in the lesson's `sources` list; the validator warns on a mismatch. In the site and the Markdown export the citation links to the source's URL.
 - **Local image:** put a licensed or generated file under the course's `assets/` folder and use `<figure><img src="assets/example.webp" alt="What the image shows"><figcaption>What to notice · Creator, original source, license or generated status <a data-source="image-source">[source]</a></figcaption></figure>`. Keep the block's `alt` as a fuller text equivalent that conveys the teaching point. The builder checks the file and copies it to both outputs. Remote image URLs need network and produce a warning.
 - **Glossary term:** `<span class="term" data-term="standard error">standard error</span>`. The term must exist in `course.glossary` (term or alias).
 - **Illustrative data:** `<div class="output" data-label="Illustrative data — not a real measurement"><pre>…</pre></div>`. If `data-label` is omitted, a default label is used.
@@ -147,13 +199,21 @@ The learner's **first attempt** is recorded as performance; later attempts are p
 
 ## Learner state
 
-State is stored in `localStorage` under `lk:<course id>:v1`. It records:
+State is stored in `localStorage` under `lk:<course id>:v1`; the stored data carries its own `format` (currently **2**). It records:
 
 - `items`: first attempt, last attempt and attempt count per question or activity, plus its content hash;
 - `texts`: open responses and notes;
 - `criteria`: self-checked rubric items;
 - `visited`: per-lesson visit date;
 - `confidence`: 1–4 per lesson, self-rated;
-- `reviews`: completed spaced reviews.
+- `reviews`: completed spaced reviews per lesson (used when the course has no knowledge architecture);
+- `concepts` (format 2): per concept, the date it was introduced and its retrieval events. An event is a first attempt in a lesson or in a review session. The record also holds the current interval step and the next due date. A correct retrieval moves to the next interval in `course.review.intervals`; a wrong one returns to the first. This is a history used for scheduling, never a mastery score.
 
-Export and import go through the Progress page. Import refuses files from another course and discards items whose hash changed. Reset deletes everything for the course.
+**Formats and migration.**
+- Format 1 data (from earlier builds) is migrated on load or import. Answers, notes, visits and confidence are kept.
+- Concept history is rebuilt from the original visit dates and dated first attempts, and the learner sees a notice.
+- Imports are validated field by field. Files from another course, or with a malformed structure, are refused before anything is replaced.
+- Damaged stored data is set aside under `lk:<course id>:v1:damaged`.
+- Reset deletes everything for the course.
+
+The validation and scheduling logic lives in `assets/runtime/lk-state.js` (testable in Node).

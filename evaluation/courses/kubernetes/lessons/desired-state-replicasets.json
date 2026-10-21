@@ -1,0 +1,386 @@
+{
+  "format": 1,
+  "id": "desired-state-replicasets",
+  "title": "Desired state: Deployments, ReplicaSets and Pods",
+  "summary": "A Deployment declares what you want; controllers keep making it true. Learn which object acts after a change to replicas or to the Pod template.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 30,
+  "outcomes": [
+    "o1"
+  ],
+  "prerequisites": [],
+  "prereqText": "<p>You need to know what a container image and a running container are (from Docker). Nothing about Kubernetes is assumed.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>With docker compose you might run <code>docker compose up -d --scale web=3</code>. If a container dies, nothing brings it back unless you add a restart policy, and changing the image means you stop and start things yourself. Now imagine you edit one file saying \"I want 3 copies of <code>web</code>\" and a process keeps checking that this is true, forever, replacing what dies and replacing versions gradually. That file, for Kubernetes, is a <strong>Deployment</strong>. Your goal today: look at a change you could make to it and predict what the system does.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "l1-p1",
+      "prompt": "A Deployment <code>web</code> currently has 3 Pods. You apply it twice: first with <code>replicas: 5</code>, later with <code>image: example/web:v2</code> in the Pod template. Which statement is best?",
+      "options": [
+        "Both changes create a new ReplicaSet and replace every Pod",
+        "Only the image change creates a new ReplicaSet; the replicas change scales the existing one",
+        "Only the replicas change creates a new ReplicaSet, because the number of Pods changes"
+      ],
+      "correct": 1,
+      "feedback": {
+        "0": "Misconception: every edit replaces Pods. The docs say a rollout is triggered only by a Pod template change; scaling does not trigger one.",
+        "2": "Misconception: more Pods means a new ReplicaSet. A ReplicaSet already has a replica count, so the controller just changes it."
+      },
+      "explanation": "A Deployment rollout is triggered if and only if its Pod template (.spec.template) changes; other updates such as scaling do not trigger a rollout. <a data-source=\"k8s-deploy-update\">[source]</a>",
+      "assesses": [
+        "o1"
+      ],
+      "concepts": []
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Think of a thermostat. You set the target temperature (the <span class='term' data-term='desired state'>desired state</span>); the thermostat measures the room (the current state) and switches heating on or off to close the gap, over and over. Kubernetes <span class='term' data-term='controller'>controllers</span> are this kind of loop. <a data-source='k8s-controller'>[source]</a> A Deployment is your target, and the controllers are the thermostat.</p>",
+      "limits": "<p>A thermostat adjusts one number. A Deployment controller manages other objects (ReplicaSets), which have their own controller managing Pods. Also, the cluster may never be perfectly stable; the docs say that is fine while controllers keep running. The loop is also not instantaneous: you saw nothing happen \"at the moment you apply\", only a recorded desired state that controllers then act on.</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Show who owns whom: Deployment to ReplicaSets to Pods, and which field each controller reads.",
+      "alt": "A three-level ownership diagram. A Deployment named web with replicas 3 and a Pod template version v1 owns a ReplicaSet web-hash1 with 3 Pods. After the template changes to v2, the Deployment also owns a second ReplicaSet web-hash2 which gets Pods while the first ReplicaSet is scaled down. Pods carry a pod-template-hash label that matches their ReplicaSet.",
+      "html": "<figure><svg viewBox='0 0 560 270' role='img' aria-labelledby='l1v-t l1v-d'><title id='l1v-t'>Deployment owns ReplicaSets, which own Pods</title><desc id='l1v-d'>Deployment web with replicas 3 owns ReplicaSet for template v1 (3 Pods) and ReplicaSet for template v2 (new, Pods appear as v1 shrinks).</desc><rect class='n1' x='170' y='10' width='220' height='56' rx='8'/><text class='t' x='180' y='34'>Deployment web</text><text class='ts' x='180' y='54'>replicas: 3 · template: v1 → v2</text><rect class='n2' x='20' y='110' width='230' height='56' rx='8'/><text class='t' x='30' y='134'>ReplicaSet (template v1)</text><text class='ts' x='30' y='154'>label pod-template-hash=A · 3 → 0</text><rect class='n3' x='310' y='110' width='230' height='56' rx='8'/><text class='t' x='320' y='134'>ReplicaSet (template v2)</text><text class='ts' x='320' y='154'>label pod-template-hash=B · 0 → 3</text><rect class='n-plain' x='20' y='210' width='70' height='40' rx='6'/><text class='ts' x='34' y='235'>Pod A</text><rect class='n-plain' x='100' y='210' width='70' height='40' rx='6'/><text class='ts' x='114' y='235'>Pod A</text><rect class='n-plain' x='180' y='210' width='70' height='40' rx='6'/><text class='ts' x='194' y='235'>Pod A</text><rect class='n-plain' x='310' y='210' width='70' height='40' rx='6' stroke-dasharray='4 3'/><text class='ts' x='324' y='235'>Pod B</text><rect class='n-plain' x='390' y='210' width='70' height='40' rx='6' stroke-dasharray='4 3'/><text class='ts' x='404' y='235'>Pod B</text><rect class='n-plain' x='470' y='210' width='70' height='40' rx='6' stroke-dasharray='4 3'/><text class='ts' x='484' y='235'>Pod B</text><line class='edge' x1='240' y1='66' x2='150' y2='110' marker-end='url(#arrow)'/><line class='edge' x1='320' y1='66' x2='400' y2='110' marker-end='url(#arrow)'/><line class='edge' x1='135' y1='166' x2='135' y2='210' marker-end='url(#arrow)'/><line class='edge dashed' x1='425' y1='166' x2='425' y2='210' marker-end='url(#arrow)'/></svg><figcaption>Illustrative diagram drawn for this course. Dashed = Pods that exist only after the template changes. Structure per the Deployment docs: a template change creates a new ReplicaSet which is scaled up while the old one is scaled down. <a data-source='k8s-deploy-update'>[source]</a></figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "title": "What each object does",
+      "html": "<p>A <span class='term' data-term='Pod'>Pod</span> runs your container. You rarely create Pods directly. A <span class='term' data-term='ReplicaSet'>ReplicaSet</span> has three things: a selector (which Pods it owns), a replica count, and a <span class='term' data-term='Pod template'>Pod template</span> used to create missing Pods. It creates or deletes Pods until the count matches, and records itself in each Pod's <code>metadata.ownerReferences</code>. <a data-source='k8s-rs'>[source]</a></p><p>A <span class='term' data-term='Deployment'>Deployment</span> sits one level up. You describe a desired state in it and the Deployment controller changes the actual state to the desired state at a controlled rate. <a data-source='k8s-deploy'>[source]</a> It does this by managing ReplicaSets. The docs recommend using a Deployment rather than a bare ReplicaSet unless you need custom update orchestration or no updates at all, and they caution against managing ReplicaSets that a Deployment owns. <a data-source='k8s-rs-when'>[source]</a></p><p><strong>Two kinds of change, two behaviours.</strong></p><ul><li><strong>Change <code>replicas</code>:</strong> the existing (current) ReplicaSet's count changes. No new ReplicaSet, no rollout. <a data-source='k8s-deploy-update'>[source]</a></li><li><strong>Change anything in <code>.spec.template</code></strong> (image, labels, probes, env): the Deployment creates a <em>new</em> ReplicaSet for the new template and, with the default RollingUpdate strategy, scales it up while scaling the old one down. This is a <span class='term' data-term='rollout'>rollout</span>.</li></ul><p>To tell ReplicaSets apart, the Deployment adds a <code>pod-template-hash</code> label to each ReplicaSet and its Pods (and the name of the ReplicaSet ends in that hash). Do not edit it. <a data-source='k8s-deploy-hash'>[source]</a> Defaults you will use later: <code>strategy.type</code> is <code>RollingUpdate</code> (the alternative <code>Recreate</code> kills all old Pods before creating new ones), and the Deployment keeps old ReplicaSets (10 by default) so you can roll back. <a data-source='k8s-deploy-strategy'>[source]</a></p><p>Simplification: <code>.spec.replicas</code> is optional and defaults to 1; if a horizontal autoscaler manages the count, you normally do not set it in the manifest. That interaction is outside this course.</p>"
+    },
+    {
+      "type": "worked",
+      "title": "Reading a manifest and predicting the controller",
+      "steps": [
+        {
+          "html": "<pre><code>apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: web\nspec:\n  replicas: 3\n  selector:\n    matchLabels: { app: web }\n  template:\n    metadata:\n      labels: { app: web }\n    spec:\n      containers:\n      - name: web\n        image: example/web:v1</code></pre><p>Desired state: 3 Pods built from the template. Course example, not from the docs. Note <code>selector</code> must match the template labels, and in apps/v1 it is immutable after creation. <a data-source='k8s-deploy-spec'>[source]</a></p>"
+        },
+        {
+          "prompt": "<p>You apply this. What objects exist after the controllers settle?</p>",
+          "selfExplain": true,
+          "html": "<p>One Deployment, one ReplicaSet (named <code>web-&lt;hash&gt;</code>) with 3 Pods, all labelled <code>app=web</code> plus the <code>pod-template-hash</code>.</p>"
+        },
+        {
+          "prompt": "<p>Now you change only <code>replicas: 3</code> to <code>replicas: 6</code> and apply. What happens?</p>",
+          "selfExplain": true,
+          "html": "<p>The Deployment controller sees desired 6 versus current 3, and the same ReplicaSet's count becomes 6 (ReplicaSet controller creates 3 more Pods). The template is unchanged, so no new ReplicaSet and no rollout.</p>"
+        },
+        {
+          "prompt": "<p>Finally you change <code>image</code> to <code>example/web:v2</code>. What happens?</p>",
+          "selfExplain": true,
+          "html": "<p>The template changed, so a new ReplicaSet (new hash) is created and gradually scaled up to 6 while the old one is scaled down to 0. The old ReplicaSet is kept, with 0 Pods, for rollback.</p>"
+        }
+      ],
+      "result": "<p>Rule of thumb: <strong>replicas changes the count of the current ReplicaSet; a template change creates a new ReplicaSet.</strong> Prediction is the skill: name the object that changes first.</p>"
+    },
+    {
+      "type": "activity",
+      "id": "l1-a1",
+      "widget": "system-flow",
+      "instructions": "<p>This is a <strong>simulation written for this course, not a cluster</strong>. Step through three events. Before each step is revealed, answer the prediction. Click a component to read what it does.</p>",
+      "debrief": "<p>You should have noticed that the replicas change touched only the ReplicaSet count, while the template change created a new object. The same Deployment, two different controller responses. The scaling step involves no hash change; the rollout step does.</p>",
+      "assesses": [
+        "o1"
+      ],
+      "config": {
+        "title": "Which controller acts after each edit? (simulation)",
+        "mapLabel": "Deployment, ReplicaSets and Pods",
+        "nodes": [
+          {
+            "id": "dep",
+            "label": "Deployment web",
+            "kind": "declares desired state",
+            "html": "<p>Holds replicas and the Pod template. Its controller creates and scales ReplicaSets.</p>"
+          },
+          {
+            "id": "rs1",
+            "label": "ReplicaSet v1",
+            "kind": "keeps Pods",
+            "html": "<p>Selector + count + template for the v1 Pods.</p>"
+          },
+          {
+            "id": "rs2",
+            "label": "ReplicaSet v2",
+            "kind": "keeps Pods",
+            "html": "<p>Appears only after the template changes.</p>"
+          },
+          {
+            "id": "pods",
+            "label": "Pods",
+            "kind": "run containers",
+            "html": "<p>Created and deleted by ReplicaSets.</p>"
+          }
+        ],
+        "steps": [
+          {
+            "event": "Start: replicas 3, image v1, settled",
+            "active": [
+              "dep",
+              "rs1",
+              "pods"
+            ],
+            "html": "<p><strong>State:</strong> Deployment web (3, v1) → ReplicaSet v1 (3) → 3 Pods v1.</p>"
+          },
+          {
+            "event": "You change replicas: 3 → 5",
+            "active": [
+              "dep",
+              "rs1",
+              "pods"
+            ],
+            "predict": {
+              "prompt": "Which objects are involved in reaching 5 Pods?",
+              "options": [
+                "Deployment and ReplicaSet v1 only; ReplicaSet v1 count becomes 5",
+                "A new ReplicaSet v2 is created with 5 Pods",
+                "All 3 existing Pods are deleted and 5 are created"
+              ],
+              "correct": 0,
+              "explanation": "Scaling does not change the template, so the existing ReplicaSet is scaled to 5 and creates 2 more Pods."
+            },
+            "html": "<p><strong>State:</strong> Deployment (5, v1) → ReplicaSet v1 (5) → 5 Pods v1. Existing Pods are untouched.</p>"
+          },
+          {
+            "event": "You change the image: v1 → v2",
+            "active": [
+              "dep",
+              "rs1",
+              "rs2",
+              "pods"
+            ],
+            "predict": {
+              "prompt": "What does the Deployment controller create?",
+              "options": [
+                "A new ReplicaSet v2, scaled up as v1 is scaled down",
+                "Nothing; Pods are updated in place",
+                "Only new Pods, owned directly by the Deployment"
+              ],
+              "correct": 0,
+              "explanation": "A new Pod template means a new ReplicaSet. Pods are never mutated in place; they are replaced."
+            },
+            "html": "<p><strong>State (during rollout, one possible moment):</strong> ReplicaSet v1 (4) and ReplicaSet v2 (2) shortly after the change. The exact numbers depend on the rolling-update limits, which is the next lesson.</p>"
+          },
+          {
+            "event": "Rollout finished",
+            "active": [
+              "dep",
+              "rs2",
+              "pods"
+            ],
+            "html": "<p><strong>State:</strong> ReplicaSet v2 (5), ReplicaSet v1 (0, kept for rollback), 5 Pods v2.</p>"
+          }
+        ],
+        "assumptions": [
+          "Illustrative simulation of the documented behaviour, not output from a real cluster.",
+          "The in-between Pod counts are one possible moment, not an exact trace; limits are explained in the next lesson.",
+          "Scheduling, image pulls and autoscaling are omitted."
+        ]
+      }
+    },
+    {
+      "type": "practice",
+      "id": "l1-pg",
+      "level": "guided",
+      "setting": "offline",
+      "task": "<p>Take the manifest in the worked example. For each edit, write (a) whether a new ReplicaSet is created, and (b) the objects whose fields change. Edits: 1) <code>replicas: 3</code> to <code>2</code>; 2) add a label <code>tier: frontend</code> to <code>.spec.template.metadata.labels</code> (and keep the selector valid); 3) change the Deployment's <code>metadata.name</code> labels only (not the template).</p>",
+      "hints": [
+        "Ask: is the edit inside .spec.template?",
+        "Labels of the Deployment object itself are not part of the Pod template."
+      ],
+      "rubric": [
+        "Edit 1: no new ReplicaSet; ReplicaSet count goes to 2",
+        "Edit 2: new ReplicaSet (template changed, labels are part of it)",
+        "Edit 3: no rollout (outside .spec.template)"
+      ],
+      "solution": "<p>1) Same ReplicaSet scaled to 2 (it deletes a Pod). 2) New ReplicaSet and a rollout, because labels in the template are part of it; the docs give \"labels or container images of the template\" as example triggers. <a data-source=\"k8s-deploy-update\">[source]</a> 3) No rollout: the Pod template is unchanged. Check: this is derived from the \"if and only if .spec.template changes\" rule.</p>",
+      "concepts": []
+    },
+    {
+      "type": "practice",
+      "id": "l1-pi",
+      "level": "independent",
+      "setting": "offline",
+      "task": "<p>A colleague says: \"I bumped replicas to 10 and nothing was replaced, but I also changed the <code>image</code> in the same commit and now all my Pods are being replaced. Is Kubernetes inconsistent?\" Write 3-4 sentences explaining what actually happened, using the words ReplicaSet and Pod template.</p>",
+      "rubric": [
+        "Separates the two edits",
+        "Names the Pod template change as the trigger",
+        "States replicas alone does not trigger a rollout",
+        "Mentions the new ReplicaSet"
+      ],
+      "model": "<p>Both edits were applied. The replicas change alone would only have scaled the current ReplicaSet. The image change is inside the Pod template, which creates a new ReplicaSet and a rollout that replaces Pods gradually. So the result is consistent: the template change dominates what you see, and the new ReplicaSet is scaled to 10.</p>"
+    },
+    {
+      "type": "check",
+      "html": "<p>Check your understanding. Your first attempt is recorded as performance; later attempts are practice.</p>",
+      "questions": [
+        {
+          "id": "l1-c1",
+          "prompt": "Which edit triggers a rollout (a new ReplicaSet)?",
+          "options": [
+            "<code>replicas: 3</code> to <code>replicas: 8</code>",
+            "<code>image: web:v1</code> to <code>web:v2</code> in the Pod template",
+            "Running <code>kubectl scale</code> on the Deployment"
+          ],
+          "correct": 1,
+          "explanation": "Only changes to .spec.template trigger a rollout. Scaling by editing the manifest or by kubectl scale does not.",
+          "feedback": {
+            "0": "That scales the current ReplicaSet only.",
+            "2": "Scaling, by any route, does not change the template."
+          },
+          "assesses": [
+            "o1"
+          ],
+          "kind": "mcq"
+        },
+        {
+          "id": "l1-c2",
+          "prompt": "Which object keeps the Pods running at the right count and records ownership in <code>metadata.ownerReferences</code>?",
+          "options": [
+            "The Deployment directly",
+            "The ReplicaSet",
+            "The kubelet"
+          ],
+          "correct": 1,
+          "explanation": "A ReplicaSet links to its Pods through their ownerReferences and creates or deletes Pods to match its count. The Deployment manages ReplicaSets.",
+          "feedback": {
+            "0": "The Deployment creates and scales ReplicaSets; Pods belong to a ReplicaSet.",
+            "2": "The kubelet runs containers on a node; it does not own replica counts."
+          },
+          "assesses": [
+            "o1"
+          ],
+          "kind": "mcq"
+        },
+        {
+          "id": "l1-c3",
+          "prompt": "After a rollout from v1 to v2 completes, what is the old ReplicaSet's state by default?",
+          "options": [
+            "Deleted immediately",
+            "Kept with 0 Pods (up to 10 old ones are retained by default)",
+            "Still running half the Pods"
+          ],
+          "correct": 1,
+          "explanation": "Old ReplicaSets are kept (default 10) so you can roll back. Their Pod count is 0.",
+          "feedback": {
+            "0": "If it were deleted, you would lose the ability to roll back to that revision.",
+            "2": "At the end of a completed rollout no old Pods remain."
+          },
+          "assesses": [
+            "o1"
+          ],
+          "kind": "mcq"
+        },
+        {
+          "id": "l1-c4",
+          "prompt": "In your own words: what does it mean that a Deployment declares \"desired state\"? Include what the controller does about it.",
+          "rubric": [
+            "Says you declare what you want (spec) rather than commands",
+            "Says a controller compares current with desired and acts",
+            "Says it repeats, not once"
+          ],
+          "model": "<p>The spec says what should be true (for example 3 Pods of this template). A controller keeps comparing the actual state with it and creates, scales or deletes objects to close the gap, continuously.</p>",
+          "assesses": [
+            "o1"
+          ],
+          "kind": "open"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l1-t",
+      "task": "<p>New situation. A team runs <code>api</code> with <code>replicas: 4</code>. In one pull request they (a) add an environment variable <code>LOG_LEVEL=debug</code> to the container and (b) change replicas to 2 to save cost. Predict, in order, what the Deployment controller does, and say what you would see in <code>kubectl get rs</code> afterwards (counts per ReplicaSet). Do not run anything; reason from the rules.</p>",
+      "rubric": [
+        "Identifies the env var as a Pod template change that creates a new ReplicaSet",
+        "Identifies replicas as the desired count for the new template",
+        "Predicts old ReplicaSet at 0 and new at 2 after the rollout",
+        "Notes the old ReplicaSet is kept for rollback"
+      ],
+      "model": "<p>The env var is inside the Pod template, so a new ReplicaSet is created and a rollout begins. The new desired count is 2, so the end state is new ReplicaSet at 2, old ReplicaSet at 0 (retained for rollback). The replicas change alone would not have caused a rollout, but the env var does. Mid-rollout counts depend on the update limits (next lesson).</p>",
+      "assesses": [
+        "o1"
+      ]
+    },
+    {
+      "type": "reflect",
+      "id": "l1-r",
+      "prompt": "Explain in your own words, as you would to a colleague who knows Docker: what is a ReplicaSet for, and why does a Deployment create a new one when the Pod template changes? Then compare with the model in the lesson."
+    }
+  ],
+  "sources": [
+    {
+      "id": "k8s-deploy",
+      "title": "Deployments - Kubernetes documentation",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+      "accessed": "2026-10-20",
+      "note": "Intro and Use Case. Docs version not printed on page; menu lists v1.37 as current."
+    },
+    {
+      "id": "k8s-deploy-update",
+      "title": "Deployments: Updating a Deployment",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment",
+      "accessed": "2026-10-20",
+      "note": "Rollout triggered if and only if .spec.template changes; scaling does not."
+    },
+    {
+      "id": "k8s-deploy-hash",
+      "title": "Deployments: Pod-template-hash label",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#pod-template-hash-label",
+      "accessed": "2026-10-20"
+    },
+    {
+      "id": "k8s-deploy-spec",
+      "title": "Deployments: Writing a Deployment Spec (selector, replicas)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#writing-a-deployment-spec",
+      "accessed": "2026-10-20",
+      "note": "selector must match template labels; immutable in apps/v1; replicas defaults to 1."
+    },
+    {
+      "id": "k8s-deploy-strategy",
+      "title": "Deployments: Strategy and revisionHistoryLimit",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy",
+      "accessed": "2026-10-20",
+      "note": "RollingUpdate default; Recreate; 10 old ReplicaSets kept by default."
+    },
+    {
+      "id": "k8s-controller",
+      "title": "Controllers - Kubernetes documentation",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
+      "accessed": "2026-10-20",
+      "note": "Thermostat analogy; control loop definition."
+    },
+    {
+      "id": "k8s-rs",
+      "title": "ReplicaSet - How a ReplicaSet works",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#how-a-replicaset-works",
+      "accessed": "2026-10-20",
+      "note": "selector, count, template, ownerReferences."
+    },
+    {
+      "id": "k8s-rs-when",
+      "title": "ReplicaSet - When to use a ReplicaSet",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#when-to-use-a-replicaset",
+      "accessed": "2026-10-20",
+      "note": "Taken from a fetched summary plus raw page; recommendation to prefer Deployments."
+    },
+    {
+      "id": "l1-ped",
+      "title": "Course examples (web, example/web:v1, api)",
+      "kind": "pedagogical",
+      "note": "Invented for teaching; not from the Kubernetes documentation."
+    }
+  ],
+  "next": "<p>You can now predict which ReplicaSet changes. Next: when the template changes, how many Pods can be replaced at once, and what exactly limits the rollout? That is the arithmetic of maxSurge and maxUnavailable.</p>"
+}

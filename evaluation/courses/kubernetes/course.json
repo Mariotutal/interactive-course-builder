@@ -1,0 +1,338 @@
+{
+  "format": 1,
+  "id": "k8s-deployments-rollouts",
+  "version": "1.0.0",
+  "title": "Kubernetes Deployments: desired state, ReplicaSets and rolling updates",
+  "subtitle": "Read a Deployment manifest and predict the rollout and its failure modes. Concepts and manifests only: no cluster is used.",
+  "language": "en",
+  "locale": "en-US",
+  "learner": {
+    "topic": "Kubernetes Deployments: how desired state, ReplicaSets and rolling updates work",
+    "goals": [
+      "Predict what a Deployment controller does after a change to replicas or the Pod template",
+      "Explain why a rolling update stalls when new Pods never become ready",
+      "Choose readiness settings for a simple web service"
+    ],
+    "scope": "Concepts and manifests only; no live cluster required",
+    "language": "en",
+    "locale": "en-US",
+    "intake": {
+      "capability": "Read a Deployment manifest and predict the rollout and its failure modes",
+      "familiarity": "some",
+      "modality": "hands-on",
+      "practiceLoad": "balanced"
+    },
+    "learner": {
+      "startingKnowledge": "Uses Docker and docker compose; has never operated Kubernetes",
+      "background": "Synthetic benchmark learner: web developer",
+      "depth": "solid",
+      "knownGaps": []
+    },
+    "time": {
+      "totalHours": 2,
+      "sessionMinutes": 30
+    },
+    "practice": {
+      "tools": [],
+      "equipment": [],
+      "software": [
+        "a text editor"
+      ],
+      "datasets": [],
+      "realWorld": "no cluster available; simulations and manifests only"
+    },
+    "sources": {
+      "provided": [],
+      "freshness": "Current Kubernetes documentation (state the version)",
+      "evidenceStandard": "Official Kubernetes documentation"
+    },
+    "exclusions": [],
+    "constraints": [],
+    "presentation": {
+      "visual": "high",
+      "interaction": "high",
+      "reducedMotion": false,
+      "readingLevel": "unknown"
+    },
+    "accessibility": {
+      "screenReader": false,
+      "notes": ""
+    },
+    "output": {
+      "format": "web+markdown",
+      "host": "unknown"
+    },
+    "diagnostic": true,
+    "decisions": [
+      {
+        "because": "familiarity: some",
+        "decision": "Offer the diagnostic so known prerequisites can get a quick pass; keep the full core route available."
+      },
+      {
+        "because": "modality: hands-on",
+        "decision": "Put an activity or practice before the explanation and include more in-app or real-world practice."
+      },
+      {
+        "because": "practice load: balanced",
+        "decision": "Guided and independent practice in every full lesson plus spaced review."
+      },
+      {
+        "because": "sessions of 30 min",
+        "decision": "Size lessons to about 30 minutes and pack the schedule into sessions of that length."
+      }
+    ]
+  },
+  "assumptions": [
+    "Documentation basis: kubernetes.io pages read on 2026-10-20. Their version menu lists v1.37 as the current documentation, and the pages mention features \"since v1.37\". The course targets the apps/v1 Deployment API as documented there. Not verified: that every page snapshot is exactly v1.37 (the pages themselves do not print a version number).",
+    "No cluster is used. Every activity is a labelled simulation or a static trace of a manifest, written by the course author from the documented rules. None of it is output from a real cluster.",
+    "Pod and manifest names (web, /healthz, port 8080, image tags) are illustrative course examples, not taken from the Kubernetes documentation.",
+    "Simplification: the Deployment controller interleaves scale-up and scale-down steps in ways this course shows as tidy rounds. The documented limits (maxSurge, maxUnavailable) are exact; the exact order of individual steps is not."
+  ],
+  "outcomes": [
+    {
+      "id": "o1",
+      "text": "Predict what the Deployment controller does (which ReplicaSet and how many Pods) after a change to replicas or to the Pod template",
+      "level": "core"
+    },
+    {
+      "id": "o2",
+      "text": "Explain, from maxSurge, maxUnavailable and Pod readiness, why a rolling update stalls when the new Pods never become ready",
+      "level": "core"
+    },
+    {
+      "id": "o3",
+      "text": "Choose readiness probe settings and rollout parameters for a simple web service and justify them",
+      "level": "core"
+    }
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "title": "Deployments and rollouts",
+      "summary": "From desired state to ReplicaSets, rolling updates and readiness",
+      "prerequisites": [],
+      "lessons": [
+        "desired-state-replicasets",
+        "rolling-update-arithmetic",
+        "readiness-stalled-rollouts"
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "desired state",
+      "definition": "What you declare in an object's spec, for example \"3 replicas of this Pod template\". Controllers keep working to make the actual (current) state match it."
+    },
+    {
+      "term": "controller",
+      "aka": [
+        "control loop"
+      ],
+      "definition": "A non-terminating loop that watches the state of the cluster and makes or requests changes to move the current state closer to the desired state."
+    },
+    {
+      "term": "Pod",
+      "aka": [
+        "Pods"
+      ],
+      "definition": "The smallest unit Kubernetes schedules: one or more containers that share network and storage. A Deployment creates Pods from its Pod template."
+    },
+    {
+      "term": "Pod template",
+      "aka": [
+        ".spec.template"
+      ],
+      "definition": "The part of a Deployment (.spec.template) that describes the Pods to create: labels, containers, image, probes. Changing it is what triggers a rollout."
+    },
+    {
+      "term": "ReplicaSet",
+      "aka": [
+        "ReplicaSets"
+      ],
+      "definition": "An object that keeps a given number of identical Pods running, using a selector, a replica count and a Pod template. A Deployment creates and manages ReplicaSets for you."
+    },
+    {
+      "term": "Deployment",
+      "definition": "An object that declares the desired state of a set of Pods and manages ReplicaSets to reach it, replacing Pods gradually when the Pod template changes."
+    },
+    {
+      "term": "rollout",
+      "aka": [
+        "rolling update"
+      ],
+      "definition": "The replacement of Pods of an old Pod template by Pods of a new one. With the default RollingUpdate strategy it happens gradually, within the limits maxSurge and maxUnavailable."
+    },
+    {
+      "term": "maxSurge",
+      "definition": "The maximum number of Pods that can exist above the desired number during a rolling update. A number or a percentage; percentages are rounded up; default 25%."
+    },
+    {
+      "term": "maxUnavailable",
+      "definition": "The maximum number of desired Pods that may be unavailable during a rolling update. A number or a percentage; percentages are rounded down; default 25%."
+    },
+    {
+      "term": "ready",
+      "aka": [
+        "readiness"
+      ],
+      "definition": "A Pod is ready when its containers report ready; with a readiness probe, that means the probe is succeeding. Pods that are not ready receive no Service traffic."
+    },
+    {
+      "term": "available",
+      "aka": [
+        "availability"
+      ],
+      "definition": "A Pod is available when it has been ready for at least minReadySeconds (default 0, so ready means available)."
+    },
+    {
+      "term": "readiness probe",
+      "definition": "A check the kubelet runs repeatedly against a container. While it fails, the Pod is marked not ready and is removed from the endpoints of matching Services."
+    },
+    {
+      "term": "progressDeadlineSeconds",
+      "definition": "How long the Deployment controller waits for a rollout to make progress before reporting it as failed to progress (default 600). It reports; it does not roll back."
+    }
+  ],
+  "routes": [
+    {
+      "id": "core",
+      "title": "Core route",
+      "description": "Three lessons, then the capstone. About 90 minutes, in three 30-minute sessions.",
+      "lessons": [
+        "desired-state-replicasets",
+        "rolling-update-arithmetic",
+        "readiness-stalled-rollouts"
+      ]
+    }
+  ],
+  "review": {
+    "intervals": [
+      1,
+      3,
+      7
+    ]
+  },
+  "intro": "<p>You already run services with Docker and docker compose. Kubernetes adds a layer that keeps re-checking what you asked for and acting until reality matches it. In three short lessons you will learn to read a <code>Deployment</code> manifest and predict what happens when you change it, why an update sometimes stops half-way, and how a readiness probe decides whether it finishes.</p><p><strong>How it works:</strong> each lesson starts by making you predict, then explains. Everything is a manifest or a labelled simulation. You need only a text editor; nothing here runs a real cluster, and what you see in the simulations is the course author's model of the documented rules, not cluster output. Documentation basis: kubernetes.io, read 2026-10-20 (its menu lists v1.37 as current).</p>",
+  "theme": {
+    "profile": "systems",
+    "layout": "standard",
+    "diagramStyle": "outline",
+    "codeTheme": "auto",
+    "tokens": {
+      "light": {
+        "accent": "#0b5d7a"
+      },
+      "dark": {
+        "accent": "#7cc8e6"
+      }
+    }
+  },
+  "diagnostic": {
+    "intro": "<p>Two quick questions to set your pace. Nothing is hidden by your answers.</p>",
+    "fastLabel": "quick pass: predictions and checks",
+    "fullLabel": "study fully",
+    "questions": [
+      {
+        "id": "dg1",
+        "prompt": "You change <code>replicas: 3</code> to <code>replicas: 5</code> in a Deployment and apply it. What happens?",
+        "options": [
+          "A new ReplicaSet is created and replaces the old one",
+          "The existing ReplicaSet is scaled to 5 Pods; no rollout happens",
+          "Nothing, until you delete the Pods"
+        ],
+        "correct": 1,
+        "explanation": "Only a change to the Pod template triggers a rollout; scaling does not.",
+        "feedback": {
+          "0": "That is what a Pod template change does, not a replicas change.",
+          "2": "The controller acts on its own; you do not need to delete Pods."
+        },
+        "lessons": [
+          "desired-state-replicasets"
+        ]
+      },
+      {
+        "id": "dg2",
+        "prompt": "In Docker you can see a container is \"running\". What extra question does Kubernetes ask before sending it traffic?",
+        "options": [
+          "Whether the image is the latest one",
+          "Whether the container is ready, as reported by its readiness probe if one is defined",
+          "Whether it uses less than 1 CPU"
+        ],
+        "correct": 1,
+        "explanation": "Running is not the same as ready. Services send traffic only to ready Pods.",
+        "feedback": {
+          "0": "Image tags are unrelated to traffic routing.",
+          "2": "CPU use is not a readiness condition."
+        },
+        "lessons": [
+          "readiness-stalled-rollouts"
+        ]
+      }
+    ]
+  },
+  "capstone": {
+    "id": "capstone",
+    "title": "Review a rollout before it ships",
+    "task": "<p>A teammate shows you this Deployment and says: \"I'll change the image to <code>v2</code> and apply it on Friday afternoon.\" The new image has a bug: its <code>/healthz</code> endpoint returns HTTP 500 for the first two minutes and then 200 only if the database is reachable (it is not, from the new network).</p><pre><code>kind: Deployment\nspec:\n  replicas: 4\n  progressDeadlineSeconds: 120\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%\n  template:\n    spec:\n      containers:\n      - name: web\n        image: example/web:v1\n        readinessProbe:\n          httpGet: { path: /healthz, port: 8080 }\n          periodSeconds: 5\n          failureThreshold: 3</code></pre><p>Write a short review (about 150 words) that: (1) predicts which ReplicaSets and how many Pods exist two minutes after apply, with the arithmetic; (2) states what the Deployment status will show and whether users are affected; (3) says what the controller will and will not do next; and (4) recommends one change to the manifest and explains the trade-off.</p>",
+    "levels": [
+      "Beginning",
+      "Developing",
+      "Proficient"
+    ],
+    "rubric": [
+      {
+        "criterion": "Prediction with arithmetic (o1, o2)",
+        "descriptors": [
+          "Says \"it will break\" without numbers",
+          "Gives Pod counts but not from maxSurge/maxUnavailable",
+          "Surge = ceil(4 x 25%) = 1 and unavailable = floor(4 x 25%) = 1, so up to 5 Pods total and at least 3 available; derives the state of both ReplicaSets"
+        ]
+      },
+      {
+        "criterion": "Status and user impact (o2)",
+        "descriptors": [
+          "Not discussed",
+          "Mentions failure but not the mechanism",
+          "Explains that unready Pods get no traffic, that old ready Pods keep serving, and that after 120 s the Progressing condition reports ProgressDeadlineExceeded"
+        ]
+      },
+      {
+        "criterion": "Controller behaviour (o1)",
+        "descriptors": [
+          "Expects automatic rollback",
+          "Says the rollout stops but not why",
+          "States that the controller reports but does not roll back, keeps retrying, and that a human must fix the template or roll back"
+        ]
+      },
+      {
+        "criterion": "Recommendation and trade-off (o3)",
+        "descriptors": [
+          "A change with no justification",
+          "A plausible change, trade-off missing",
+          "A specific change (for example a readiness check that matches real readiness, or a longer deadline or a stricter surge setting) with the trade-off named"
+        ]
+      }
+    ],
+    "assesses": [
+      "o1",
+      "o2",
+      "o3"
+    ],
+    "evaluation": "<p>Self-assess with the rubric, then compare with the model. If you have a colleague who knows Kubernetes, ask them to challenge your arithmetic. Optional, outside this course: reproduce the scenario on a disposable cluster of your own and compare. This course never ran one, so it cannot tell you what yours will print.</p>",
+    "model": "<p><strong>Arithmetic.</strong> replicas = 4. maxSurge 25% of 4 = 1 (rounded up); maxUnavailable 25% of 4 = 1 (rounded down). So at most 5 Pods exist and at least 3 must be available. With one unavailable allowed, the controller can scale the old ReplicaSet to 3 and create 2 new Pods (total 5). If those new Pods are not ready, no more old Pods can be removed without dropping below 3 available. Expect: old ReplicaSet 3 ready, new ReplicaSet 2 not ready.</p><p><strong>Status.</strong> Users are served by the 3 old ready Pods; the unready new Pods are removed from Service endpoints. The Deployment stays in progress until 120 s pass; then Progressing becomes False with reason ProgressDeadlineExceeded.</p><p><strong>Controller.</strong> It reports lack of progress and keeps retrying; it does not roll back automatically. A human must fix the template or roll back.</p><p><strong>Recommendation.</strong> For example, split the probe: make readiness check what this Pod needs to serve (and decide deliberately whether a database outage should make every Pod unready), and keep maxUnavailable low so a bad version cannot reduce capacity. Trade-off: stricter limits make rollouts slower; a probe that depends on the database can take every Pod out of service during a database blip.</p><p>Course decision: the capstone scenario is invented for teaching. The 3 and 2 Pod counts follow from the documented limits; the exact step order the controller takes may differ.</p>"
+  },
+  "sources": [
+    {
+      "title": "Deployments (Kubernetes documentation)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/",
+      "accessed": "2026-10-20"
+    },
+    {
+      "title": "Liveness, Readiness, and Startup Probes (Kubernetes concepts)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/",
+      "accessed": "2026-10-20"
+    }
+  ]
+}

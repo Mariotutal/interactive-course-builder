@@ -1,0 +1,423 @@
+{
+  "format": 1,
+  "id": "readiness-stalled-rollouts",
+  "title": "Readiness, stalled rollouts and choosing settings",
+  "summary": "Diagnose a stalled rollout from its evidence, understand what readiness means to the controller, and choose readiness and deadline settings for a simple web service.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 30,
+  "outcomes": [
+    "o2",
+    "o3"
+  ],
+  "prerequisites": [
+    "rolling-update-arithmetic"
+  ],
+  "prereqText": "<p>From the previous lesson: the ceiling (replicas + maxSurge) and floor (replicas − maxUnavailable available) that bound a rolling update.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>It is Friday. You apply a new image and your pipeline prints \"Waiting for rollout to finish: 1 out of 3 new replicas have been updated...\" and keeps printing it. Nobody paged you; the site still works. Is the deploy broken, slow, or fine? The answer is in a few lines of evidence, and you are about to read them. (Pipeline message style as in the docs' rollout example; this specific scenario is invented.) <a data-source='k8s-deploy-update'>[source]</a></p>"
+    },
+    {
+      "type": "activity",
+      "id": "l3-a1",
+      "widget": "evidence-case",
+      "instructions": "<p>The outputs below are <strong>invented, illustrative simulations written for this course, not from a real cluster</strong>. Open the evidence you think you need (you do not have to open all of it), then choose the best-supported conclusion.</p>",
+      "debrief": "<p>You should have noticed that the Pods are <em>Running</em> but not <em>ready</em>, and that the old Pods are still serving. \"Running\" is a container state; readiness is a separate condition that the probe decides. The stalled rollout is the limits from the last lesson plus a readiness probe that never succeeds.</p>",
+      "assesses": [
+        "o2"
+      ],
+      "config": {
+        "situation": "<p>Deployment <code>web</code>, 3 replicas, default RollingUpdate (25% / 25%), progressDeadlineSeconds 600. Ten minutes ago the image changed from <code>v1</code> to <code>v2</code>.</p>",
+        "question": "Which conclusion is best supported by the evidence?",
+        "terminalLabel": "Simulated output - illustrative, not from a real cluster",
+        "evidence": [
+          {
+            "id": "e1",
+            "label": "Check the ReplicaSets",
+            "terminal": true,
+            "content": "NAME            DESIRED  CURRENT  READY\nweb-6b4f8c9d    3        3        3\nweb-7d9c5a1e    1        1        0",
+            "reading": "<p>The old ReplicaSet still has 3 ready Pods; the new one has 1 Pod that is not ready. Total 4 is the ceiling for 3 replicas with 25% surge.</p>",
+            "key": true
+          },
+          {
+            "id": "e2",
+            "label": "Check the Pods",
+            "terminal": true,
+            "content": "NAME                  READY  STATUS   RESTARTS\nweb-6b4f8c9d-aaaaa    1/1    Running  0\nweb-6b4f8c9d-bbbbb    1/1    Running  0\nweb-6b4f8c9d-ccccc    1/1    Running  0\nweb-7d9c5a1e-ddddd    0/1    Running  0",
+            "reading": "<p>The new Pod is Running, not crashing (0 restarts), but 0/1 ready.</p>",
+            "key": true
+          },
+          {
+            "id": "e3",
+            "label": "Read the Pod events",
+            "terminal": true,
+            "content": "Warning  Unhealthy  Readiness probe failed: HTTP probe failed with statuscode: 500",
+            "reading": "<p>The readiness probe itself is failing, with the application answering 500.</p>",
+            "key": true
+          },
+          {
+            "id": "e4",
+            "label": "Check the Deployment condition",
+            "terminal": true,
+            "content": "Progressing  False  ProgressDeadlineExceeded",
+            "reading": "<p>The controller reports that the rollout has not progressed within its deadline. It has not rolled back.</p>"
+          },
+          {
+            "id": "e5",
+            "label": "Check Pod restarts / image pull",
+            "terminal": true,
+            "content": "Image pulled successfully; container started; restarts: 0",
+            "reading": "<p>Rules out an image pull error and a crash loop.</p>"
+          }
+        ],
+        "conclusions": [
+          {
+            "id": "c1",
+            "label": "The new version starts but fails its readiness probe, so the rollout is stuck at the surge ceiling while old Pods serve.",
+            "verdict": "best",
+            "explanation": "Matches the ReplicaSet counts (ceiling reached), 0/1 ready, 0 restarts and a failing readiness probe with HTTP 500."
+          },
+          {
+            "id": "c2",
+            "label": "The cluster is out of capacity, so the new Pod cannot be scheduled.",
+            "verdict": "wrong",
+            "explanation": "The Pod is Running; a scheduling problem would show Pending."
+          },
+          {
+            "id": "c3",
+            "label": "The image cannot be pulled.",
+            "verdict": "wrong",
+            "explanation": "The image was pulled and the container started."
+          },
+          {
+            "id": "c4",
+            "label": "The rollout is just slow; wait longer.",
+            "verdict": "weak",
+            "explanation": "The deadline has already passed and the probe returns 500, which is not a transient wait. Waiting will not fix a failing probe."
+          }
+        ],
+        "assumptions": [
+          "Invented outputs, formatted like typical kubectl output but not produced by one.",
+          "Application behaviour (HTTP 500) is an illustrative bug."
+        ]
+      }
+    },
+    {
+      "type": "explain",
+      "title": "What readiness is, and how it drives rollouts",
+      "html": "<p>A <span class='term' data-term='readiness probe'>readiness probe</span> tells Kubernetes when a container is ready to accept traffic. <a data-source='k8s-probes-readiness'>[source]</a> While it fails, the kubelet marks the Pod not ready (it keeps the container running and keeps probing), and the EndpointSlice controller removes the Pod's IP from every matching Service. <a data-source='k8s-probes-readiness'>[source]</a> Readiness probes run for the whole life of the container, so a Pod can go unready later too. <a data-source='k8s-probes-task'>[source]</a></p><p>A <strong>liveness</strong> probe is different: it decides when to <em>restart</em> a container. A <strong>startup</strong> probe runs only at startup and holds off the others until it succeeds. <a data-source='k8s-probes-concepts'>[source]</a> Mixing them up is a classic mistake: a failing readiness probe never restarts anything.</p><p>Where it meets the Deployment: a Pod counts as <span class='term' data-term='ready'>ready</span> via the probe, and <span class='term' data-term='available'>available</span> when it has been ready for <code>minReadySeconds</code> (default 0). The Deployment's progress is measured by new Pods becoming ready or available. <a data-source='k8s-deploy-progress'>[source]</a> The docs list readiness probe failures among the causes of a Deployment getting stuck trying to deploy its newest ReplicaSet. <a data-source='k8s-deploy-failed'>[source]</a></p><p>The <span class='term' data-term='progressDeadlineSeconds'>progressDeadlineSeconds</span> field (default 600) is how long the controller waits before reporting that the rollout failed to progress. It surfaces as condition <code>Progressing</code> with status <code>False</code> and reason <code>ProgressDeadlineExceeded</code>. The controller keeps retrying; it does not roll back for you. If specified it must be greater than <code>minReadySeconds</code>. <a data-source='k8s-deploy-deadline'>[source]</a> Rolling back is a separate action you take. <a data-source='k8s-deploy-rollback'>[source]</a></p><p><strong>Probe fields and defaults</strong> (from the probe reference): <code>initialDelaySeconds</code> 0, <code>periodSeconds</code> 10, <code>timeoutSeconds</code> 1, <code>successThreshold</code> 1, <code>failureThreshold</code> 3. After <code>failureThreshold</code> failures in a row the container is not ready. For readiness the result counts as failed before the initial delay. <a data-source='k8s-probes-config'>[source]</a> For HTTP probes, status codes from 200 up to but not including 400 count as success. <a data-source='k8s-probes-task'>[source]</a></p><p><strong>Choosing settings: course decisions, not rules.</strong> The docs do not prescribe values for your app. A reasonable method for a simple web service: (1) point readiness at an endpoint that answers 200 only when this Pod can really serve requests; (2) pick <code>periodSeconds</code> small enough to notice problems (5 s is common) but not so small the probe is a load; (3) keep <code>failureThreshold</code> at 3 unless the endpoint is flaky; (4) use <code>initialDelaySeconds</code> or a startup probe so a slow start is not counted as failures; (5) set <code>progressDeadlineSeconds</code> comfortably above normal start time (plus <code>minReadySeconds</code>), so a healthy slow rollout is not reported as failed. Whether the readiness endpoint should check dependencies such as a database is a trade-off: the docs describe a readiness probe that additionally checks required backend services, which protects users from a Pod that cannot do its job but can make every Pod unready when a dependency blips. <a data-source='k8s-probes-concepts'>[source]</a></p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Show how a readiness probe sets the timeline from container start to receiving traffic, with the settings that control each interval.",
+      "alt": "Timeline with four stages from left to right: container starts; initialDelaySeconds wait with no probes; probes every periodSeconds, failing, Pod not ready and receives no traffic; first success, Pod ready and added to Service endpoints; after minReadySeconds, Pod counts as available to the rollout. A note says the earliest time to unready after a failure is about failureThreshold times periodSeconds.",
+      "html": "<figure><svg viewBox='0 0 560 200' role='img' aria-labelledby='l3v-t l3v-d'><title id='l3v-t'>From container start to available</title><desc id='l3v-d'>Container starts, initial delay, probes failing then succeeding, ready, then minReadySeconds until available.</desc><rect class='n-plain' x='10' y='40' width='100' height='50' rx='8'/><text class='ts' x='18' y='62'>container</text><text class='ts' x='18' y='78'>starts</text><rect class='n-plain' x='125' y='40' width='110' height='50' rx='8'/><text class='ts' x='133' y='62'>initialDelay</text><text class='ts' x='133' y='78'>no probes</text><rect class='n-warn' x='250' y='40' width='120' height='50' rx='8'/><text class='ts' x='258' y='62'>probes fail ✗</text><text class='ts' x='258' y='78'>not ready</text><rect class='n1' x='385' y='40' width='80' height='50' rx='8'/><text class='ts' x='393' y='62'>probe ok ✓</text><text class='ts' x='393' y='78'>READY</text><rect class='n2' x='480' y='40' width='70' height='50' rx='8'/><text class='ts' x='486' y='62'>+minReady</text><text class='ts' x='486' y='78'>AVAILABLE</text><line class='edge' x1='110' y1='65' x2='125' y2='65' marker-end='url(#arrow)'/><line class='edge' x1='235' y1='65' x2='250' y2='65' marker-end='url(#arrow)'/><line class='edge' x1='370' y1='65' x2='385' y2='65' marker-end='url(#arrow)'/><line class='edge' x1='465' y1='65' x2='480' y2='65' marker-end='url(#arrow)'/><text class='t' x='10' y='130'>Not ready: removed from Service endpoints, no traffic.</text><text class='t' x='10' y='152'>Ready: added to endpoints. Available: counted by the rollout.</text><text class='ts' x='10' y='178'>Probe cadence: every periodSeconds; ~failureThreshold × periodSeconds to turn unready.</text></svg><figcaption>Illustrative diagram drawn for this course from the probe documentation; stage names carry text and symbols, not colour alone. The failure-time rule is simple arithmetic, not a timing guarantee. <a data-source='k8s-probes-config'>[source]</a></figcaption></figure>"
+    },
+    {
+      "type": "activity",
+      "id": "l3-a2",
+      "widget": "classify",
+      "instructions": "<p>Decide, for each consequence, which probe it belongs to. Argue before you check: what happens to the Pod when this probe fails?</p>",
+      "debrief": "<p>Readiness is about <em>traffic</em> (and therefore rollouts); liveness is about <em>restarts</em>; startup is about <em>slow starts</em>.</p>",
+      "assesses": [
+        "o3"
+      ],
+      "config": {
+        "categories": [
+          {
+            "id": "ready",
+            "label": "Readiness probe"
+          },
+          {
+            "id": "live",
+            "label": "Liveness probe"
+          },
+          {
+            "id": "start",
+            "label": "Startup probe"
+          }
+        ],
+        "items": [
+          {
+            "id": "i1",
+            "html": "On repeated failure the kubelet restarts the container.",
+            "category": "live",
+            "feedback": "Liveness decides when to restart a container."
+          },
+          {
+            "id": "i2",
+            "html": "On failure the Pod is removed from the endpoints of matching Services.",
+            "category": "ready",
+            "feedback": "Readiness controls whether the Pod receives Service traffic."
+          },
+          {
+            "id": "i3",
+            "html": "A new Pod that never passes it blocks a rolling update from finishing.",
+            "category": "ready",
+            "feedback": "New Pods must become ready/available for the rollout to progress."
+          },
+          {
+            "id": "i4",
+            "html": "Runs only at startup, and holds off the other probes until it succeeds.",
+            "category": "start",
+            "feedback": "The startup probe gives a slow application time to initialise."
+          },
+          {
+            "id": "i5",
+            "html": "A deadlocked app that still holds its port open should be caught by this to recover.",
+            "category": "live",
+            "feedback": "Liveness catches a process that is running but cannot make progress."
+          },
+          {
+            "id": "i6",
+            "html": "Runs for the whole life of the container, and a Pod can become unready again later.",
+            "category": "ready",
+            "feedback": "Readiness probes run during the container's whole lifecycle."
+          }
+        ],
+        "debrief": "<p>If you put a failing check in the wrong probe you either restart healthy Pods (liveness) or keep sending traffic to a broken Pod (no readiness).</p>"
+      }
+    },
+    {
+      "type": "worked",
+      "title": "Choosing settings for a simple web service",
+      "steps": [
+        {
+          "html": "<p><strong>Requirements (course scenario).</strong> A web API on port 8080 takes about 20 s to start, then answers <code>GET /healthz</code> with 200 only when its cache is loaded. Normal deploys must keep full capacity; a bad version should be detected within about 5 minutes.</p>"
+        },
+        {
+          "prompt": "<p>Which probe, and which endpoint?</p>",
+          "selfExplain": true,
+          "html": "<p>A readiness probe: <code>httpGet</code> <code>/healthz</code> port 8080. The endpoint answers 200 only when the Pod can serve. This answers the question \"should this Pod get traffic?\" and gates the rollout.</p>"
+        },
+        {
+          "prompt": "<p>Pick <code>initialDelaySeconds</code>, <code>periodSeconds</code>, <code>failureThreshold</code>.</p>",
+          "selfExplain": true,
+          "html": "<p>Start takes ~20 s. <code>initialDelaySeconds: 10</code>, <code>periodSeconds: 5</code>, <code>failureThreshold: 3</code>. Early failures before ~20 s are expected and harmless for readiness (the Pod is simply not ready yet). Later, a failing app turns unready after about 3 × 5 = 15 s. Course decision; not documented defaults.</p>"
+        },
+        {
+          "prompt": "<p>Pick the rollout parameters, remembering the limits from lesson 2.</p>",
+          "selfExplain": true,
+          "html": "<pre><code>strategy:\n  rollingUpdate:\n    maxSurge: 1\n    maxUnavailable: 0\nminReadySeconds: 10\nprogressDeadlineSeconds: 300</code></pre><p>maxUnavailable 0 keeps capacity; maxSurge 1 gives the controller room to start one new Pod at a time. <code>minReadySeconds: 10</code> means a Pod must stay ready 10 s before it is counted available. The deadline of 300 s is greater than minReadySeconds (required) and about 15 times the 20 s start time, so a healthy rollout is not reported failed but a stalled one is flagged in 5 minutes.</p>"
+        },
+        {
+          "prompt": "<p>Check: what happens if v2 returns 500 on <code>/healthz</code> forever?</p>",
+          "selfExplain": true,
+          "html": "<p>Pods never become ready, so the rollout stalls at ceiling 4 / floor 3 with 3 old Pods serving. After 300 s the Progressing condition reports ProgressDeadlineExceeded. The controller does not roll back; you roll back or fix.</p>"
+        }
+      ],
+      "result": "<p>Method: probe what \"can serve\" means, size the delays to the real start time, set the deadline a comfortable multiple above it, and re-run the stall check.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l3-pg",
+      "level": "guided",
+      "setting": "offline",
+      "task": "<p>This snippet has two problems for a service that takes ~30 s to start and must not lose capacity during deploys:</p><pre><code>livenessProbe:\n  httpGet: { path: /healthz, port: 8080 }\n  initialDelaySeconds: 5\n  periodSeconds: 5\nstrategy:\n  rollingUpdate: { maxSurge: 0, maxUnavailable: 1 }\nprogressDeadlineSeconds: 20</code></pre><p>Name the problems and write the corrected fragment.</p>",
+      "hints": [
+        "What happens to a container whose liveness probe fails before it finishes starting?",
+        "What does maxUnavailable 1 allow? Is the stall safe?",
+        "Is the deadline longer than the start time?"
+      ],
+      "rubric": [
+        "Liveness with short delay may restart a still-starting app; use a readiness probe/startup probe or a longer delay",
+        "maxUnavailable 1 allows capacity loss; use maxUnavailable 0 with maxSurge ≥ 1",
+        "Deadline 20 s is shorter than the 30 s start; raise it well above"
+      ],
+      "solution": "<p>Problems: (1) only a liveness probe with a 5 s delay: it can restart the container while it is still starting, and nothing marks it ready/unready for traffic; (2) maxUnavailable: 1 with maxSurge: 0 lets capacity drop during a deploy; (3) the 20 s deadline is shorter than the 30 s start, so healthy rollouts would be reported as failed. Fix: add <code>readinessProbe</code> (httpGet /healthz, periodSeconds 5, failureThreshold 3), a startup probe or longer initial delay for any liveness probe, <code>maxSurge: 1, maxUnavailable: 0</code>, and <code>progressDeadlineSeconds: 300</code>.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l3-pi",
+      "level": "independent",
+      "setting": "offline",
+      "task": "<p>Write a complete rollout configuration (readiness probe, strategy, minReadySeconds, progressDeadlineSeconds) for a web service with 6 replicas that starts in 45 s and whose <code>/ready</code> endpoint returns 200 only after warming a cache. Justify each number in one line and state the ceiling and floor. No hints.</p>",
+      "rubric": [
+        "Readiness probe httpGet /ready with sensible delays vs 45 s start",
+        "Ceiling and floor computed correctly from your chosen surge/unavailable",
+        "minReadySeconds is less than progressDeadlineSeconds",
+        "Deadline is well above 45 s",
+        "Each number has a justification"
+      ],
+      "model": "<p>Example: readinessProbe httpGet /ready:8080, initialDelaySeconds 20, periodSeconds 5, failureThreshold 3; maxSurge 2 (ceiling 8), maxUnavailable 0 (floor 6); minReadySeconds 10; progressDeadlineSeconds 300 (> 45 + 10, with margin; must exceed minReadySeconds). Alternatives are valid: a startupProbe instead of initialDelay, or maxUnavailable 1 if brief capacity loss is acceptable. Numbers are course decisions, not documented requirements.</p>"
+    },
+    {
+      "type": "check",
+      "html": "<p>First attempts count as performance; later attempts are practice.</p>",
+      "questions": [
+        {
+          "id": "l3-c1",
+          "kind": "mcq",
+          "prompt": "A new Pod is Running, 0 restarts, but 0/1 ready, and the rollout is stuck. Which is the most likely cause?",
+          "options": [
+            "A failing liveness probe",
+            "A failing readiness probe",
+            "An image pull error"
+          ],
+          "correct": 1,
+          "explanation": "Running with 0/1 ready and no restarts points at readiness. A failing liveness probe would restart the container; an image pull error would prevent it from running.",
+          "feedback": {
+            "0": "Liveness failures cause restarts; there are none.",
+            "2": "The container is running, so the image was pulled."
+          },
+          "assesses": [
+            "o2"
+          ]
+        },
+        {
+          "id": "l3-c2",
+          "kind": "mcq",
+          "prompt": "What does the Deployment controller do when progressDeadlineSeconds expires on a stalled rollout?",
+          "options": [
+            "Rolls back automatically",
+            "Reports Progressing=False with reason ProgressDeadlineExceeded, and keeps retrying",
+            "Deletes the new ReplicaSet"
+          ],
+          "correct": 1,
+          "explanation": "It reports the failure in the status condition and keeps retrying; rolling back is a separate action.",
+          "feedback": {
+            "0": "Automatic rollback is not done by the controller.",
+            "2": "The new ReplicaSet is not deleted."
+          },
+          "assesses": [
+            "o2"
+          ]
+        },
+        {
+          "id": "l3-c3",
+          "kind": "mcq",
+          "prompt": "Which setting pair is invalid according to the docs?",
+          "options": [
+            "progressDeadlineSeconds 300, minReadySeconds 10",
+            "progressDeadlineSeconds 30, minReadySeconds 60",
+            "progressDeadlineSeconds 600, minReadySeconds 0"
+          ],
+          "correct": 1,
+          "explanation": "The deadline, if specified, must be greater than minReadySeconds.",
+          "feedback": {
+            "0": "300 > 10, valid.",
+            "2": "600 > 0, valid (these are the defaults)."
+          },
+          "assesses": [
+            "o3"
+          ]
+        },
+        {
+          "id": "l3-c4",
+          "kind": "open",
+          "prompt": "In your own words: why does a failing readiness probe stall a rolling update but not cause an outage when maxUnavailable is 0?",
+          "rubric": [
+            "New Pods not ready never count as available",
+            "The controller can create no more new Pods (surge) and cannot remove old ones",
+            "Old Pods keep serving"
+          ],
+          "model": "<p>New Pods stay not ready, so the available count stays at the floor and the surge ceiling is used up; the controller has no legal move. The old Pods remain ready and serve traffic, so there is no outage, only a stalled rollout that reports ProgressDeadlineExceeded after the deadline.</p>",
+          "assesses": [
+            "o2",
+            "o3"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l3-t",
+      "task": "<p>New context: an internal reporting service has 2 replicas. Its start-up loads a 90-second report cache. The team sets <code>readinessProbe: httpGet /healthz, periodSeconds: 5, failureThreshold: 3</code> and leaves everything else default. Their deploys now often end with ProgressDeadlineExceeded even though the app eventually works. Explain why, with numbers, and propose two changes with their trade-offs. Do not run anything.</p>",
+      "rubric": [
+        "Notes default progressDeadlineSeconds 600 so this alone would not fail at 90 s start; identifies the plausible cause as readiness never succeeding or the probe/endpoint not matching real readiness, OR flags that more information is needed",
+        "Computes the surge/unavailable limits for 2 replicas (ceiling 3, floor 2)",
+        "Proposes a startup probe or initialDelay and/or an adequate deadline",
+        "Names trade-offs"
+      ],
+      "model": "<p>With defaults (progressDeadlineSeconds 600), a 90 s start should not by itself exceed the deadline, so the course reasoning: either /healthz returns non-200 for longer than 600 s (a real bug, or it waits on something slow) or the endpoint does not reflect readiness. Limits: ceiling 3, floor 2, one new Pod at a time, so a 90 s start per Pod means roughly 2 × 90 s of serial rollout, still within 600 s. Changes: (1) use a startupProbe or initialDelaySeconds so early failures are not misread (trade-off: slower detection of an immediately broken version); (2) make /healthz return 200 only when the cache is loaded and test it, or set progressDeadlineSeconds higher (trade-off: slower failure reporting). The point is the method; exact figures are course reasoning.</p>",
+      "assesses": [
+        "o2",
+        "o3"
+      ]
+    },
+    {
+      "type": "reflect",
+      "id": "l3-r",
+      "prompt": "Explain in your own words how a readiness probe, maxUnavailable and progressDeadlineSeconds together determine whether a bad version causes an outage, a stall, or a reported failure."
+    }
+  ],
+  "sources": [
+    {
+      "id": "k8s-probes-concepts",
+      "title": "Liveness, Readiness, and Startup Probes (concepts)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/",
+      "accessed": "2026-10-20",
+      "note": "Types of probe; when to use each; readiness removes Pod from EndpointSlices."
+    },
+    {
+      "id": "k8s-probes-readiness",
+      "title": "Probes concepts: Readiness probe",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/#readiness-probe",
+      "accessed": "2026-10-20"
+    },
+    {
+      "id": "k8s-probes-config",
+      "title": "Probes concepts: Configure probes (field defaults)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/probes/#configure-probes",
+      "accessed": "2026-10-20",
+      "note": "initialDelaySeconds 0, periodSeconds 10, timeoutSeconds 1, successThreshold 1, failureThreshold 3. Anchor taken from page headings."
+    },
+    {
+      "id": "k8s-probes-task",
+      "title": "Configure Liveness, Readiness and Startup Probes (task)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes",
+      "accessed": "2026-10-20",
+      "note": "Readiness probes run during the whole container lifecycle; HTTP success 200 to <400."
+    },
+    {
+      "id": "k8s-deploy-update",
+      "title": "Deployments: Updating a Deployment (rollout status message)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment",
+      "accessed": "2026-10-20"
+    },
+    {
+      "id": "k8s-deploy-progress",
+      "title": "Deployments: Deployment status (progressing, complete)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#deployment-status",
+      "accessed": "2026-10-20"
+    },
+    {
+      "id": "k8s-deploy-failed",
+      "title": "Deployments: Failed Deployment",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#failed-deployment",
+      "accessed": "2026-10-20",
+      "note": "Lists readiness probe failures among causes of a stuck rollout."
+    },
+    {
+      "id": "k8s-deploy-deadline",
+      "title": "Deployments: Progress Deadline Seconds",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#progress-deadline-seconds",
+      "accessed": "2026-10-20",
+      "note": "Default 600; must exceed minReadySeconds; controller keeps retrying."
+    },
+    {
+      "id": "k8s-deploy-rollback",
+      "title": "Deployments: Rolling Back a Deployment",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment",
+      "accessed": "2026-10-20"
+    },
+    {
+      "id": "l3-ped",
+      "title": "Course scenarios, settings and simulated outputs",
+      "kind": "pedagogical",
+      "note": "All numbers (20 s start, 5 s period, 300 s deadline, 90 s cache) and all kubectl-style outputs are invented for teaching."
+    }
+  ],
+  "next": "<p>You have the three skills: predict the controller, explain a stall, choose settings. The capstone asks you to review a risky rollout and defend your numbers.</p>"
+}

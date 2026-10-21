@@ -363,3 +363,17 @@ input[type="range"] { width: 12em; accent-color: var(--accent-2); }
 .widget figure svg { min-width: 0; }
 .brand { min-width: 0; max-width: 40vw; overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 600px) { .brand { max-width: calc(100vw - 190px); } }
+
+/* ---- Visual options (course.json theme.*), limited to choices with a teaching purpose ---- */
+:root[data-type="compact"] body { font-size: 15px; }
+:root[data-type="large"] body { font-size: 18px; line-height: 1.7; }
+:root[data-type="large"] svg .ts { font-size: 13px; }
+:root[data-layout="reading"] main { max-width: 760px; }
+:root[data-layout="wide"] main { max-width: 1180px; }
+:root[data-diagram="outline"] svg .n1, :root[data-diagram="outline"] svg .n2, :root[data-diagram="outline"] svg .n3, :root[data-diagram="outline"] svg .n4 { fill: var(--surface); stroke-width: 2; }
+:root[data-diagram="high-contrast"] svg .edge { stroke: var(--text); stroke-width: 2.2; }
+:root[data-diagram="high-contrast"] svg .n1, :root[data-diagram="high-contrast"] svg .n2, :root[data-diagram="high-contrast"] svg .n3, :root[data-diagram="high-contrast"] svg .n4, :root[data-diagram="high-contrast"] svg .n-plain { fill: var(--surface); stroke: var(--text); stroke-width: 2.2; }
+:root[data-code="dark"] pre, :root[data-code="dark"] .cmd, :root[data-code="dark"] .output { background: #111418; color: #e6edf3; }
+:root[data-code="dark"] pre .c { color: #9aa7b4; }
+:root[data-code="light"] pre, :root[data-code="light"] .cmd, :root[data-code="light"] .output { background: #f6f8fa; color: #1f2328; }
+:root[data-code="light"] pre .c { color: #57606a; }

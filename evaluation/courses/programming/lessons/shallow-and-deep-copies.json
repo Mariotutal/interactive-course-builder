@@ -1,0 +1,390 @@
+{
+  "format": 1,
+  "id": "shallow-and-deep-copies",
+  "title": "Shallow and deep copies",
+  "summary": "Why copying a list of lists still shares the inner lists, and when copy.deepcopy is the right tool.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 25,
+  "outcomes": [
+    "o3",
+    "o1"
+  ],
+  "prerequisites": [
+    "names-and-mutation",
+    "functions-and-accidental-mutation"
+  ],
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>You build a 3x2 grid with <code>grid = [[None] * 2] * 3</code>, set <code>grid[0][0] = 5</code>, and the first cell of <em>every</em> row changes. The Python FAQ lists exactly this as a common trap <a data-source=\"faq-multi\">[FAQ]</a>. Another time you carefully copied a configuration with <code>.copy()</code> and edited the copy, and the original still changed. Both bugs share one cause.</p>"
+    },
+    {
+      "type": "activity",
+      "id": "l3-classify",
+      "widget": "classify",
+      "config": {
+        "title": "Does the change leak back into <code>a</code>?",
+        "intro": "<p>Each snippet starts with <code>a = [[1], [2]]</code> and then runs the code shown. Decide whether printing <code>a</code> afterwards shows a change. Predict first.</p>",
+        "categories": [
+          {
+            "id": "leaks",
+            "label": "a changes (leak)"
+          },
+          {
+            "id": "safe",
+            "label": "a unchanged"
+          }
+        ],
+        "items": [
+          {
+            "id": "i1",
+            "html": "<code>b = a[:]; b[0].append(9)</code>",
+            "category": "leaks",
+            "feedback": "The slice is a new outer list, but b[0] is the same inner list as a[0]. Local run: a is [[1, 9], [2]]."
+          },
+          {
+            "id": "i2",
+            "html": "<code>b = a[:]; b.append([3])</code>",
+            "category": "safe",
+            "feedback": "append changes the outer list of b only, which is separate from a's. Local run: a is [[1], [2]]."
+          },
+          {
+            "id": "i3",
+            "html": "<code>b = a[:]; b[1] = [5]</code>",
+            "category": "safe",
+            "feedback": "Item assignment on b rebinds a slot in b's own outer list. a's slot is untouched."
+          },
+          {
+            "id": "i4",
+            "html": "<code>b = copy.deepcopy(a); b[0].append(9)</code>",
+            "category": "safe",
+            "feedback": "deepcopy copies the inner lists too."
+          },
+          {
+            "id": "i5",
+            "html": "<code>b = list(a); b[0][0] = 7</code>",
+            "category": "leaks",
+            "feedback": "list(a) is a shallow copy; b[0] and a[0] are one object. Local run: a is [[7], [2]]."
+          },
+          {
+            "id": "i6",
+            "html": "<code>b = [row[:] for row in a]; b[0].append(9)</code>",
+            "category": "safe",
+            "feedback": "Each inner list was copied, so nothing is shared."
+          }
+        ],
+        "debrief": "<p>The rule: a shallow copy shares every item it holds. Changes that replace or add items in the outer list stay local; changes that mutate a shared inner object leak.</p>"
+      },
+      "instructions": "Sort every snippet, and say for each one which object is shared.",
+      "debrief": "<p>You should have noticed the dividing line: does the change mutate an inner object that both lists hold?</p>",
+      "assesses": [
+        "o3"
+      ]
+    },
+    {
+      "type": "intuition",
+      "html": "<p>A shallow copy is like photocopying the <strong>table of contents</strong> of a filing cabinet: you now hold your own list of drawers, but every entry still points at the same physical folders. A deep copy is photocopying the folders too.</p>",
+      "limits": "Real photocopies do not create live references. In Python a shallow copy genuinely holds references to the original items, so mutating a shared item is visible from both containers, while replacing an item in one container is not. Also, deep copy is not always desirable (see the explanation)."
+    },
+    {
+      "type": "visual",
+      "purpose": "Show which objects a shallow and a deep copy share with the original.",
+      "alt": "Three stacked diagrams of the list [[1, 2], [3, 4]]. The original has an outer list pointing to inner lists A and B. A shallow copy has a new outer list whose arrows point to the same A and B. A deep copy has a new outer list pointing to new inner lists A prime and B prime.",
+      "html": "<figure><svg viewBox=\"0 0 660 290\" role=\"img\" aria-label=\"Three rows. Row 1: orig is an outer list holding two arrows to inner lists A and B. Row 2: a shallow copy sh is a different outer list whose two arrows point to the same inner lists A and B. Row 3: a deep copy dp is a different outer list whose arrows point to new inner lists A prime and B prime.\">\n<rect class=\"n3\" x=\"20\" y=\"20\" width=\"60\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"50\" y=\"40\" text-anchor=\"middle\">orig</text>\n<rect class=\"n1\" x=\"120\" y=\"20\" width=\"110\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"175\" y=\"40\" text-anchor=\"middle\">outer list</text>\n<rect class=\"n1\" x=\"330\" y=\"10\" width=\"110\" height=\"26\" rx=\"6\"/><text class=\"t\" x=\"385\" y=\"28\" text-anchor=\"middle\">A [1, 2]</text>\n<rect class=\"n1\" x=\"330\" y=\"44\" width=\"110\" height=\"26\" rx=\"6\"/><text class=\"t\" x=\"385\" y=\"62\" text-anchor=\"middle\">B [3, 4]</text>\n<path class=\"edge\" d=\"M80 35 L118 35\" marker-end=\"url(#arrow)\"/><path class=\"edge\" d=\"M230 30 L328 23\" marker-end=\"url(#arrow)\"/><path class=\"edge\" d=\"M230 40 L328 57\" marker-end=\"url(#arrow)\"/>\n<rect class=\"n3\" x=\"20\" y=\"110\" width=\"60\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"50\" y=\"130\" text-anchor=\"middle\">sh</text>\n<rect class=\"n4\" x=\"120\" y=\"110\" width=\"110\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"175\" y=\"130\" text-anchor=\"middle\">new outer</text>\n<path class=\"edge\" d=\"M80 125 L118 125\" marker-end=\"url(#arrow)\"/><path class=\"edge dashed\" d=\"M230 118 L330 28\" marker-end=\"url(#arrow)\"/><path class=\"edge dashed\" d=\"M230 132 L330 60\" marker-end=\"url(#arrow)\"/>\n<text class=\"tm\" x=\"470\" y=\"125\">shallow copy: new outer, SAME inner lists (dashed)</text>\n<rect class=\"n3\" x=\"20\" y=\"210\" width=\"60\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"50\" y=\"230\" text-anchor=\"middle\">dp</text>\n<rect class=\"n2\" x=\"120\" y=\"210\" width=\"110\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"175\" y=\"230\" text-anchor=\"middle\">new outer</text>\n<rect class=\"n2\" x=\"330\" y=\"200\" width=\"110\" height=\"26\" rx=\"6\"/><text class=\"t\" x=\"385\" y=\"218\" text-anchor=\"middle\">A' [1, 2]</text>\n<rect class=\"n2\" x=\"330\" y=\"234\" width=\"110\" height=\"26\" rx=\"6\"/><text class=\"t\" x=\"385\" y=\"252\" text-anchor=\"middle\">B' [3, 4]</text>\n<path class=\"edge\" d=\"M80 225 L118 225\" marker-end=\"url(#arrow)\"/><path class=\"edge\" d=\"M230 220 L328 213\" marker-end=\"url(#arrow)\"/><path class=\"edge\" d=\"M230 230 L328 247\" marker-end=\"url(#arrow)\"/>\n<text class=\"tm\" x=\"460\" y=\"225\">deep copy: everything new</text>\n</svg><figcaption>Shallow vs deep copy of <code>[[1, 2], [3, 4]]</code>. Course-drawn diagram based on the definitions in the copy module documentation. <a data-source=\"copy-mod\">[source]</a></figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "title": "Definitions, tools and the limits of deepcopy",
+      "html": "<p>The copy module defines the terms precisely: a <span class=\"term\" data-term=\"shallow copy\">shallow copy</span> constructs a new compound object and then (to the extent possible) inserts references into it to the objects found in the original; a <span class=\"term\" data-term=\"deep copy\">deep copy</span> constructs a new compound object and then, recursively, inserts copies of the objects found in the original <a data-source=\"copy-mod\">[copy module]</a>.</p><p>For a list, the built-in ways of making a shallow copy are <code>s.copy()</code>, which the docs say is equivalent to <code>s[:]</code> <a data-source=\"seq-ops\">[sequence types]</a>, and the module-level <code>copy.copy(s)</code>. I also use <code>list(s)</code>; <strong>not verified in the docs I read</strong> as a listed copy idiom, but I confirmed locally that it makes a new outer list sharing the items.</p><div class=\"output\" data-label=\"Output from a local python3 run (3.14.5), not produced by this page\"><pre>orig = [[1, 2], [3, 4]]\nsh = orig.copy(); dp = copy.deepcopy(orig)\norig[0].append(99)\nprint(orig)   # [[1, 2, 99], [3, 4]]\nprint(sh)     # [[1, 2, 99], [3, 4]]   inner list shared\nprint(dp)     # [[1, 2], [3, 4]]       independent\nprint(orig is sh, [i is j for i, j in zip(orig, sh)])  # False [True, True]</pre></div><p>The same mechanism produces the grid trap. The FAQ explains that replicating a list with <code>*</code> does not create copies, only references to the existing objects <a data-source=\"faq-multi\">[FAQ]</a>; the library reference gives the same warning for <code>[[]] * 3</code> <a data-source=\"seq-ops\">[sequence types]</a>. The fix is a comprehension that builds a new inner list per row.</p><div class=\"output\" data-label=\"Output from a local python3 run (3.14.5), not produced by this page\"><pre>A = [[None] * 2] * 3\nA[0][0] = 5\nprint(A)  # [[5, None], [5, None], [5, None]]\nB = [[None] * 2 for _ in range(3)]\nB[0][0] = 5\nprint(B)  # [[5, None], [None, None], [None, None]]</pre></div><p><strong>When not to deep-copy.</strong> The documentation lists two problems: recursive objects may cause a recursive loop (deepcopy handles this with a memo of what it already copied), and because deep copy copies everything it may copy too much, such as data intended to be shared between copies <a data-source=\"copy-mod\">[copy module]</a>. Simplification: for this course, copying means lists of lists and dictionaries of lists; user-defined classes can customise copying, which is out of scope.</p>"
+    },
+    {
+      "type": "worked",
+      "title": "Fix a copied configuration",
+      "html": "<p>Goal: make a variant of <code>cfg</code> with an extra tag, leaving <code>cfg</code> untouched. Outputs from a local python3 run.</p><pre><code>cfg = {'tags': ['a'], 'opts': {'v': 1}}\nc1 = cfg.copy()\nc1['tags'].append('b')\nprint(cfg)</code></pre>",
+      "steps": [
+        {
+          "prompt": "Predict",
+          "html": "<p><code>cfg.copy()</code> is a shallow copy: a new dict, same values. <code>c1['tags']</code> is the same list as <code>cfg['tags']</code>.</p>"
+        },
+        {
+          "prompt": "Result of the buggy code",
+          "html": "<p>Printed: <code>{'tags': ['a', 'b'], 'opts': {'v': 1}}</code>. The original changed.</p>",
+          "selfExplain": true
+        },
+        {
+          "prompt": "Pick the minimal fix",
+          "html": "<p>Only <code>tags</code> is mutated, so you could copy just that: <code>c1['tags'] = cfg['tags'] + ['b']</code>. This avoids copying <code>opts</code> needlessly.</p>",
+          "selfExplain": true
+        },
+        {
+          "prompt": "Or deep copy",
+          "html": "<p><code>c2 = copy.deepcopy(cfg)</code> then <code>c2['tags'].append('b')</code>: original stays <code>{'tags': ['a'], 'opts': {'v': 1}}</code> (local run).</p>"
+        }
+      ],
+      "result": "<p>Decision rule: copy at the depth at which you will mutate. Shallow suffices if you only replace top-level items; deep if you mutate nested ones; a targeted copy if only one part changes.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "l3-predict",
+      "prompt": "Predict the output.<pre><code>m = [1, [2, 3]]\nm2 = m[:]\nm2[0] = 10\nm2[1][0] = 20\nprint(m)</code></pre>",
+      "options": [
+        "[1, [2, 3]]",
+        "[10, [20, 3]]",
+        "[1, [20, 3]]",
+        "[10, [2, 3]]"
+      ],
+      "correct": 2,
+      "feedback": {
+        "0": "This assumes the slice is a fully independent copy. Item 1 is a shared inner list.",
+        "1": "m2[0] = 10 rebinds a slot in m2's own outer list; m is not affected.",
+        "3": "Reversed: slot 0 is not shared, the inner list is."
+      },
+      "explanation": "The outer list is new, so replacing slot 0 stays local, but m[1] and m2[1] are the same inner list, so item assignment through it leaks. Local run output: [1, [20, 3]]."
+    },
+    {
+      "type": "activity",
+      "id": "l3-trace",
+      "widget": "code-trace",
+      "config": {
+        "title": "Trace a shallow copy",
+        "code": "orig = [[1, 2], [3, 4]]\nsh = orig.copy()\norig[0].append(99)\nprint(sh)",
+        "steps": [
+          {
+            "line": 1,
+            "title": "Create nested list",
+            "state": {
+              "orig": "outer O -> [A, B]",
+              "A": "[1, 2]",
+              "B": "[3, 4]"
+            },
+            "html": "<p>One outer list holds references to A and B.</p>"
+          },
+          {
+            "line": 2,
+            "title": "Shallow copy",
+            "state": {
+              "orig": "O -> [A, B]",
+              "sh": "O2 -> [A, B]"
+            },
+            "html": "<p>O2 is new, but it holds the same A and B.</p>",
+            "predict": {
+              "prompt": "Is sh[0] the same object as orig[0]?",
+              "options": [
+                "Yes",
+                "No"
+              ],
+              "correct": 0,
+              "explanation": "A shallow copy inserts references to the original's items."
+            }
+          },
+          {
+            "line": 3,
+            "title": "Mutate A through orig",
+            "state": {
+              "orig": "O -> [A, B]",
+              "sh": "O2 -> [A, B]",
+              "A": "[1, 2, 99]"
+            },
+            "html": "<p>A is mutated; both outer lists point to A.</p>",
+            "predict": {
+              "prompt": "What does sh[0] show now?",
+              "options": [
+                "[1, 2]",
+                "[1, 2, 99]"
+              ],
+              "correct": 1,
+              "explanation": "sh[0] is A, and A was mutated."
+            }
+          },
+          {
+            "line": 4,
+            "title": "Print",
+            "state": {
+              "sh": "[[1, 2, 99], [3, 4]]"
+            },
+            "html": "<p>This matches my local python3 run.</p>"
+          }
+        ],
+        "assumptions": [
+          "The widget displays a hand-written trace; it does not run Python.",
+          "O, O2, A and B are labels invented for the lesson."
+        ]
+      },
+      "instructions": "Predict each step; then replace .copy() with copy.deepcopy in your head and say which step changes.",
+      "debrief": "<p>You should see that the divergence happens at line 2: what the copy holds, not what you later do with it.</p>",
+      "assesses": [
+        "o3"
+      ]
+    },
+    {
+      "type": "practice",
+      "id": "l3-guided",
+      "level": "guided",
+      "setting": "in-app",
+      "task": "<p>Fix the grid builder so that setting one cell changes only that cell. Predict the buggy output first; run both in your Python.</p><pre><code>def build_grid(n):\n    row = [0] * n\n    return [row] * n\n\nG = build_grid(3)\nG[1][1] = 7\nprint(G)</code></pre>",
+      "hints": [
+        "How many distinct list objects are in the grid?",
+        "You need a new row object on every iteration."
+      ],
+      "rubric": [
+        "I predicted three identical rows",
+        "My fix creates a new row for each row",
+        "I verified in my own Python"
+      ],
+      "solution": "<p>Buggy output (local run): <code>[[0, 7, 0], [0, 7, 0], [0, 7, 0]]</code>. Fix: <code>return [[0] * n for _ in range(n)]</code>, giving <code>[[0, 0, 0], [0, 7, 0], [0, 0, 0]]</code>.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l3-independent",
+      "level": "independent",
+      "setting": "offline",
+      "task": "<p>Build a three-level structure (a list containing a dict that contains a list). Make a shallow copy and a deep copy. Mutate the innermost list through the original, predict what each copy shows, then verify with <code>is</code> and by printing. Finally write one sentence on a case where deepcopy would copy too much.</p>",
+      "hints": [],
+      "rubric": [
+        "Prediction written first",
+        "Used is on at least one inner object to show sharing",
+        "Shallow copy leaks, deep copy does not",
+        "Sentence names data meant to be shared"
+      ],
+      "model": "<p>The shallow copy shows the mutated inner list; the deep copy does not. deepcopy copies too much when the structure holds something that should stay shared, such as a reference to a shared configuration or cache; the docs describe this problem <a data-source=\"copy-mod\">[copy module]</a>.</p>",
+      "externalFeedback": "Your interpreter's output is the check; a peer can review your reasoning about which objects are shared."
+    },
+    {
+      "type": "check",
+      "html": "<p>Retrieval and application.</p>",
+      "questions": [
+        {
+          "id": "l3-q1",
+          "prompt": "What is a shallow copy of a list?",
+          "options": [
+            "A new list holding references to the same items",
+            "A new list holding copies of every item",
+            "The same list under a new name",
+            "A list with only the first level of items"
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "That is a deep copy.",
+            "2": "That is plain assignment.",
+            "3": "A shallow copy has all the items; it just does not copy them."
+          },
+          "explanation": "Definition from the copy module <a data-source=\"copy-mod\">[copy module]</a>.",
+          "assesses": [
+            "o3"
+          ]
+        },
+        {
+          "id": "l3-q2",
+          "prompt": "<code>a = [[1], [2]]; b = a.copy(); b[0] = [5]</code>. What is a?",
+          "options": [
+            "[[1], [2]]",
+            "[[5], [2]]",
+            "[[1, 5], [2]]",
+            "Error"
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "This replaces slot 0 of b's own outer list; it does not mutate the shared inner list.",
+            "2": "Same misconception as option 1.",
+            "3": "No error occurs."
+          },
+          "explanation": "Replacing an element of the copy changes only the copy. Compare with b[0][0] = 5, which would leak.",
+          "assesses": [
+            "o3",
+            "o1"
+          ]
+        },
+        {
+          "id": "l3-q3",
+          "prompt": "Why is <code>[[0] * 3] * 3</code> risky but <code>[[0] * 3 for _ in range(3)]</code> safe?",
+          "options": [
+            "* repeats the same inner list; the comprehension builds a new one each time",
+            "* is slower",
+            "The comprehension uses deepcopy",
+            "They behave identically"
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "Speed is not the issue.",
+            "2": "The comprehension just evaluates [0]*3 afresh each iteration.",
+            "3": "They differ, as the FAQ example shows."
+          },
+          "explanation": "<a data-source=\"faq-multi\">[FAQ]</a> Replication with * creates references to existing objects, not copies.",
+          "assesses": [
+            "o3",
+            "o1"
+          ]
+        },
+        {
+          "id": "l3-q4",
+          "prompt": "Explain in your own words when a shallow copy is enough and when you need a deep copy.",
+          "kind": "open",
+          "rubric": [
+            "Shallow is enough when items are immutable or are only replaced",
+            "Deep is needed when nested mutable items will be mutated",
+            "Mentions that deepcopy can copy too much"
+          ],
+          "model": "<p>A shallow copy suffices when items are immutable or you only replace/add top-level items. Use a deep copy when you will mutate nested mutable objects and need independence, remembering it may copy data meant to be shared <a data-source=\"copy-mod\">[copy module]</a>.</p>",
+          "assesses": [
+            "o3"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l3-transfer",
+      "task": "<p>A function keeps a history for an undo feature: <code>history.append(state)</code> where <code>state</code> is a dict containing lists of selected items. After several edits, all history entries show the latest selection. Explain why, decide between a shallow copy, a deep copy or restructuring, and justify the choice with the cost of each.</p>",
+      "rubric": [
+        "Explains that every history entry is the same object (or shares inner lists)",
+        "Distinguishes appending the same state from appending a copy",
+        "Chooses a copy depth and justifies it",
+        "Mentions that deepcopy may copy too much or cost memory"
+      ],
+      "model": "<p>history.append(state) stores a reference to the one mutable state, so later edits show in every entry. Store a copy. A shallow copy is enough if you replace lists instead of mutating them; if code mutates the nested lists, use copy.deepcopy(state) (or store immutable tuples). Deep copies cost memory and time per entry and could duplicate data meant to be shared, so copy only what changes if the state is large <a data-source=\"copy-mod\">[copy module]</a>.</p>",
+      "assesses": [
+        "o3",
+        "o1"
+      ]
+    },
+    {
+      "type": "reflect",
+      "id": "l3-reflect",
+      "prompt": "Explain to a colleague, in your own words and without using the word 'copy' more than twice, why editing one list of lists can change another."
+    }
+  ],
+  "sources": [
+    {
+      "id": "copy-mod",
+      "title": "Python Library Reference: copy - Shallow and deep copy operations",
+      "kind": "official",
+      "url": "https://docs.python.org/3/library/copy.html",
+      "accessed": "2026-10-20",
+      "note": "Definitions of shallow and deep copy; two problems with deep copy"
+    },
+    {
+      "id": "faq-multi",
+      "title": "Python Programming FAQ: How do I create a multidimensional list?",
+      "kind": "official",
+      "url": "https://docs.python.org/3/faq/programming.html#how-do-i-create-a-multidimensional-list",
+      "accessed": "2026-10-20",
+      "note": "FAQ entry on [[None]*2]*3"
+    },
+    {
+      "id": "seq-ops",
+      "title": "Python Library Reference: Common sequence operations / mutable sequence types",
+      "kind": "official",
+      "url": "https://docs.python.org/3/library/stdtypes.html#mutable-sequence-types",
+      "accessed": "2026-10-20",
+      "note": "`s += t` extends s; `s.copy()` is a shallow copy; note on [[]] * 3 under common sequence operations"
+    },
+    {
+      "id": "local-run",
+      "title": "Course author's local runs of every code sample and output shown (python3 3.14.5, macOS, `python3 -I`)",
+      "kind": "pedagogical",
+      "note": "Not a web source. Outputs shown as 'ran locally' were produced this way on 2026-10-20; other Python 3 versions may differ in details such as object identity of small ints, not in the behaviour taught here."
+    }
+  ],
+  "next": "<p>Capstone: debug a small gradebook program that contains all three kinds of bug.</p>"
+}

@@ -1,0 +1,341 @@
+{
+  "format": 1,
+  "id": "correlacion-y-causalidad",
+  "title": "Correlación, causalidad y la pregunta del contrafactual",
+  "summary": "Cómo distinguir en una noticia lo que se observa (dos cosas van juntas) de lo que se afirma (una provoca la otra).",
+  "level": "core",
+  "profile": "full",
+  "minutes": 30,
+  "outcomes": [
+    "o1"
+  ],
+  "prerequisites": [],
+  "prereqText": "<p>No necesitas estadística ni economía. Solo saber leer una noticia con cifras. Todos los términos técnicos se definen aquí antes de usarlos.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>Imagina que recibes este avance de agencia (<strong>titular inventado para este ejercicio</strong>): <em>«Las ciudades con salario mínimo más alto tienen más paro»</em>. El texto incluye un gráfico en el que cada punto es una ciudad. Tu jefa de sección te pregunta: «¿Lo titulamos como que subir el salario mínimo destruye empleo?».</p><p>Antes de responder hace falta saber qué dice realmente el dato y qué se le está haciendo decir. Esa distinción es el tema de esta lección.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Piensa en los bomberos. Si comparas incendios, verás que cuantos más bomberos acuden, mayores son los daños. Nadie concluye que los bomberos causan daños: los incendios grandes <em>atraen</em> a más bomberos y también <em>causan</em> más daños. Hay algo que no aparece en la tabla (el tamaño del incendio) y que explica las dos columnas.</p>",
+      "limits": "<p>El ejemplo es tan evidente que desactiva la sospecha. En política económica o social la tercera cosa oculta casi nunca es evidente, y a veces ni siquiera se ha medido. Además, que exista una explicación alternativa no prueba que el vínculo causal sea falso: solo que el dato, por sí solo, no basta.</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Mostrar que una misma asociación observada es compatible con varias estructuras causales distintas.",
+      "alt": "Cuatro pequeños diagramas de flechas entre A (salario mínimo) y B (empleo). Primero, A provoca B. Segundo, B provoca A (causalidad inversa). Tercero, un factor C, como la situación económica local, provoca tanto A como B (variable de confusión). Cuarto, A y B coinciden por azar, sin flecha. Los cuatro producen la misma asociación observable.",
+      "html": "<figure><svg viewBox=\"0 0 640 250\" role=\"img\" aria-labelledby=\"v1t v1d\"><title id=\"v1t\">Cuatro explicaciones de una misma asociación</title><desc id=\"v1d\">Cuatro diagramas: A provoca B; B provoca A; C provoca A y B; solo coincidencia.</desc>\n<text class=\"t\" x=\"10\" y=\"18\">Observamos: A y B van juntos. ¿Por qué?</text>\n<g transform=\"translate(10,40)\"><rect class=\"n1\" x=\"0\" y=\"20\" width=\"60\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"10\" y=\"42\">A</text><rect class=\"n2\" x=\"110\" y=\"20\" width=\"60\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"122\" y=\"42\">B</text><line class=\"edge\" x1=\"60\" y1=\"37\" x2=\"108\" y2=\"37\" marker-end=\"url(#arrow)\"/><text class=\"tm\" x=\"0\" y=\"80\">1. A provoca B</text></g>\n<g transform=\"translate(170,40)\"><rect class=\"n1\" x=\"0\" y=\"20\" width=\"60\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"10\" y=\"42\">A</text><rect class=\"n2\" x=\"110\" y=\"20\" width=\"60\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"122\" y=\"42\">B</text><line class=\"edge\" x1=\"108\" y1=\"37\" x2=\"62\" y2=\"37\" marker-end=\"url(#arrow)\"/><text class=\"tm\" x=\"0\" y=\"80\">2. B provoca A</text></g>\n<g transform=\"translate(330,40)\"><rect class=\"n3\" x=\"55\" y=\"0\" width=\"60\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"75\" y=\"22\">C</text><rect class=\"n1\" x=\"0\" y=\"70\" width=\"60\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"10\" y=\"92\">A</text><rect class=\"n2\" x=\"110\" y=\"70\" width=\"60\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"122\" y=\"92\">B</text><line class=\"edge\" x1=\"70\" y1=\"34\" x2=\"35\" y2=\"68\" marker-end=\"url(#arrow)\"/><line class=\"edge\" x1=\"100\" y1=\"34\" x2=\"135\" y2=\"68\" marker-end=\"url(#arrow)\"/><text class=\"tm\" x=\"0\" y=\"130\">3. C provoca A y B</text></g>\n<g transform=\"translate(500,40)\"><rect class=\"n1\" x=\"0\" y=\"20\" width=\"50\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"10\" y=\"42\">A</text><rect class=\"n2\" x=\"80\" y=\"20\" width=\"50\" height=\"34\" rx=\"6\"/><text class=\"ts\" x=\"92\" y=\"42\">B</text><line class=\"edge dashed\" x1=\"52\" y1=\"37\" x2=\"78\" y2=\"37\"/><text class=\"tm\" x=\"0\" y=\"80\">4. Casualidad</text></g>\n<text class=\"tm\" x=\"10\" y=\"215\">A = salario mínimo, B = empleo, C = situación económica local (ejemplo). Los datos de A y B, por sí solos, no distinguen 1, 2, 3 y 4.</text></svg><figcaption>Cuatro explicaciones posibles para una misma asociación. Diagrama propio, creado para este curso; es una simplificación, no una medición.</figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "title": "Qué se observa y qué se afirma",
+      "html": "<p>Una <span class=\"term\" data-term=\"correlación\">correlación</span> es una pauta observada: cuando una variable es alta, la otra tiende a ser alta (o baja). Es un hecho sobre los datos. Una afirmación <span class=\"term\" data-term=\"causalidad\">causal</span> dice algo más fuerte: que si se <em>cambiara</em> A, B cambiaría <em>por ese motivo</em>. La primera se comprueba mirando datos; la segunda exige además descartar las otras explicaciones del diagrama anterior.</p>\n<p>Hay dos explicaciones alternativas que debes reconocer enseguida:</p>\n<ul><li>La <span class=\"term\" data-term=\"variable de confusión\">variable de confusión</span> es un tercer factor que influye en las dos variables y crea una asociación que no corresponde a un efecto de una sobre otra. En el ejemplo de los bomberos, el tamaño del incendio.</li><li>La <span class=\"term\" data-term=\"causalidad inversa\">causalidad inversa</span> ocurre cuando el sentido de la flecha es el contrario al supuesto. La Real Academia Sueca de las Ciencias lo explica con el propio salario mínimo: cuando sube el desempleo, los empleadores pueden fijar salarios más bajos, y eso a su vez puede dar lugar a demandas de subir el salario mínimo <a data-source=\"nobel2021\">[1]</a>. Entonces el paro «provocaría» el salario mínimo, y no al revés.</li></ul>\n<p>La idea que ordena todo es el <span class=\"term\" data-term=\"contrafactual\">contrafactual</span>: lo que habría pasado con las mismas personas o lugares si la política no hubiera cambiado. Nunca lo observamos directamente, porque cada lugar vive una sola historia. Por eso los investigadores buscan un <span class=\"term\" data-term=\"grupo de comparación\">grupo de comparación</span> lo más parecido posible, y toda afirmación causal es, en el fondo, una afirmación sobre cómo de buena es esa comparación.</p>\n<p><strong>Pistas de lenguaje.</strong> Los verbos «provoca», «reduce», «destruye», «gracias a», «efecto de» y «debido a» son causales. Los verbos «se asocia con», «va de la mano de», «coincide con» o «se observa junto a» son descriptivos. Muchos titulares usan los primeros para datos que solo justifican los segundos. Esto es una pauta práctica de lectura (decisión del curso), no una regla infalible: una frase descriptiva puede insinuar causalidad por el contexto.</p>\n<p><strong>Estado de la evidencia.</strong> Que los estudios antiguos hallaran una correlación negativa entre salario mínimo y empleo es un hecho; la Real Academia Sueca señala, sin embargo, que la evidencia sobre un efecto causal no era del todo convincente en los años noventa (paráfrasis) <a data-source=\"nobel2021\">[1]</a>. Cómo se mejoró esa evidencia es el asunto de la lección siguiente.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "l1-p1",
+      "prompt": "Un estudio observa que, entre las ciudades de un país, las que tienen un salario mínimo más alto tienen también más paro. ¿Qué conclusión permite ese dato por sí solo?",
+      "options": [
+        "El salario mínimo alto provoca paro.",
+        "El paro alto provoca un salario mínimo alto.",
+        "Ambas variables van juntas, pero el dato no distingue entre varias explicaciones.",
+        "No hay ninguna relación entre las dos variables."
+      ],
+      "correct": 2,
+      "concepts": [
+        "corr-vs-cause"
+      ],
+      "assesses": [
+        "o1"
+      ],
+      "feedback": {
+        "0": "Es la lectura causal más tentadora, pero ese dato por sí solo es compatible también con la causalidad inversa y con un tercer factor.",
+        "1": "Esa flecha es posible (causalidad inversa), pero el dato tampoco la demuestra: solo es otra de las explicaciones compatibles.",
+        "3": "Se observa justo lo contrario: hay asociación. Lo que falta es saber por qué existe."
+      },
+      "explanation": "Una asociación observada entre ciudades es un hecho sobre los datos. Para pasar a «A provoca B» hay que descartar que B provoque A y que un tercer factor (por ejemplo, la estructura económica de cada ciudad) mueva ambas variables."
+    },
+    {
+      "type": "activity",
+      "id": "l1-a1",
+      "widget": "causal-map",
+      "concepts": [
+        "confounding",
+        "reverse-causation"
+      ],
+      "instructions": "<p>Explora el mapa de la pregunta «¿el salario mínimo cambia el empleo?». Pulsa cada nodo y cada flecha y lee lo que afirma. Después responde al reto del final. Piensa: ¿qué flecha, si fuera cierta, haría que el titular de la motivación fuese engañoso aunque los datos sean reales?</p>",
+      "debrief": "<p>Debías notar que las flechas son <em>hipótesis por investigar</em>, no hechos. El mapa muestra por qué una asociación entre salario mínimo y empleo puede aparecer sin que haya un efecto causal: la situación económica local puede afectar a ambos, y el paro puede influir en las decisiones salariales. El mapa en sí no demuestra ninguna de las flechas.</p>",
+      "config": {
+        "title": "Salario mínimo y empleo: ¿qué flechas son posibles?",
+        "intro": "<p>Mapa ilustrativo, construido para el curso. Las flechas son afirmaciones a investigar.</p>",
+        "nodes": [
+          {
+            "id": "smi",
+            "label": "Salario mínimo más alto",
+            "kind": "intervention",
+            "html": "<p>La política que se quiere evaluar.</p>"
+          },
+          {
+            "id": "emp",
+            "label": "Empleo (o paro)",
+            "kind": "outcome",
+            "html": "<p>El resultado que se mide, por ejemplo el número de empleados de un sector.</p>"
+          },
+          {
+            "id": "eco",
+            "label": "Situación económica local",
+            "kind": "confounder",
+            "html": "<p>Ciudades con economías distintas pueden tener a la vez salarios mínimos y niveles de empleo diferentes.</p>"
+          },
+          {
+            "id": "paro",
+            "label": "Paro previo",
+            "kind": "confounder",
+            "html": "<p>Un paro alto puede influir en la presión política para cambiar el salario mínimo.</p>"
+          }
+        ],
+        "links": [
+          {
+            "id": "l1",
+            "from": "smi",
+            "to": "emp",
+            "label": "efecto hipotético",
+            "explanation": "<p>Es la flecha que afirma el titular. Se necesitan evidencia y comparaciones adecuadas para sostenerla; la asociación por sí sola no basta.</p>"
+          },
+          {
+            "id": "l2",
+            "from": "eco",
+            "to": "emp",
+            "label": "explicación alternativa",
+            "explanation": "<p>Si la economía local influye en el empleo y, a la vez, en el salario mínimo vigente, el empleo y el salario mínimo parecerán relacionados sin que uno cause al otro.</p>"
+          },
+          {
+            "id": "l3",
+            "from": "paro",
+            "to": "smi",
+            "label": "sentido inverso",
+            "explanation": "<p>Si el paro previo influye en que se suba o se baje el salario mínimo, la flecha apunta del paro al salario, el sentido contrario al supuesto.</p>"
+          }
+        ],
+        "challenge": {
+          "prompt": "¿Qué flecha representa la causalidad inversa?",
+          "options": [
+            "l1",
+            "l2",
+            "l3"
+          ],
+          "correct": "l3",
+          "explanation": "La flecha l3 va del paro previo al salario mínimo: el sentido opuesto al que afirma el titular. La l2 es una variable de confusión (un tercer factor que mueve ambas)."
+        },
+        "assumptions": [
+          "Mapa simplificado: hay más factores posibles que los cuatro representados",
+          "Las flechas son hipótesis, no resultados demostrados"
+        ]
+      }
+    },
+    {
+      "type": "worked",
+      "title": "Analizar el titular inventado, paso a paso",
+      "html": "<p>Titular: «Las ciudades con salario mínimo más alto tienen más paro». Cifras ficticias de apoyo: ninguna; el ejemplo sirve para el método.</p>",
+      "steps": [
+        {
+          "prompt": "<p>Paso 1. ¿Qué se observó exactamente?</p>",
+          "html": "<p>Una pauta entre ciudades: salario mínimo alto y paro alto aparecen juntos. Es una comparación entre lugares distintos en un mismo momento, no el seguimiento de una ciudad antes y después de un cambio.</p>"
+        },
+        {
+          "prompt": "<p>Paso 2. ¿Qué afirma el titular o el texto que lo rodea?</p>",
+          "selfExplain": true,
+          "html": "<p>Si el titular o la entradilla dicen «destruye», «provoca» o «por culpa de», afirman causalidad. Si solo dicen «tienen», describen. Aquí, la pregunta de tu jefa («¿lo titulamos como que subir el salario mínimo destruye empleo?») pasa de lo uno a lo otro.</p>"
+        },
+        {
+          "prompt": "<p>Paso 3. Nombra al menos dos explicaciones alternativas a «A provoca B».</p>",
+          "selfExplain": true,
+          "html": "<p>Causalidad inversa: ciudades con mucho paro pueden haber reclamado o aprobado salarios mínimos distintos. Confusión: ciudades con economías diferentes (más industria, más turismo) pueden diferir a la vez en ambas variables.</p>"
+        },
+        {
+          "prompt": "<p>Paso 4. ¿Qué comparación necesitarías para sostener la afirmación causal?</p>",
+          "html": "<p>Una que muestre qué habría pasado con el empleo en esas ciudades sin el cambio de salario mínimo: por ejemplo, ciudades similares a las que no se aplicó el cambio y que siguieran trayectorias parecidas antes. Eso es un contrafactual aproximado.</p>"
+        },
+        {
+          "prompt": "<p>Paso 5. Reescribe el titular con lo que el dato permite.</p>",
+          "html": "<p>«Las ciudades con salario mínimo más alto presentan, de media, más paro: los datos no permiten decir si una cosa influye en la otra.»</p>"
+        }
+      ],
+      "result": "<p>Método en cinco pasos: qué se observó, qué se afirma, explicaciones alternativas, qué comparación falta, y reescritura proporcionada a la evidencia.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l1-pr1",
+      "level": "guided",
+      "setting": "in-app",
+      "concepts": [
+        "corr-vs-cause"
+      ],
+      "task": "<p>Titular inventado: «El consumo de café reduce el riesgo de despido». El estudio ficticio solo compara a empleados y empleadas de una empresa: los que toman más café son despedidos con menos frecuencia. Escribe (a) la correlación observada, (b) la afirmación causal del titular, y (c) dos explicaciones alternativas.</p>",
+      "hints": [
+        "<p>Pregúntate qué tipo de trabajador toma más café y qué otra cosa podría tener que ver con ser despedido.</p>",
+        "<p>Para la causalidad inversa: ¿podría el hecho de estar a salvo de un despido influir en los hábitos de la persona?</p>"
+      ],
+      "rubric": [
+        "Separa lo observado (más café y menos despidos van juntos) de lo afirmado (el café reduce el riesgo)",
+        "Propone una variable de confusión plausible (por ejemplo, antigüedad o tipo de puesto)",
+        "Propone una explicación de causalidad inversa o dice por qué no aplica"
+      ],
+      "solution": "<p>(a) Entre las personas de la empresa, más consumo de café se asocia con menor frecuencia de despido. (b) El café reduce el riesgo de despido. (c) Confusión: las personas con más antigüedad o en puestos de oficina pueden tomar más café y estar menos expuestas a despidos. Inversa: quien siente su puesto seguro puede permitirse pausas más largas y más café. Ninguna de las dos está demostrada: son alternativas que el dato no permite descartar.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l1-pr2",
+      "level": "independent",
+      "setting": "in-app",
+      "concepts": [
+        "corr-vs-cause",
+        "confounding"
+      ],
+      "task": "<p>Sin pistas: inventa tú un titular con verbo causal basado solo en una correlación entre dos variables sociales (educación, vivienda, transporte, lo que prefieras). Escribe cuál es el dato, la afirmación, dos explicaciones alternativas y el titular reescrito.</p>",
+      "rubric": [
+        "El titular inventado usa un verbo causal",
+        "Identifica correctamente qué dato lo sostendría",
+        "Da dos alternativas diferentes (no dos formas de lo mismo)",
+        "El titular reescrito es proporcionado: descriptivo o condicional"
+      ],
+      "solution": "<p>Ejemplo: «Los barrios con más bibliotecas tienen mejores notas, ¡las bibliotecas elevan las notas!». Dato: asociación entre barrios. Alternativa 1 (confusión): barrios con más renta tienen más bibliotecas y mejores notas. Alternativa 2 (inversa): las familias con hijos de buenas notas presionan para tener bibliotecas. Reescrito: «Los barrios con más bibliotecas tienen mejores notas, aunque el dato no permite saber si las bibliotecas influyen».</p>"
+    },
+    {
+      "type": "check",
+      "html": "<p>Comprueba lo aprendido con preguntas de reconocimiento, aplicación y con tus propias palabras.</p>",
+      "questions": [
+        {
+          "id": "l1-c1",
+          "assesses": [
+            "o1"
+          ],
+          "concepts": [
+            "corr-vs-cause"
+          ],
+          "prompt": "¿Cuál de estas frases afirma causalidad y no solo correlación?",
+          "options": [
+            "«Los municipios con más gimnasios tienen menos obesidad.»",
+            "«La apertura de gimnasios redujo la obesidad en el municipio.»",
+            "«Gimnasios y obesidad se observan juntos con signo contrario.»",
+            "«Hay una relación negativa entre ambos datos.»"
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "Describe una pauta entre municipios; no dice que los gimnasios cambien la obesidad.",
+            "2": "Es descriptiva: «se observan juntos».",
+            "3": "«Relación negativa» es una descripción de la asociación, sin sentido causal."
+          },
+          "explanation": "«Redujo» es un verbo causal: afirma que el cambio (apertura) produjo el efecto."
+        },
+        {
+          "id": "l1-c2",
+          "assesses": [
+            "o1"
+          ],
+          "concepts": [
+            "reverse-causation"
+          ],
+          "prompt": "Un estudio muestra que las personas que más usan una aplicación de meditación duermen peor. ¿Qué explicación es un caso de causalidad inversa?",
+          "options": [
+            "Quienes duermen mal buscan la aplicación para intentar dormir mejor.",
+            "La aplicación empeora el sueño.",
+            "Ambos dependen de que el estudio fue breve.",
+            "Es pura casualidad en los datos."
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "Es la lectura causal directa (A provoca B), no la inversa.",
+            "2": "Un estudio breve es un problema de diseño, no una flecha de B hacia A.",
+            "3": "La casualidad es otra explicación posible, pero no es causalidad inversa."
+          },
+          "explanation": "En la causalidad inversa B (dormir mal) lleva a A (usar la aplicación): la flecha va al revés."
+        },
+        {
+          "id": "l1-c3",
+          "assesses": [
+            "o1"
+          ],
+          "concepts": [
+            "confounding"
+          ],
+          "prompt": "Las ventas de helados y los ahogamientos suben a la vez cada verano. ¿Cuál es la variable de confusión más razonable?",
+          "options": [
+            "El calor y las vacaciones de verano",
+            "El precio del helado",
+            "El número de salvavidas",
+            "No hay ninguna: los helados provocan ahogamientos"
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "El precio podría influir en ventas, pero no explica por qué sube también el número de ahogamientos.",
+            "2": "Los salvavidas influirían en los ahogamientos, no en las ventas de helados.",
+            "3": "Es justo la lectura que la variable de confusión viene a evitar."
+          },
+          "explanation": "El calor eleva ambas cantidades al aumentar los baños y las ganas de helado; por eso aparecen juntas sin que una cause la otra."
+        },
+        {
+          "id": "l1-c4",
+          "assesses": [
+            "o1"
+          ],
+          "concepts": [
+            "corr-vs-cause"
+          ],
+          "kind": "open",
+          "prompt": "Con tus palabras: ¿por qué «dos cosas van juntas» no basta para decir que una provoca la otra? Usa un ejemplo distinto de los de la lección.",
+          "rubric": [
+            "Distingue lo observado de lo afirmado",
+            "Menciona al menos una explicación alternativa (confusión o causalidad inversa)",
+            "El ejemplo es nuevo y encaja"
+          ],
+          "model": "<p>Porque una asociación es compatible con varias estructuras: A puede provocar B, B puede provocar A, o un tercer factor puede mover las dos. Por ejemplo, las personas que más madrugan ganan más: puede que el empleo directivo exija madrugar (confusión) o que quien gana más pueda organizar mejor su horario (inversa). Hace falta una comparación que aísle la causa.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l1-t1",
+      "assesses": [
+        "o1"
+      ],
+      "concepts": [
+        "corr-vs-cause",
+        "confounding",
+        "reverse-causation"
+      ],
+      "task": "<p>Contexto nuevo (hipotético): una nota de prensa dice «Los colegios con más ordenadores por alumno obtienen mejores resultados; invertir en ordenadores mejora la educación». Eres el verificador. Explica en 4-6 líneas qué se observa, qué se afirma, dos explicaciones alternativas y cómo reformularías la frase.</p>",
+      "rubric": [
+        "Separa dato y afirmación",
+        "Una variable de confusión plausible (p. ej., renta o financiación del colegio)",
+        "Una causalidad inversa o explicación alternativa distinta",
+        "Reformulación proporcionada"
+      ],
+      "model": "<p>Se observa una asociación entre colegios. Se afirma que la inversión en ordenadores eleva los resultados. Confusión: los colegios con más recursos o familias de mayor renta compran más ordenadores y obtienen mejores resultados. Inversa: colegios con buenos resultados reciben más donaciones o subvenciones para equipamiento. Reformulación: «Los colegios con más ordenadores por alumno obtienen mejores resultados; el dato no indica si los ordenadores influyen».</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "l1-r1",
+      "prompt": "Piensa en un titular reciente de tu medio con un verbo causal. ¿Qué dato lo sostenía realmente? Escribe cómo lo habrías titulado tú."
+    }
+  ],
+  "sources": [
+    {
+      "id": "nobel2021",
+      "title": "Popular science background: Natural experiments help answer important questions (Prize in Economic Sciences 2021)",
+      "kind": "official",
+      "author": "Royal Swedish Academy of Sciences",
+      "date": "2021",
+      "url": "https://www.nobelprize.org/prizes/economic-sciences/2021/popular-information/",
+      "accessed": "2026-10-20",
+      "note": "Sección «The effects of a minimum wage» (causalidad inversa y evidencia previa). Leído en texto original, parafraseado en español."
+    },
+    {
+      "title": "Ejemplos y titulares de esta lección",
+      "kind": "pedagogical",
+      "note": "Los titulares, el café, los ordenadores y las bibliotecas son ejemplos inventados con fines didácticos; no proceden de datos reales."
+    }
+  ],
+  "next": "<p>La siguiente lección muestra una de las soluciones mejor conocidas al problema del contrafactual: el experimento natural del salario mínimo entre Nueva Jersey y Pensilvania, y lo que ese diseño puede y no puede resolver.</p>"
+}

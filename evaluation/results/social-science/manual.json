@@ -1,0 +1,37 @@
+{
+  "benchmark": "social-science",
+  "reviewer": "Claude Sonnet subagent (same model family as generator)",
+  "date": "2026-10-20",
+  "independent": false,
+  "note": "Read all three lessons and course.json and spot-checked 9 central claims against the cited source pages (abstract level; CBO and Nobel via fetched copies), but did not use a browser, so widgets, keyboard operation and 375 px layout were assessed from source only.",
+  "scores": {
+    "factual-accuracy": {
+      "score": 2,
+      "rationale": "I checked 9 central claims against the cited pages and all matched: Card-Krueger 410 restaurants, 4.25 to 5.05 on 1 April 1992 and +13% relative to PA (NBER 4509); Neumark-Wascher 230 payroll restaurants, -4.6% at the 5% level, 3x standard deviation and +17.6% survey result (NBER 5224); Cengiz 138 changes 1979-2016 (NBER 25434); Neumark-Shirley preponderance of negative estimates (NBER 28388); DLR contiguous counties (RePEc); Nobel text on reverse causation, 'resemble randomised experiments' and the prize split; CBO 1.3M/0.8%/3.7M/17M/1.3M (archive copy). Weaknesses: only abstracts were checkable (the course admits this), the NW figures are from the 1995 working paper (labelled), and the lesson-3 phrases 'discrepancia de medición, no de diseño' and 'encuesta más ruidosa' are the author's interpretation stated without a label."
+    },
+    "instructional-sequencing": {
+      "score": 1,
+      "rationale": "Prerequisites are explicit (prereqText in each lesson) and terms are defined before use, but prediction often follows the reveal: in correlacion-y-causalidad the l1-p1 predict block comes after the 'explain' block that already lists the alternative explanations, and in experimento-natural l2-p1 comes after the explain block that states the parallel-trends assumption. evidencia-en-conflicto has no predict block at all (only an instruction in l3-a1 to think first), so the lesson goes straight from explanation to worked example."
+    },
+    "visual-purpose": {
+      "score": 2,
+      "rationale": "Each of the three visuals has a stated single purpose and a full text equivalent: the four-structure arrow diagram in l1 (alt names all four structures), the difference-in-differences chart in l2 (alt gives all values 18/18.6, 22/21, counterfactual 17, effect 1.6), and the six-source comparison table in l3 (real th scope headers, alt lists all rows). The SVGs have role=img with title/desc. Not checked rendered; the author's own REVIEW notes the l2 SVG is wider than 375 px."
+    },
+    "interaction-relevance": {
+      "score": 1,
+      "rationale": "Activities involve predicting or deciding (parameter-explorer in l2-a1 with stated assumptions and interpretation text; evidence-case in l3-a1 with verdict-labelled conclusions) and all 10 MCQs have per-option misconception feedback. However, the l1-a1 causal-map is thin and partly misdrawn: the confounder 'eco' has only an arrow to employment (link l2), no arrow to the minimum wage, though the explanation text says it affects both, so it does not show confounding. Controls were not exercised in a browser, and open questions only offer a model answer for self-comparison."
+    },
+    "accessibility": {
+      "score": 1,
+      "rationale": "From source only: all visuals have alt/desc text, tables use th scope, figures have captions, language is es, and meaning is not colour-only in the diagrams (nodes carry letter labels). Not verified: keyboard operation of the causal-map, parameter-explorer and evidence-case widgets, 375 px layout (REVIEW itself reports the l2 SVG is wider than the column), and lang attributes on the English source titles. Scored conservatively."
+    },
+    "source-quality": {
+      "score": 2,
+      "rationale": "Sources are the primary papers' abstracts (NBER/RePEc/AEA), the Nobel Academy's popular background and CBO (read via an archive copy, which is disclosed), all with access dates 2026-10-20 and versions (working paper vs published). The one unverified source (ck-reply, Card and Krueger 2000 reply) is marked status: unverified and labelled 'no verificado' in l3 explain and the e2 reading. The contested minimum-wage evidence has several positions: CK, NW, DLR, Cengiz, Neumark-Shirley and CBO, and the author-bias of Neumark-Shirley is noted. Limitation: no full texts were read."
+    },
+    "transfer-coverage": {
+      "score": 2,
+      "rationale": "Each outcome has a transfer block with rubric and model answer in a new context: o1 l1-t1 (school computers), o2 l2-t1 (regional phone ban), o3 l3-t1 (four-day week), plus the capstone (a legislator's claim about CBO) covering all three. Contexts are new in domain but structurally close to the earlier practice (l1-pr2 libraries and grades, l2-pr1 tourist-tax neighbour city), and the capstone reuses lesson-3 data, so the transfer distance is modest."
+    }
+  }
+}

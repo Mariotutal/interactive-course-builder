@@ -1,0 +1,36 @@
+{
+  "topic": "Kubernetes Deployments: how desired state, ReplicaSets and rolling updates work",
+  "goals": [
+    "Predict what a Deployment controller does after a change to replicas or the Pod template",
+    "Explain why a rolling update stalls when new Pods never become ready",
+    "Choose readiness settings for a simple web service"
+  ],
+  "scope": "Concepts and manifests only; no live cluster required",
+  "language": "en",
+  "locale": "en-US",
+  "intake": {
+    "capability": "Read a Deployment manifest and predict the rollout and its failure modes",
+    "familiarity": "some",
+    "modality": "hands-on",
+    "practiceLoad": "balanced"
+  },
+  "learner": {
+    "startingKnowledge": "Uses Docker and docker compose; has never operated Kubernetes",
+    "background": "Synthetic benchmark learner: web developer",
+    "depth": "solid"
+  },
+  "time": {
+    "totalHours": 2,
+    "sessionMinutes": 30
+  },
+  "practice": {
+    "software": [
+      "a text editor"
+    ],
+    "realWorld": "no cluster available; simulations and manifests only"
+  },
+  "sources": {
+    "freshness": "Current Kubernetes documentation (state the version)",
+    "evidenceStandard": "Official Kubernetes documentation"
+  }
+}

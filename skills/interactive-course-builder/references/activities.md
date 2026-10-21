@@ -138,7 +138,7 @@ A step's `predict` gates **that** step: its `html` stays hidden, and Next stays 
 
 ### code-trace
 
-Use this to explain code or declarative configuration. It displays code without executing it; each step highlights a line and shows a concrete state.
+Use this to explain code or declarative configuration. It displays code without executing it; each step highlights a line and shows a concrete state. `state` values may be numbers or short strings (for example `"[1, 2]"` or `"<list id 0x1>"`). If a state comes from a real run, say so in the step's `html` and name the version; otherwise label it illustrative.
 
 ```json
 { "code": "total = 0\nfor n in values:\n  total += n",
@@ -151,6 +151,7 @@ Use this to explain code or declarative configuration. It displays code without 
 
 ### system-flow
 
+The widget highlights which nodes are active at each step. Put per-step quantities, such as Pod counts, in the step's `html`.
 Use this for a changing architecture or lifecycle. A step names the active components after an event; learners can inspect components and must answer a prediction when one is present.
 
 ```json
@@ -174,6 +175,39 @@ Use this for a causal or argumentative structure. Links must state what they cla
   "challenge": { "prompt": "Which link names an alternative explanation?", "options": ["l1", "l2"], "correct": "l2", "explanation": "The local economy can affect income independently of the policy." },
   "assumptions": ["Arrows are claims to investigate, not proof of causation."] }
 ```
+
+## Template widget: function-lab (mathematics and statistics sandbox)
+
+`assets/templates/widgets/function-lab.js` is a course-local widget. Copy it into the course's `widgets/` folder; it is never part of the core.
+
+The learner works through tasks:
+
+- a **direction** task: predict whether a watched quantity increases, decreases or stays the same, then move the parameter (the slider stays locked until a prediction is made);
+- a **value** task: compute a value with given parameters, then compare it with the model.
+
+A plot, readouts and markers show each consequence. At the end, the learner states a limit of the model.
+
+```json
+{ "title": "Slope and intercept lab",
+  "params": [ { "id": "m", "label": "slope m", "min": -3, "max": 3, "step": 0.5, "value": 1 }, { "id": "b", "label": "intercept b", "min": -4, "max": 4, "step": 1, "value": 0 } ],
+  "x": { "from": -5, "to": 5, "label": "x" }, "y": { "from": -10, "to": 10 },
+  "curves": [ { "label": "y = m·x + b", "expr": "m*x + b" } ],
+  "readouts": [ { "label": "y at x = 2", "expr": "m*2 + b" } ],
+  "markers": [ { "label": "(2, y)", "x": "2", "y": "m*2 + b" } ],
+  "tasks": [
+    { "id": "t1", "type": "direction", "prompt": "If you increase m, what happens to y at x = 2?", "param": "m", "watch": "m*2 + b", "explanation": "<p>…</p>" },
+    { "id": "t2", "type": "value", "prompt": "With m = 2 and b = −1, what is y at x = 3?", "set": { "m": 2, "b": -1 }, "expr": "m*3 + b", "tolerance": 0.001, "explanation": "<p>…</p>" } ],
+  "testCases": [ { "label": "textbook value", "set": { "m": 2, "b": -1 }, "expr": "m*3 + b", "value": 5 } ],
+  "limitPrompt": "State one situation where a straight line would be a poor model.", "limitModel": "<p>…</p>",
+  "assumptions": ["Pure linear model", "Inputs between −5 and 5"] }
+```
+
+- **Expressions.** They use the same safe evaluator as `parameter-explorer`.
+- **Validation.** `validate` parses every expression and rejects unknown variables or task types. It **evaluates `testCases`**, so a wrong model or a wrong expected value fails the build. Take test values from a textbook or reference, not from the widget itself.
+- **At runtime.** The widget repeats the check and shows a warning instead of silently teaching a broken model.
+- **Accessibility.** The plot has a generated text summary, and all controls work from the keyboard.
+- **Ranges.** Set `y.from` and `y.to` when curves differ in scale; values outside the range are clipped at the plot edge. `parameter-explorer` also accepts `chart.y.from` and `chart.y.to`, so an exponential series does not flatten the others.
+- **Direction tasks.** These ask about *increasing* a parameter. If the learner moves the slider down, the widget inverts the observed change and says so. To keep this obvious, start the parameter away from its maximum.
 
 ## Custom widgets (extension point)
 

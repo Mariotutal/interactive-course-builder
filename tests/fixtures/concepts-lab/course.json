@@ -1,0 +1,228 @@
+{
+ "format": 1,
+ "id": "concepts-lab",
+ "version": "1.0.0",
+ "title": "Linear functions (concept-model fixture)",
+ "language": "en",
+ "locale": "en-US",
+ "learner": {
+  "topic": "Linear functions",
+  "goals": [
+   "Predict how slope and intercept change a line"
+  ],
+  "intake": {
+   "capability": "Predict how slope and intercept change a line",
+   "familiarity": "some",
+   "modality": "visual",
+   "practiceLoad": "balanced"
+  },
+  "time": {
+   "sessionMinutes": 30
+  },
+  "decisions": [
+   {
+    "because": "familiarity: some",
+    "decision": "Offer the diagnostic so known prerequisites can get a quick pass; keep the full core route available."
+   },
+   {
+    "because": "modality: visual",
+    "decision": "Lead each full lesson with a visual model and a manipulable activity before the long explanation."
+   }
+  ]
+ },
+ "assumptions": [
+  "Test fixture with a synthetic learner profile"
+ ],
+ "theme": {
+  "profile": "mathematics",
+  "typeScale": "large",
+  "diagramStyle": "outline",
+  "layout": "reading",
+  "codeTheme": "auto",
+  "tokens": {
+   "light": {
+    "accent": "#5b3f9e"
+   },
+   "dark": {
+    "accent": "#c9b6ff"
+   }
+  }
+ },
+ "outcomes": [
+  {
+   "id": "o1",
+   "text": "Predict how changing the slope or the intercept moves a line",
+   "level": "core"
+  },
+  {
+   "id": "o2",
+   "text": "Compute the value of a linear function at a given input",
+   "level": "core"
+  }
+ ],
+ "modules": [
+  {
+   "id": "m1",
+   "title": "Lines",
+   "lessons": [
+    "slope-intercept",
+    "line-review"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "id": "core",
+   "title": "Core route",
+   "lessons": [
+    "slope-intercept",
+    "line-review"
+   ]
+  }
+ ],
+ "glossary": [
+  {
+   "term": "slope",
+   "definition": "How much the output changes for each unit increase of the input; m in y = m·x + b."
+  },
+  {
+   "term": "intercept",
+   "aka": [
+    "y-intercept"
+   ],
+   "definition": "The output when the input is 0; b in y = m·x + b."
+  }
+ ],
+ "knowledgeArchitecture": {
+  "summary": "Slope and intercept are hierarchical (evaluation depends on both); rate of change is a lens that reappears in other topics; checking a model against values is a disposition.",
+  "concepts": [
+   {
+    "id": "intercept",
+    "label": "Intercept",
+    "type": "hierarchical",
+    "lessons": [
+     "slope-intercept"
+    ]
+   },
+   {
+    "id": "slope",
+    "label": "Slope",
+    "type": "hierarchical",
+    "lessons": [
+     "slope-intercept"
+    ]
+   },
+   {
+    "id": "evaluate-linear",
+    "label": "Evaluating a linear function",
+    "type": "hierarchical",
+    "lessons": [
+     "slope-intercept",
+     "line-review"
+    ]
+   },
+   {
+    "id": "rate-of-change",
+    "label": "Rate of change as a lens",
+    "type": "horizontal",
+    "lessons": [
+     "slope-intercept",
+     "line-review"
+    ]
+   }
+  ],
+  "prerequisites": [
+   {
+    "from": "intercept",
+    "to": "evaluate-linear"
+   },
+   {
+    "from": "slope",
+    "to": "evaluate-linear"
+   }
+  ],
+  "hubs": [
+   {
+    "id": "change-hub",
+    "label": "Change",
+    "lens": "Every model describes how one quantity changes with another",
+    "concepts": [
+     "slope",
+     "rate-of-change"
+    ]
+   }
+  ],
+  "dispositions": [
+   {
+    "id": "check-models",
+    "label": "Checking a model against known values",
+    "lessons": [
+     "slope-intercept"
+    ],
+    "bands": [
+     {
+      "level": 1,
+      "descriptor": "Accepts the plotted result without checking."
+     },
+     {
+      "level": 2,
+      "descriptor": "Checks one value by hand when prompted."
+     },
+     {
+      "level": 3,
+      "descriptor": "Checks values and states where the model stops applying, unprompted."
+     }
+    ]
+   }
+  ],
+  "assessmentModes": {
+   "intercept": "auto",
+   "slope": "auto",
+   "evaluate-linear": "auto",
+   "rate-of-change": "rubric",
+   "check-models": "observation"
+  }
+ },
+ "capstone": {
+  "id": "capstone",
+  "title": "Read a real line",
+  "task": "<p>A taxi charges a fixed fee plus a price per kilometre. Write the function, explain what the slope and the intercept mean, and compute the price of a 7 km ride.</p>",
+  "levels": [
+   "Beginning",
+   "Developing",
+   "Proficient"
+  ],
+  "rubric": [
+   {
+    "criterion": "Model",
+    "descriptors": [
+     "No function",
+     "Function with an error",
+     "Correct function with units"
+    ]
+   },
+   {
+    "criterion": "Interpretation",
+    "descriptors": [
+     "Missing",
+     "Partial",
+     "Slope and intercept interpreted in context"
+    ]
+   }
+  ],
+  "assesses": [
+   "o1",
+   "o2"
+  ],
+  "concepts": [
+   "rate-of-change"
+  ]
+ },
+ "review": {
+  "intervals": [
+   1,
+   3,
+   7
+  ]
+ }
+}

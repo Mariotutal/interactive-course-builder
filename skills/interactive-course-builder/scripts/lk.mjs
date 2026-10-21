@@ -38,9 +38,35 @@ const slug = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '
 const hash = obj => crypto.createHash('sha256').update(JSON.stringify(obj)).digest('hex').slice(0, 12);
 
 /* ---------------- Learning request ---------------- */
+export const INTAKE = {
+  familiarity: ['none', 'some', 'working', 'fluent'],
+  modality: ['visual', 'reading', 'hands-on', 'mixed'],
+  practiceLoad: ['light', 'balanced', 'heavy'],
+};
+const INTAKE_QUESTIONS = {
+  capability: 'What do you want to be able to do when you finish? (one concrete task)',
+  familiarity: 'How familiar are you with this today? (none, some, working knowledge, fluent)',
+  modality: 'How do you prefer to learn and practise? (visual models, reading, hands-on, a mix) — and how much practice per session (light, balanced, heavy)?',
+};
+// The three intake answers drive most design choices; record which choice each one caused so the course can show it.
+export function intakeDecisions(n) {
+  const i = n.intake || {}; const d = [];
+  const fam = { none: 'Offer the diagnostic, start the core route from prerequisites and define every term before it is used.', some: 'Offer the diagnostic so known prerequisites can get a quick pass; keep the full core route available.', working: 'Keep prerequisite review short; weight independent practice and offer the advanced route.', fluent: 'Use the diagnostic to skip basics; emphasise transfer tasks and the advanced route.' };
+  const mod = { visual: 'Lead each full lesson with a visual model and a manipulable activity before the long explanation.', reading: 'Lead with prose explanations and worked examples; keep visuals as summaries and make the printable view complete.', 'hands-on': 'Put an activity or practice before the explanation and include more in-app or real-world practice.', mixed: 'Alternate visual, reading and hands-on entry points across lessons.' };
+  const load = { light: 'One guided and one independent practice per full lesson; prefer focused lessons for review.', balanced: 'Guided and independent practice in every full lesson plus spaced review.', heavy: 'Extra independent practice and cumulative review sets; more transfer tasks.' };
+  if (fam[i.familiarity]) d.push({ because: `familiarity: ${i.familiarity}`, decision: fam[i.familiarity] });
+  if (mod[i.modality]) d.push({ because: `modality: ${i.modality}`, decision: mod[i.modality] });
+  if (load[i.practiceLoad]) d.push({ because: `practice load: ${i.practiceLoad}`, decision: load[i.practiceLoad] });
+  if (typeof (n.time || {}).sessionMinutes === 'number') d.push({ because: `sessions of ${n.time.sessionMinutes} min`, decision: `Size lessons to about ${n.time.sessionMinutes} minutes and pack the schedule into sessions of that length.` });
+  return d;
+}
+
 export function checkRequest(req) {
   const errors = [], unknown = [], blocking = [];
   const out = JSON.parse(JSON.stringify(req || {}));
+  out.intake = Object.assign({}, out.intake || {});
+  if ((!Array.isArray(out.goals) || !out.goals.length) && out.intake.capability) { out.goals = [String(out.intake.capability)]; unknown.push('goals → derived from intake.capability'); }
+  for (const [k, allowed] of Object.entries(INTAKE)) if (out.intake[k] != null && !allowed.includes(out.intake[k])) errors.push(`intake.${k} must be one of ${allowed.join(', ')}`);
   if (!out.topic || !String(out.topic).trim()) blocking.push('topic: what should the learner learn?');
   if (!Array.isArray(out.goals) || !out.goals.length) blocking.push('goals: at least one concrete thing the learner wants to be able to do');
   const def = (obj, key, val, label) => { if (obj[key] == null || obj[key] === '') { obj[key] = val; unknown.push(`${label || key} → default ${JSON.stringify(val)}`); } };
@@ -62,7 +88,13 @@ export function checkRequest(req) {
   if (!['web', 'markdown', 'web+markdown'].includes(out.output.format)) errors.push('output.format must be web | markdown | web+markdown');
   out.sources = Object.assign({ provided: [], freshness: 'unknown', evidenceStandard: 'authoritative sources appropriate to the field' }, out.sources || {});
   if (out.diagnostic == null) out.diagnostic = true;
-  return { ok: !errors.length && !blocking.length, errors, blocking, unknown, normalized: out };
+  if (!out.intake.capability && Array.isArray(out.goals) && out.goals.length) out.intake.capability = out.goals[0];
+  const intakeQuestions = [];
+  if (!out.intake.capability) intakeQuestions.push(INTAKE_QUESTIONS.capability);
+  if (!out.intake.familiarity) intakeQuestions.push(INTAKE_QUESTIONS.familiarity);
+  if (!out.intake.modality || !out.intake.practiceLoad) intakeQuestions.push(INTAKE_QUESTIONS.modality);
+  out.decisions = intakeDecisions(out);
+  return { ok: !errors.length && !blocking.length, errors, blocking, unknown, intakeQuestions, decisions: out.decisions, normalized: out };
 }
 
 /* ---------------- Course loading & validation ---------------- */
@@ -153,6 +185,7 @@ const allStrings = v => v == null ? [] : typeof v === 'string' ? [v] : Array.isA
 function checkQuestion(where, q, outcomes, errs, warns, terms, requireAssess) {
   if (!q.id) errs.push(`${where}: question without id`);
   if (!q.prompt) errs.push(`${where}: question without prompt`);
+  if (['mcq', 'multi', 'numeric', 'open'].includes(q.type) && q.kind == null) errs.push(`${where}: questions use "kind" (mcq | multi | numeric | open), not "type"`);
   const kind = q.kind || (q.options ? 'mcq' : 'open');
   if (kind === 'mcq' || kind === 'multi') {
     if (!Array.isArray(q.options) || q.options.length < 2) errs.push(`${where}: needs at least 2 options`);
@@ -178,6 +211,7 @@ function checkWidget(where, b, errs, warns, custom) {
   if (!BUILTIN_WIDGETS.includes(w) && !custom[w]) { errs.push(`${where}: unknown widget "${w}" (built-in: ${BUILTIN_WIDGETS.join(', ')}; or add widgets/*.js)`); return; }
   if (!b.instructions) warns.push(`${where}: activity without instructions telling the learner what to think about`);
   if (!b.debrief) warns.push(`${where}: activity without a debrief explaining what the learner should have noticed`);
+  if (custom[w] && w === 'function-lab') { functionLabIssues(where, c, errs, warns); return; }
   if (custom[w]) { if (!(c.assumptions || []).length) warns.push(`${where}: custom widget config should list assumptions`); return; }
   const need = (cond, msg) => { if (!cond) errs.push(`${where} (${w}): ${msg}`); };
   const predict = (p, label) => { if (!p) return; need(Array.isArray(p.options) && p.options.length >= 2, `${label}: predict needs at least 2 options`); need(Number.isInteger(p.correct) && p.correct >= 0 && p.correct < (p.options || []).length, `${label}: predict needs a valid correct option`); need(p.explanation, `${label}: predict needs an explanation`); };
@@ -227,6 +261,130 @@ function checkWidget(where, b, errs, warns, custom) {
   }
 }
 
+// WCAG 2.x relative luminance and contrast ratio.
+const lum = hex => { const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(v => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4))); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+export const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+const BACKGROUNDS = { light: ['#f7f7f4', '#ffffff'], dark: ['#15171a', '#1d2024'] };
+export const THEME_OPTIONS = { typeScale: ['compact', 'standard', 'large'], diagramStyle: ['filled', 'outline', 'high-contrast'], layout: ['standard', 'reading', 'wide'], codeTheme: ['auto', 'light', 'dark'] };
+const THEME_TOKENS = ['accent', 'accent2', 'ok', 'warn', 'danger'];
+function themeIssues(th, errs, warns) {
+  if (th == null) return;
+  if (typeof th !== 'object' || Array.isArray(th)) { errs.push('course.json: "theme" must be an object'); return; }
+  for (const [k, allowed] of Object.entries(THEME_OPTIONS)) if (th[k] != null && !allowed.includes(th[k])) errs.push(`theme.${k} must be one of ${allowed.join(', ')}`);
+  const known = ['profile', 'accent', 'tokens', ...Object.keys(THEME_OPTIONS)];
+  Object.keys(th).filter(k => !known.includes(k)).forEach(k => warns.push(`theme.${k} is not a supported option (ignored). Supported: ${known.join(', ')}`));
+  if (th.accent != null) { if (!/^#[0-9a-f]{6}$/i.test(th.accent)) errs.push('theme.accent must be a #rrggbb colour'); else BACKGROUNDS.light.forEach(bg => { if (contrast(th.accent, bg) < 4.5) errs.push(`theme.accent ${th.accent} has contrast ${contrast(th.accent, bg).toFixed(2)}:1 against the light background ${bg}; text needs at least 4.5:1 (WCAG AA). Use theme.tokens.light/dark to set separate colours per mode.`); }); }
+  if (th.tokens != null) {
+    if (typeof th.tokens !== 'object' || Array.isArray(th.tokens)) { errs.push('theme.tokens must be { light: {...}, dark: {...} }'); return; }
+    for (const [mode, set] of Object.entries(th.tokens)) {
+      if (!BACKGROUNDS[mode]) { errs.push(`theme.tokens.${mode}: mode must be light or dark`); continue; }
+      for (const [k, v] of Object.entries(set || {})) {
+        if (!THEME_TOKENS.includes(k)) { errs.push(`theme.tokens.${mode}.${k}: only ${THEME_TOKENS.join(', ')} can be overridden`); continue; }
+        if (!/^#[0-9a-f]{6}$/i.test(v)) { errs.push(`theme.tokens.${mode}.${k} must be a #rrggbb colour`); continue; }
+        BACKGROUNDS[mode].forEach(bg => { const r = contrast(v, bg); if (r < 4.5) errs.push(`theme.tokens.${mode}.${k} ${v} has contrast ${r.toFixed(2)}:1 against ${bg}; text needs at least 4.5:1 (WCAG AA)`); });
+      }
+    }
+  }
+}
+
+// Optional knowledge architecture: concept types, prerequisite edges, cross-cutting hubs, dispositions and assessment modes.
+export const CONCEPT_TYPES = ['hierarchical', 'horizontal'];
+export const ASSESSMENT_MODES = ['auto', 'rubric', 'observation'];
+function knowledgeIssues(C, lessons, orderIds, errs, warns) {
+  const ka = C.knowledgeArchitecture; const ids = new Set();
+  if (ka == null) {
+    const tagged = lessons.some(l => (l.blocks || []).some(b => (b.concepts || []).length || (b.questions || []).some(q => (q.concepts || []).length))) || !!(C.capstone && (C.capstone.concepts || []).length);
+    if (tagged) warns.push('concepts tags are ignored because course.json has no knowledgeArchitecture; add one or remove the tags');
+    return { ids, report: null };
+  }
+  if (typeof ka !== 'object' || Array.isArray(ka)) { errs.push('knowledgeArchitecture must be an object'); return { ids, report: null }; }
+  const lessonSet = new Set(orderIds); const w = 'knowledgeArchitecture';
+  const concepts = Array.isArray(ka.concepts) ? ka.concepts : []; const dispositions = Array.isArray(ka.dispositions) ? ka.dispositions : [];
+  if (!concepts.length) errs.push(`${w}: needs at least one concept`);
+  const slugOk = id => /^[a-z][a-z0-9-]{0,63}$/.test(id || '');
+  for (const c of concepts) {
+    if (!slugOk(c.id)) errs.push(`${w}: concept id "${c.id}" must be a lowercase slug`); else if (ids.has(c.id)) errs.push(`${w}: duplicate id ${c.id}`); else ids.add(c.id);
+    if (!c.label) errs.push(`${w}: concept ${c.id} needs a label`);
+    if (!CONCEPT_TYPES.includes(c.type)) errs.push(`${w}: concept ${c.id} type must be ${CONCEPT_TYPES.join(' or ')} (dispositions go in "dispositions")`);
+    if (!(c.lessons || []).length) errs.push(`${w}: concept ${c.id} must list the lessons that teach it`);
+    (c.lessons || []).forEach(l => { if (!lessonSet.has(l)) errs.push(`${w}: concept ${c.id}: unknown lesson ${l}`); });
+  }
+  for (const d of dispositions) {
+    if (!slugOk(d.id)) errs.push(`${w}: disposition id "${d.id}" must be a lowercase slug`); else if (ids.has(d.id)) errs.push(`${w}: duplicate id ${d.id}`); else ids.add(d.id);
+    if (!d.label) errs.push(`${w}: disposition ${d.id} needs a label`);
+    if (!Array.isArray(d.bands) || d.bands.length < 2 || d.bands.some(b => !b.descriptor)) errs.push(`${w}: disposition ${d.id} needs at least 2 progression bands, each with a descriptor`);
+    (d.lessons || []).forEach(l => { if (!lessonSet.has(l)) errs.push(`${w}: disposition ${d.id}: unknown lesson ${l}`); });
+  }
+  const conceptIds = new Set(concepts.map(c => c.id)); const edges = Array.isArray(ka.prerequisites) ? ka.prerequisites : [];
+  for (const e of edges) {
+    if (!conceptIds.has(e.from) || !conceptIds.has(e.to)) { errs.push(`${w}: prerequisite ${e.from} → ${e.to} references an unknown concept`); continue; }
+    if (e.from === e.to) errs.push(`${w}: concept ${e.from} cannot be its own prerequisite`);
+    const types = [e.from, e.to].map(id => concepts.find(c => c.id === id).type); if (types.includes('horizontal')) warns.push(`${w}: prerequisite ${e.from} → ${e.to} involves a horizontal concept; lenses usually connect topics through hubs rather than prerequisites`);
+    const first = id => Math.min(...concepts.find(c => c.id === id).lessons.map(l => orderIds.indexOf(l)).filter(i => i >= 0));
+    if (first(e.from) > first(e.to)) warns.push(`${w}: prerequisite ${e.from} is first taught after ${e.to}; reorder lessons or the edge`);
+  }
+  // Cycle detection on hierarchical prerequisite edges.
+  const adj = {}; edges.forEach(e => (adj[e.from] = adj[e.from] || []).push(e.to));
+  const state = {}; const cyc = []; const dfs = (n, path) => { state[n] = 1; for (const m of adj[n] || []) { if (state[m] === 1) cyc.push([...path, n, m].join(' → ')); else if (!state[m]) dfs(m, [...path, n]); } state[n] = 2; };
+  Object.keys(adj).forEach(n => { if (!state[n]) dfs(n, []); }); cyc.slice(0, 3).forEach(c => errs.push(`${w}: prerequisite cycle ${c}`));
+  for (const h of Array.isArray(ka.hubs) ? ka.hubs : []) {
+    if (!slugOk(h.id) || !h.label) errs.push(`${w}: hub "${h.id}" needs a slug id and a label`);
+    if ((h.concepts || []).length < 2) errs.push(`${w}: hub ${h.id} must connect at least 2 concepts`);
+    (h.concepts || []).forEach(c => { if (!conceptIds.has(c)) errs.push(`${w}: hub ${h.id}: unknown concept ${c}`); });
+  }
+  const modes = ka.assessmentModes || {};
+  Object.keys(modes).forEach(k => { if (!ids.has(k)) errs.push(`${w}: assessmentModes.${k} is not a concept or disposition`); if (!ASSESSMENT_MODES.includes(modes[k])) errs.push(`${w}: assessmentModes.${k} must be ${ASSESSMENT_MODES.join(', ')}`); });
+  // Items tagged with each concept, by kind of evidence they can provide.
+  const tagged = {}; const add = (id, kind) => (tagged[id] = tagged[id] || new Set()).add(kind);
+  for (const l of lessons) for (const b of l.blocks || []) {
+    const tags = (where, list, kind) => (list || []).forEach(c => { if (!ids.has(c)) errs.push(`lesson ${l.id} ${where}: unknown concept "${c}" in concepts`); else add(c, kind); });
+    if (b.type === 'predict') tags(`predict ${b.id}`, b.concepts, b.options ? 'auto' : 'rubric');
+    if (b.type === 'transfer') tags(`transfer ${b.id}`, b.concepts, 'rubric');
+    if (b.type === 'practice') tags(`practice ${b.id}`, b.concepts, b.setting === 'real-world' || b.externalFeedback ? 'observation' : ((b.rubric || []).length ? 'rubric' : 'practice'));
+    if (b.type === 'activity') tags(`activity ${b.id}`, b.concepts, 'activity');
+    (b.questions || []).forEach(q => tags(`question ${q.id}`, q.concepts, (q.kind || (q.options ? 'mcq' : 'open')) === 'open' ? 'rubric' : 'auto'));
+  }
+  if (C.capstone) (C.capstone.concepts || []).forEach(c => { if (!ids.has(c)) errs.push(`capstone: unknown concept "${c}"`); else add(c, 'rubric'); });
+  const report = [];
+  for (const c of [...concepts.map(x => ({ ...x, kind: x.type })), ...dispositions.map(x => ({ ...x, kind: 'dispositional' }))]) {
+    const mode = modes[c.id]; const have = tagged[c.id] || new Set();
+    if (!mode) errs.push(`${w}: ${c.id} has no assessment mode (assessmentModes.${c.id}: auto | rubric | observation)`);
+    if (c.kind === 'dispositional' && mode === 'auto') errs.push(`${w}: disposition ${c.id} cannot be assessed with auto-checked questions; use observation or rubric`);
+    if (c.kind === 'horizontal' && mode === 'auto') warns.push(`${w}: horizontal concept ${c.id} is assessed only automatically; lenses usually need reasoning (rubric)`);
+    if (mode && !have.has(mode)) warns.push(`${w}: ${c.id} is assessed by "${mode}" but no item tagged with it provides that evidence (${mode === 'auto' ? 'tag a non-open question' : mode === 'rubric' ? 'tag an open question, transfer task, capstone or rubric practice' : 'tag a real-world practice or one with externalFeedback'})`);
+    if (c.kind !== 'dispositional' && !have.has('auto')) warns.push(`${w}: concept ${c.id} has no auto-checked question tagged with it, so it cannot be scheduled for concept review`);
+    report.push({ id: c.id, label: c.label, kind: c.kind, mode: mode || '—', evidence: [...have].sort() });
+  }
+  return { ids, report };
+}
+
+// The function-lab template widget (assets/templates/widgets/function-lab.js) is course-local, but its config is
+// checked here so that expressions parse and the author's test cases hold before learners see the model.
+function functionLabIssues(where, c, errs, warns) {
+  const need = (cond, msg) => { if (!cond) errs.push(`${where} (function-lab): ${msg}`); };
+  const params = Array.isArray(c.params) ? c.params : []; const vars = new Set(params.map(p => p.id));
+  need(params.length, 'needs params'); params.forEach(p => need(p.id && p.label && p.min < p.max && p.value >= p.min && p.value <= p.max, `param ${p.id}: needs id, label, min < max and a value within range`));
+  need((c.assumptions || []).length, 'needs assumptions (what the model simplifies)');
+  if (!c.limitPrompt) warns.push(`${where} (function-lab): add a limitPrompt so the learner states a limit of the model`);
+  const parse = (e, extra = []) => { try { LKExpr.parse(e); const unknown = LKExpr.variables(e).filter(v => !vars.has(v) && !extra.includes(v)); if (unknown.length) errs.push(`${where} (function-lab): expression "${e}" uses unknown variable(s) ${unknown.join(', ')}`); return true; } catch (x) { errs.push(`${where} (function-lab): invalid expression "${e}": ${x.message}`); return false; } };
+  need(c.x && c.x.from < c.x.to, 'x needs from < to');
+  (c.curves || []).forEach(cv => parse(cv.expr, ['x'])); need((c.curves || []).length, 'needs at least one curve');
+  (c.readouts || []).forEach(r => parse(r.expr)); (c.markers || []).forEach(m => { parse(m.x); parse(m.y); });
+  const tasks = Array.isArray(c.tasks) ? c.tasks : []; need(tasks.length, 'needs at least one task (prediction or value)');
+  const ids = new Set(); const defaults = Object.fromEntries(params.map(p => [p.id, p.value]));
+  tasks.forEach((t, i) => {
+    need(t.id && !ids.has(t.id), `task ${i}: needs a unique id`); ids.add(t.id); need(t.prompt && t.explanation, `task ${t.id}: needs prompt and explanation`);
+    if (t.type === 'direction') { need(vars.has(t.param), `task ${t.id}: param must be one of the params`); if (t.watch) parse(t.watch); else need(false, `task ${t.id}: needs "watch", the expression whose change the learner predicts`); }
+    else if (t.type === 'value') { Object.keys(t.set || {}).forEach(k => need(vars.has(k), `task ${t.id}: set.${k} is not a param`)); if (t.expr && parse(t.expr)) { try { if (!isFinite(LKExpr.evaluate(t.expr, Object.assign({}, defaults, t.set || {})))) errs.push(`${where} (function-lab): task ${t.id} evaluates to a non-finite value`); } catch (x) { /* reported */ } } else need(t.expr, `task ${t.id}: needs expr`); }
+    else need(false, `task ${t.id}: type must be direction or value`);
+  });
+  (c.testCases || []).forEach((tc, i) => {
+    if (!parse(tc.expr)) return;
+    try { const v = LKExpr.evaluate(tc.expr, Object.assign({}, defaults, tc.set || {})); const tol = tc.tolerance != null ? tc.tolerance : 1e-9; if (!(Math.abs(v - tc.value) <= tol)) errs.push(`${where} (function-lab): test case ${tc.label || i} failed: ${tc.expr} = ${v}, expected ${tc.value} ± ${tol}`); } catch (x) { errs.push(`${where} (function-lab): test case ${i}: ${x.message}`); }
+  });
+  if (!(c.testCases || []).length) warns.push(`${where} (function-lab): add testCases with reference values (for example from a textbook) so the model is checked at build time`);
+}
+
 export function validateCourse(dir) {
   const errs = [], warns = [];
   let data; try { data = loadCourse(dir); } catch (e) { return { errs: [e.message], warns, data: null }; }
@@ -251,6 +409,8 @@ export function validateCourse(dir) {
   if (!UI_LANGUAGES.includes(base)) { const need = Object.keys(I18N.en).filter(k => typeof I18N.en[k] === 'string'); const have = need.filter(k => C.ui && typeof C.ui[k] === 'string'); if (have.length < need.length) warns.push(`course.json: language "${C.language}" has no built-in UI strings; ${need.length - have.length} of ${need.length} keys in "ui" are missing, so they fall back to English (see assets/runtime/lk-i18n.js)`); }
   if (C.sources) C.sources.forEach((s, i) => checkSource(`course.sources[${i}]`, s, errs, warns));
   allStrings([C.intro]).forEach(s => htmlIssues('course.intro', s, errs, warns, terms));
+  themeIssues(C.theme, errs, warns);
+  if (C.learner && C.learner.intake && !(Array.isArray(C.learner.decisions) && C.learner.decisions.length)) warns.push('course.json: learner.intake is present but learner.decisions is empty; record which design choices the intake caused (check-request prints them)');
   const transferred = new Set(); const blockIds = new Set(); const assessed = new Map([...outcomes.keys()].map(k => [k, []])); const taught = new Map([...outcomes.keys()].map(k => [k, []]));
   const contract = {};
   for (const l of lessons) {
@@ -298,10 +458,11 @@ export function validateCourse(dir) {
     if (has.has('own-words-candidate')) has.add('own-words');
     if ((l.sources || []).length) has.add('sources');
     (l.sources || []).forEach((s, i) => checkSource(`${w} sources[${i}]`, s, errs, warns));
-    citationIssues(w, l, errs);
+    citationIssues(w, l, errs, warns);
     req(l.next, `${w}: needs "next", connecting to what comes after`);
     const sm = C.learner && C.learner.time && typeof C.learner.time.sessionMinutes === 'number' ? C.learner.time.sessionMinutes : null;
     if (sm && l.minutes > sm * 1.5) warns.push(`${w}: ${l.minutes} min is much longer than the learner's ${sm}-minute sessions; split the lesson or mark natural break points`);
+    if (profile === 'full') { const ty = (l.blocks || []).map(b => b && b.type); const firstP = ty.findIndex(t => t === 'predict' || t === 'activity'); const firstE = ty.findIndex(t => t === 'explain' || t === 'worked'); if (firstE >= 0 && (firstP < 0 || firstP > firstE)) warns.push(`${w}: the first prediction comes after the first explain/worked block; put a predict block or a predicting activity before the explanation that reveals its answer (or use a later prediction only for a new case)`); }
     if (has.has('check')) { const min = profile === 'full' ? 2 : 1; if (nQuestions < min) errs.push(`${w}: a ${profile} lesson needs at least ${min} check question(s) in total`); }
     contract[l.id] = { _profile: profile };
     const required = PROFILES[profile] || REQUIRED_FUNCTIONS;
@@ -311,6 +472,8 @@ export function validateCourse(dir) {
     }
   }
   for (const [o, ls] of taught) if (!ls.length) errs.push(`outcome ${o} is not taught by any lesson`);
+  const th = C.learner && C.learner.time && C.learner.time.totalHours;
+  if (typeof th === 'number' && th > 0) { const mins = lessons.reduce((acc, l) => acc + (l.minutes || 0), 0); if (mins > th * 60 * 1.25) warns.push(`lessons add up to ${mins} min, more than the ${th} h the learner asked for; trim, mark lessons as advanced, or confirm with the learner`); }
   if (C.capstone) {
     const cp = C.capstone; req(cp.id && cp.title && cp.task, 'capstone needs id, title and task'); req((cp.rubric || []).length, 'capstone needs a rubric');
     (cp.rubric || []).forEach(r => req(r.criterion && (r.descriptors || []).length === (cp.levels || []).length, `capstone rubric "${r.criterion}": one descriptor per level`));
@@ -320,8 +483,9 @@ export function validateCourse(dir) {
   }
   for (const o of outcomes.keys()) if (!transferred.has(o) && taught.get(o).length) warns.push(`outcome ${o} has no transfer task (a transfer block or the capstone); recall and practice alone do not show transfer to a new situation`);
   for (const [o, a] of assessed) if (!a.length) errs.push(`outcome ${o} is never assessed (add assesses:["${o}"] to a check question, transfer task or the capstone)`);
+  const ka = knowledgeIssues(C, lessons, orderIds, errs, warns);
   if (C.diagnostic) (C.diagnostic.questions || []).forEach((q, i) => { checkQuestion(`diagnostic q${i}`, q, outcomes, errs, warns, terms, false); (q.lessons || []).forEach(id => req(byId.has(id), `diagnostic q${i}: unknown lesson ${id}`)); });
-  return { errs, warns, data, contract, assessed, taught };
+  return { errs, warns, data, contract, assessed, taught, knowledge: ka.report };
 }
 function checkSource(where, s, errs, warns) {
   if (s.id && !/^[a-z][a-z0-9-]*$/.test(s.id)) errs.push(`${where}: id must be a lowercase slug`);
@@ -334,14 +498,16 @@ function checkSource(where, s, errs, warns) {
 }
 
 const CITATION = /<a\s+data-source=["']([a-z][a-z0-9-]*)["']\s*>/gi;
-function citationIssues(where, lesson, errs) {
-  const sources = new Map();
+function citationIssues(where, lesson, errs, warns) {
+  const sources = new Map(); const order = (lesson.sources || []).map(s => s.id);
   (lesson.sources || []).forEach(s => { if (s.id) { if (sources.has(s.id)) errs.push(`${where}: duplicate source id "${s.id}"`); sources.set(s.id, s); } });
   allStrings([lesson.blocks, lesson.next, lesson.prereqText]).forEach(html => {
     for (const m of html.matchAll(CITATION)) {
       const s = sources.get(m[1]);
       if (!s || !s.url) errs.push(`${where}: inline citation "${m[1]}" needs a matching lesson source with a URL`);
     }
+    // Numbered labels such as <a data-source="x">[2]</a> must match the source's position in the list.
+    for (const m of html.matchAll(/<a\s+data-source=["']([a-z][a-z0-9-]*)["']\s*>\s*\[(\d+)\]\s*<\/a>/gi)) { const pos = order.indexOf(m[1]) + 1; if (warns && pos && +m[2] !== pos) warns.push(`${where}: citation label [${m[2]}] points to "${m[1]}", which is source ${pos} in the list`); }
   });
 }
 
@@ -433,7 +599,8 @@ function toMd(html) {
 }
 let MT = I18N.en; // UI strings for the course being exported (set in exportMarkdown)
 function qMd(q) {
-  let t = `**${toMd(q.prompt).replace(/\n+/g, ' ')}**\n\n`;
+  // Keep multi-line prompts (code blocks, lists) intact; only collapse a plain one-paragraph prompt into a bold line.
+  const pm = toMd(q.prompt); let t = /```|\n\s*[-*\d]/.test(pm) ? `${pm}\n\n` : `**${pm.replace(/\n+/g, ' ')}**\n\n`;
   if (q.options) { t += q.options.map((o, j) => `- ${String.fromCharCode(97 + j)}) ${toMd(o)}`).join('\n'); const c = Array.isArray(q.correct) ? q.correct.map(i => String.fromCharCode(97 + i)).join(', ') : String.fromCharCode(97 + q.correct); t += `\n\n<details><summary>${MT.md_answer}</summary>\n\n**${c}** — ${toMd(q.explanation)}${q.feedback ? '\n\n' + Object.entries(q.feedback).map(([k, v]) => `- ${String.fromCharCode(97 + +k)}): ${toMd(v)}`).join('\n') : ''}\n\n</details>`; }
   else if (q.kind === 'numeric') t += `<details><summary>${MT.md_answer}</summary>\n\n${q.answer}${q.unit ? ' ' + q.unit : ''} (± ${q.tolerance || 0}) — ${toMd(q.explanation)}\n\n</details>`;
   else t += `${(q.rubric || []).map(r => '- [ ] ' + toMd(r)).join('\n')}\n\n<details><summary>${MT.showModel}</summary>\n\n${toMd(q.model)}\n\n</details>`;
@@ -480,6 +647,7 @@ export function coverageMarkdown(v) {
   for (const id of C.modules.flatMap(m => m.lessons)) { const l = byId.get(id); if (!l) continue; const c = v.contract[id] || {}; md += `| ${l.title} | ${c._profile || 'full'} | ${REQUIRED_FUNCTIONS.map(f => ({ yes: '✓', exempt: 'exempt', missing: '✗', optional: '—' }[c[f]] || '?')).join(' | ')} | ${(l.blocks || []).filter(b => b.type === 'activity').map(b => b.widget).join(', ') || '—'} |\n`; }
   const ex = lessons.flatMap(l => Object.entries(l.exemptions || {}).map(([k, w]) => `- ${l.id} / ${k}: ${w}`));
   if (ex.length) md += `\n## Justified exemptions\n\n${ex.join('\n')}\n`;
+  if (v.knowledge) md += `\n## Knowledge architecture\n\n| Concept or disposition | Kind | Assessment mode | Evidence from tagged items |\n|---|---|---|---|\n${v.knowledge.map(k => `| ${k.label} (${k.id}) | ${k.kind} | ${k.mode} | ${k.evidence.join(', ') || '**none**'} |`).join('\n')}\n`;
   const unv = [...(C.sources || []).map(s => ['course', s]), ...lessons.flatMap(l => (l.sources || []).map(s => [l.id, s]))].filter(([, s]) => s.status === 'unverified');
   if (unv.length) md += `\n## Unverified sources (${unv.length})\n\n${unv.map(([w, s]) => `- ${w}: ${s.title}${s.note ? ' — ' + s.note : ''}`).join('\n')}\n`;
   if (v.warns.length) md += `\n## Warnings (${v.warns.length})\n\n${v.warns.map(w => '- ' + w).join('\n')}\n`;
@@ -507,7 +675,7 @@ function main(argv) {
   const print = (r, label) => { r.errs.forEach(e => console.log('ERROR  ' + e)); r.warns.forEach(w => console.log('warn   ' + w)); console.log(`\n${label}: ${r.errs.length} error(s), ${r.warns.length} warning(s).`); };
   try {
     switch (cmd) {
-      case 'check-request': { const r = checkRequest(readJson(a)); console.log(JSON.stringify({ ok: r.ok, blocking: r.blocking, errors: r.errors, unknown: r.unknown }, null, 2)); if (!r.ok) console.error(`\nNot ready: ${r.blocking.length} blocking gap(s), ${r.errors.length} error(s). Ask the requester or fix the request before init.`); return r.ok ? 0 : 1; }
+      case 'check-request': { const r = checkRequest(readJson(a)); console.log(JSON.stringify({ ok: r.ok, blocking: r.blocking, errors: r.errors, intakeQuestions: r.intakeQuestions, decisions: r.decisions, unknown: r.unknown }, null, 2)); if (!r.ok) console.error(`\nNot ready: ${r.blocking.length} blocking gap(s), ${r.errors.length} error(s). Ask the requester or fix the request before init.`); return r.ok ? 0 : 1; }
       case 'init': { const r = initCourse(a, b); console.log(`Created ${b}/course.json (id "${r.course.id}"; rename it now if you want a different stable id).\nNext: define outcomes and modules in course.json, then write lessons/<id>.json files (see references/lesson-contract.md).`); return 0; }
       case 'validate': { const r = validateCourse(a); print(r, 'validate'); return r.errs.length ? 1 : 0; }
       case 'build': { const out = rest[0] === '--out' ? rest[1] : (b === '--out' ? rest[0] : undefined); const r = build(a, out); print(r, 'build'); if (!r.errs.length) console.log(`Site: ${r.out}/index.html\nMarkdown: ${r.md}/\nCoverage: ${path.join(a, 'COVERAGE.md')}`); return r.errs.length ? 1 : 0; }

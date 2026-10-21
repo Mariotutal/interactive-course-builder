@@ -1,0 +1,37 @@
+{
+  "benchmark": "kubernetes",
+  "reviewer": "Claude Sonnet subagent (same model family as generator)",
+  "date": "2026-10-20",
+  "independent": false,
+  "note": "Read all three lessons, course.json and REVIEW.md in route order and checked about ten central claims and 13 anchors against the live kubernetes.io Deployment and Probes pages; did not run the built site, so keyboard, 375 px, lang attributes and live widget behaviour were not tested and the reviewer is the same model family as the generator.",
+  "scores": {
+    "factual-accuracy": {
+      "score": 1,
+      "rationale": "I checked against the fetched kubernetes.io Deployment and Probes pages: the rollout-only-on-.spec.template rule, surge rounds up and unavailable rounds down with 25% defaults, neither can be 0 when the other is, progressDeadlineSeconds default 600 and > minReadySeconds, 'no action other than report ProgressDeadlineExceeded' (so no auto-rollback), revisionHistoryLimit 10, readiness removing the Pod from EndpointSlices, readiness running for the whole container lifetime, and the HTTP 200-399 success range all match, so central claims are right. Not 2 because the docs version is never pinned (v1.37 is inferred from the site menu and the course says so), and the l2-a1 parameter-explorer 'Not a valid setting' warning and debrief say a rounded-to-zero surge and unavailable is 'rejected', which goes beyond the documented rule on the configured values (from my own knowledge, not verified against the page, the controller coerces maxUnavailable to 1 in that case)."
+    },
+    "instructional-sequencing": {
+      "score": 1,
+      "rationale": "Each lesson opens with an authentic start (motivate), then a prediction (l1-p1, l2-p1) before the explanation, then worked example, activity, guided and independent practice, check and transfer; prerequisites are explicit and chained. Gaps: 'available' is used in the l2-p1 prediction before the lesson-2 explain block defines it, 'kubelet' appears as an option in l1-c2 and 'Service'/'EndpointSlice' in l3 without earlier definition, and 'progress deadline' is used in l2-pi and l2-c4 a lesson before l3 introduces it."
+    },
+    "visual-purpose": {
+      "score": 2,
+      "rationale": "All three visuals (l1 ownership diagram, l2 stalled-rollout bounds, l3 probe timeline) have a stated one-sentence purpose (structure, state at a limit, change over time), and each alt text carries the full information including both bounds and the failureThreshold x periodSeconds note; status uses words/symbols, not colour alone. The parameter-explorer chart has an ariaLabel. Judged from source only; I did not render them."
+    },
+    "interaction-relevance": {
+      "score": 1,
+      "rationale": "From source, every activity asks for a prediction or decision (system-flow l1-a1, code-trace l2-a2, evidence-case l3-a1 with per-conclusion explanations, parameter-explorer with conditional warnings) and each lists assumptions, and MCQ feedback names misconceptions. Held at 1 because I could not run any control in a browser, the classify activity (l3-a2) gives only a one-line confirmation per item rather than addressing why a wrong bucket is wrong, and the parameter-explorer has no way to record the prediction it requests."
+    },
+    "accessibility": {
+      "score": 1,
+      "rationale": "Source-only check: every visual has alt text and a text equivalent, meaning is carried by words and symbols, code is in pre/code, and course language is en with built-in widgets claimed keyboard-operable. I did not test keyboard navigation, 375 px layout or language attributes in the built site, and REVIEW.md admits mobile and keyboard-only were never tested, so I score conservatively."
+    },
+    "source-quality": {
+      "score": 1,
+      "rationale": "All sources are official kubernetes.io documentation with access dates (appropriate authority), I confirmed all 13 sampled section anchors exist, and the 3 invented examples are labelled pedagogical. But the '26 sources' are really two pages (Deployments, Probes) split by anchor, no API reference or other primary source is used, the docs version is not pinned, and k8s-deploy-bad (lesson 2) is explicitly noted as an approximate anchor ('verify in page') yet is not marked unverified in the metadata."
+    },
+    "transfer-coverage": {
+      "score": 1,
+      "rationale": "Each outcome has a task with a rubric and model answer (l1-t, l2-t, l3-t, capstone covering o1-o3), but the contexts stay close to the lesson examples: l1-t (env var plus replicas in one PR) is nearly the l1-pi 'bumped replicas and changed image' scenario, and every task is a stateless web/worker Deployment. o3 (choose settings) is only transferred in l3-t, which is a diagnosis whose own model answer admits the stated symptom should not occur with the defaults, so the premise is shaky."
+    }
+  }
+}

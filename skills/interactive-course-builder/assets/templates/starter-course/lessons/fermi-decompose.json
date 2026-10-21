@@ -28,6 +28,22 @@
       "alt": "Four boxes in a row: number of people, pianos per person, tunings per piano per year, and division by the number of tunings one tuner does per year."
     },
     {
+      "type": "predict",
+      "id": "fd-p1",
+      "prompt": "If you double the share of households with a piano, what happens to the estimate?",
+      "options": [
+        "It doubles",
+        "It barely changes",
+        "It quadruples"
+      ],
+      "correct": 0,
+      "feedback": {
+        "1": "Every factor multiplies the result, so no factor is negligible.",
+        "2": "Only factors that appear squared would quadruple it."
+      },
+      "explanation": "The estimate is a product of the factors, so it scales linearly with each one."
+    },
+    {
       "type": "explain",
       "html": "<p>Write the target as a formula of factors whose units cancel. For each factor, give a low and a high value you would be surprised to see exceeded. Use the <span class='term' data-term='geometric mean'>geometric mean</span> of the bounds as your point estimate. The <span class='term' data-term='order of magnitude'>order of magnitude</span> of the result is usually right even when individual factors are off by a factor of two.</p>"
     },
@@ -48,22 +64,6 @@
         }
       ],
       "result": "<p>About 20 tuners, so 2,000 is off by a factor of 100. The claim needs a very different assumption to survive.</p>"
-    },
-    {
-      "type": "predict",
-      "id": "fd-p1",
-      "prompt": "If you double the share of households with a piano, what happens to the estimate?",
-      "options": [
-        "It doubles",
-        "It barely changes",
-        "It quadruples"
-      ],
-      "correct": 0,
-      "feedback": {
-        "1": "Every factor multiplies the result, so no factor is negligible.",
-        "2": "Only factors that appear squared would quadruple it."
-      },
-      "explanation": "The estimate is a product of the factors, so it scales linearly with each one."
     },
     {
       "type": "activity",
@@ -110,9 +110,21 @@
           }
         ],
         "chart": {
-          "x": { "var": "x", "from": 1, "to": 20 },
-          "series": [ { "label": "Estimated tuners", "expr": "pop / 2.5 * x / 100 / (perday * 250)" } ],
-          "current": { "label": "Current piano share (%)", "x": "share" },
+          "x": {
+            "var": "x",
+            "from": 1,
+            "to": 20
+          },
+          "series": [
+            {
+              "label": "Estimated tuners",
+              "expr": "pop / 2.5 * x / 100 / (perday * 250)"
+            }
+          ],
+          "current": {
+            "label": "Current piano share (%)",
+            "x": "share"
+          },
           "xLabel": "Households with a piano (%)",
           "yLabel": "Estimated tuners",
           "ariaLabel": "Estimated piano tuners as the share of households with a piano changes"

@@ -1,0 +1,37 @@
+{
+  "benchmark": "programming",
+  "reviewer": "Claude Sonnet subagent (same model family as generator)",
+  "date": "2026-10-20",
+  "independent": false,
+  "note": "Read all three lessons and the capstone/course.json, ran every code sample locally (python3 3.14.5) and checked central claims against fetched docs.python.org pages, but did not open the built site, so keyboard, 375 px, widget behaviour and rendered lang attributes were not checked.",
+  "scores": {
+    "factual-accuracy": {
+      "score": 2,
+      "rationale": "I ran every code sample from l1/l2/l3 and the capstone (python3 3.14.5) and all shown outputs and trace states match, including the l3-classify items i1-i6 and the capstone model answer. I fetched docs.python.org (FAQ x3 entries, copy module, tutorial default arguments, augmented assignment) and the paraphrases/quotes in l1 explain, l2 explain and l3 explain match the docs; minor slips: 'tutorial 4.9' is cited for 'call by object reference', which is a footnote in section 4.8, and the l2 evidence item e2 (list.sort docs) is explicitly paraphrased, unquoted and not in the sources list (flagged in the item)."
+    },
+    "instructional-sequencing": {
+      "score": 1,
+      "rationale": "Prerequisites are explicit (prereqText in l1, prerequisites arrays) and l1-predict, l2-debug evidence-case and l3-classify open each lesson before the explanation, which is good. But l1's worked 'Trace' block gives the full answer to the same program that the l1-trace code-trace then asks the learner to predict (prediction after the reveal), l2's worked 'Debug normalize' repeats the already-done l2-debug case, and l2-predict-default follows an explain block that contains the near-identical f(a, L=[]) example. Some terms are used before definition: copy.deepcopy, list(a), a[:] and a comprehension inside l3-classify before the explain block, and **extra/dict.update in l2-transfer."
+    },
+    "visual-purpose": {
+      "score": 2,
+      "rationale": "Three SVG figures each have a stated one-sentence purpose (l1 shared object vs new object; l2 mutation vs rebinding of a parameter; l3 shallow vs deep sharing), each has an alt plus an aria-label that carries the same structure (which names point to which list) and the diagrams label meaning in text rather than by colour alone (dashed edges are also explained in text). Nothing essential is lost reading only the text equivalents; the figures are static, not manipulable, which the rubric allows for structure/comparison jobs."
+    },
+    "interaction-relevance": {
+      "score": 1,
+      "rationale": "Source-only check (site not run): all four activities require prediction or classification (l1-trace and l3-trace have per-step predict prompts with explanations, l2-debug requires choosing discriminating evidence, l3-classify requires sorting with a rationale), and each declares in assumptions that it does not execute Python. Feedback is thin in places: several l3-classify item feedbacks are one clause ('deepcopy copies the inner lists too'), the code-trace predictions are two-option and don't name misconceptions, and e2 in l2-debug has no real doc content. I could not verify that controls work in the built page."
+    },
+    "accessibility": {
+      "score": 1,
+      "rationale": "From JSON source only: every visual has alt text and an aria-label, categories and verdicts are text-labelled, code is in pre/code, and course language is set to en. I did not test keyboard operation of the widgets, 375 px overflow, contrast, or rendered lang attributes, and the course's own REVIEW.md also says these were not tested, so I score conservatively."
+    },
+    "source-quality": {
+      "score": 1,
+      "rationale": "Sources are all primary/official Python documentation (FAQ, language reference, library reference, tutorial, copy module) with access dates, plus a clearly labelled 'pedagogical' local-run entry, which is appropriate for this topic. Weaknesses: URLs point to the floating /3/ docs (docs showed 3.15 while code was run on 3.14.5, no pinned version), the capstone cites only the docs.python.org/3/ root, the l2-debug e2 evidence item cites 'Python docs, list.sort' with no URL or entry in the lesson sources, and the tutorial section reference is mislabelled. No contested positions exist in this topic."
+    },
+    "transfer-coverage": {
+      "score": 1,
+      "rationale": "Every lesson has a transfer task with a rubric and model answer, plus a capstone (gradebook) with a level rubric, and the o3 tasks (l3-transfer undo history, capstone snapshot) are in new contexts. However l1-transfer (two model names sharing defaults) is structurally the same alias-then-mutate story as the l1 motivate block and l1-guided; l2-transfer is a dict.update helper, so o2's 'shared default' case has no transfer task (default-argument bugs appear only in explain, l2-predict-default and the offline l2-independent), and the capstone's three bugs mirror the lesson examples (shared [] via comprehension, curve, shallow copy)."
+    }
+  }
+}

@@ -1,0 +1,482 @@
+{
+  "format": 1,
+  "id": "correlacion-causalidad-salario-minimo",
+  "version": "1.0.0",
+  "title": "Correlación, causalidad y evidencia en la investigación social: el caso del salario mínimo y el empleo",
+  "subtitle": "Curso introductorio, sin econometría, para leer con criterio una afirmación sobre el efecto de una política",
+  "language": "es",
+  "locale": "es-ES",
+  "learner": {
+    "topic": "Correlation, causation and evidence in social research: the case of minimum wage and employment",
+    "goals": [
+      "Distinguish a correlation from a causal claim in a news report",
+      "Explain what a natural experiment adds and what it cannot settle",
+      "Write a qualified conclusion that acknowledges competing evidence"
+    ],
+    "scope": "Introductory; no econometrics",
+    "language": "es",
+    "locale": "es-ES",
+    "intake": {
+      "capability": "Read a claim about a policy's effect and judge how strong the evidence is",
+      "familiarity": "none",
+      "modality": "reading",
+      "practiceLoad": "light"
+    },
+    "learner": {
+      "startingKnowledge": "General reader; no statistics or economics training",
+      "background": "Synthetic benchmark learner: journalist",
+      "depth": "solid",
+      "knownGaps": []
+    },
+    "time": {
+      "totalHours": 2,
+      "sessionMinutes": 30
+    },
+    "sources": {
+      "provided": [],
+      "freshness": "unknown",
+      "evidenceStandard": "Peer-reviewed research and official statistics; present competing findings"
+    },
+    "exclusions": [],
+    "constraints": [],
+    "presentation": {
+      "visual": "high",
+      "interaction": "high",
+      "reducedMotion": false,
+      "readingLevel": "unknown"
+    },
+    "accessibility": {
+      "screenReader": false,
+      "notes": ""
+    },
+    "practice": {
+      "tools": [],
+      "equipment": [],
+      "software": [],
+      "datasets": [],
+      "realWorld": "unknown"
+    },
+    "output": {
+      "format": "web+markdown",
+      "host": "unknown"
+    },
+    "diagnostic": true,
+    "decisions": [
+      {
+        "because": "familiarity: none",
+        "decision": "Offer the diagnostic, start the core route from prerequisites and define every term before it is used."
+      },
+      {
+        "because": "modality: reading",
+        "decision": "Lead with prose explanations and worked examples; keep visuals as summaries and make the printable view complete."
+      },
+      {
+        "because": "practice load: light",
+        "decision": "One guided and one independent practice per full lesson; prefer focused lessons for review."
+      },
+      {
+        "because": "sessions of 30 min",
+        "decision": "Size lessons to about 30 minutes and pack the schedule into sessions of that length."
+      }
+    ]
+  },
+  "assumptions": [
+    "Perfil de aprendiz sintético para este banco de pruebas: periodista sin formación en estadística ni economía",
+    "Los titulares, ejemplos y cifras de las lecciones marcados como ilustrativos o hipotéticos son inventados para enseñar; no son datos reales",
+    "Las fuentes se leyeron como resúmenes públicos (páginas de NBER, IDEAS/RePEc, AEA, Nobel y una copia de archivo web del informe de CBO); no se leyeron los artículos completos",
+    "Los hallazgos se refieren a Estados Unidos; no se cubre España ni otros países",
+    "Fecha de acceso a las fuentes: 2026-10-20"
+  ],
+  "outcomes": [
+    {
+      "id": "o1",
+      "text": "Distinguir, en una noticia, una afirmación de correlación de una afirmación causal y nombrar al menos una explicación alternativa (variable de confusión o causalidad inversa)",
+      "level": "core"
+    },
+    {
+      "id": "o2",
+      "text": "Explicar qué aporta un experimento natural frente a una simple comparación y qué supuestos y límites no puede resolver",
+      "level": "core"
+    },
+    {
+      "id": "o3",
+      "text": "Redactar una conclusión matizada que reconozca la evidencia contrapuesta y delimite alcance e incertidumbre",
+      "level": "core"
+    }
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "title": "Leer una afirmación causal",
+      "summary": "De la correlación al contrafactual y al experimento natural.",
+      "prerequisites": [],
+      "lessons": [
+        "correlacion-y-causalidad",
+        "experimento-natural"
+      ]
+    },
+    {
+      "id": "m2",
+      "title": "Pesar la evidencia",
+      "summary": "Cuando los estudios discrepan: pesar y redactar una conclusión.",
+      "prerequisites": [
+        "m1"
+      ],
+      "lessons": [
+        "evidencia-en-conflicto"
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "correlación",
+      "aka": [
+        "correlaciones",
+        "asociación"
+      ],
+      "definition": "Pauta observada en los datos por la que dos variables tienden a moverse juntas. Es un hecho descriptivo; no dice si una causa la otra."
+    },
+    {
+      "term": "causalidad",
+      "aka": [
+        "causal",
+        "causales",
+        "efecto causal"
+      ],
+      "definition": "Relación en la que un cambio en A produce un cambio en B. Afirmarla exige descartar explicaciones alternativas."
+    },
+    {
+      "term": "variable de confusión",
+      "aka": [
+        "variables de confusión",
+        "factor de confusión"
+      ],
+      "definition": "Tercer factor que influye en las dos variables y crea una asociación que no corresponde a un efecto de una sobre la otra."
+    },
+    {
+      "term": "causalidad inversa",
+      "definition": "Situación en la que el sentido de la relación es el contrario al supuesto: B provoca A y no A provoca B."
+    },
+    {
+      "term": "contrafactual",
+      "definition": "Lo que habría ocurrido si la política o el cambio no hubiera tenido lugar. Nunca se observa directamente; se aproxima con una comparación."
+    },
+    {
+      "term": "grupo de comparación",
+      "aka": [
+        "grupo de control"
+      ],
+      "definition": "Conjunto de personas o lugares parecidos a los afectados por un cambio, pero no expuestos a él, usado para aproximar el contrafactual."
+    },
+    {
+      "term": "experimento natural",
+      "aka": [
+        "experimentos naturales"
+      ],
+      "definition": "Situación real, por ejemplo un cambio legal, en la que unos individuos quedan expuestos a una intervención y otros similares no, de forma parecida a un experimento, sin que el investigador la controle."
+    },
+    {
+      "term": "diferencias en diferencias",
+      "definition": "Método que resta el cambio observado en el lugar de comparación al cambio observado en el lugar afectado, para estimar el efecto de la política."
+    },
+    {
+      "term": "tendencias paralelas",
+      "definition": "Supuesto de que, sin la política, el lugar afectado y el de comparación habrían evolucionado de forma parecida. No se puede comprobar directamente."
+    },
+    {
+      "term": "validez externa",
+      "definition": "Medida en que lo que se halla en un caso (un sector, una región, un periodo) vale también para otros."
+    }
+  ],
+  "routes": [
+    {
+      "id": "core",
+      "title": "Ruta principal",
+      "description": "Las tres lecciones en orden y la tarea final. Unas dos horas.",
+      "lessons": [
+        "correlacion-y-causalidad",
+        "experimento-natural",
+        "evidencia-en-conflicto"
+      ]
+    }
+  ],
+  "review": {
+    "intervals": [
+      1,
+      3,
+      7,
+      21,
+      60
+    ]
+  },
+  "intro": "<p>¿Cómo sabes si una noticia que dice «la medida X provocó Y» está bien fundada? Este curso breve (unas dos horas) parte de un caso real y muy debatido, el efecto del salario mínimo sobre el empleo, para enseñar tres cosas: distinguir correlación de causalidad, entender qué aporta un experimento natural y qué no puede resolver, y redactar una conclusión que reconozca la evidencia contrapuesta.</p>\n<p>No necesitas saber estadística ni economía; los términos se definen al usarlos. Está pensado para leer con calma: cada lección tiene una explicación en prosa, un ejemplo resuelto, una práctica guiada y otra independiente. Las fuentes (investigación revisada por pares, documentos de trabajo y estadísticas oficiales) están enlazadas junto a cada afirmación, con su fecha de acceso. Todo lo que el curso no pudo comprobar está marcado.</p>\n<p><strong>Alcance:</strong> el caso es de Estados Unidos; el curso no te dice si hay que subir o no el salario mínimo, sino cómo juzgar la solidez de lo que se afirma.</p>",
+  "diagnostic": {
+    "intro": "<p>Tres preguntas rápidas para saber por dónde empezar. No cambian el contenido; solo sugieren el ritmo.</p>",
+    "fastLabel": "ritmo rápido: predicciones y comprobaciones",
+    "fullLabel": "estudiar todo",
+    "questions": [
+      {
+        "id": "dg1",
+        "prompt": "«Las ciudades con más parques tienen menos criminalidad.» ¿Qué tipo de afirmación es?",
+        "options": [
+          "Descriptiva: señala una asociación observada.",
+          "Causal: dice que los parques reducen la criminalidad.",
+          "Una predicción sobre el futuro."
+        ],
+        "correct": 0,
+        "explanation": "«Tienen» describe una pauta; no dice que los parques cambien nada.",
+        "feedback": {
+          "1": "Un verbo como «reducen» sería causal; aquí no aparece.",
+          "2": "No predice nada: describe datos."
+        },
+        "lessons": [
+          "correlacion-y-causalidad"
+        ]
+      },
+      {
+        "id": "dg2",
+        "prompt": "Los barrios con más policía tienen más delitos registrados. ¿Qué explicación alternativa a «la policía provoca delitos» es razonable?",
+        "options": [
+          "Hay más policía donde ya hay más delitos.",
+          "La policía no trabaja.",
+          "Los delitos no existen."
+        ],
+        "correct": 0,
+        "explanation": "Es causalidad inversa: la flecha podría ir de los delitos a la policía.",
+        "feedback": {
+          "1": "No es una explicación de los datos.",
+          "2": "Contradice el dato."
+        },
+        "lessons": [
+          "correlacion-y-causalidad"
+        ]
+      },
+      {
+        "id": "dg3",
+        "prompt": "Para estimar el efecto de una ley en una región, ¿qué comparación es más informativa?",
+        "options": [
+          "Con una región vecina similar que no cambió la ley.",
+          "Con el mismo lugar cinco años antes, sin más.",
+          "Con el promedio mundial."
+        ],
+        "correct": 0,
+        "explanation": "Una región vecina similar aproxima el contrafactual y controla cambios comunes.",
+        "feedback": {
+          "1": "Otros cambios ocurren a lo largo del tiempo.",
+          "2": "El promedio mundial no es comparable."
+        },
+        "lessons": [
+          "experimento-natural"
+        ]
+      }
+    ]
+  },
+  "capstone": {
+    "id": "capstone",
+    "title": "Valorar una afirmación política sobre el salario mínimo",
+    "concepts": [
+      "corr-vs-cause",
+      "natural-experiment",
+      "limits-of-design",
+      "weigh-evidence",
+      "qualify-claims"
+    ],
+    "task": "<p>Un diputado declara en una entrevista: <em>«El informe oficial demuestra que subir el salario mínimo federal a 15 dólares destruirá 1,3 millones de empleos»</em> (cita redactada para este ejercicio). Los datos reales de partida son los de CBO (2019) leídos en la lección 3: mediana de 1,3 millones de trabajadores menos empleados en una semana media de 2025 (0,8 %), con unos dos tercios de probabilidad de que el cambio esté entre cero y 3,7 millones; unos 17 millones de trabajadores verían subir su salario; 1,3 millones de personas saldrían de la pobreza según la estimación mediana.</p>\n<p><strong>Tarea:</strong> redacta, en 150-250 palabras, una verificación para tu sección. Debe (1) señalar si la afirmación del diputado es correlacional, causal o una proyección y por qué, (2) explicar qué aportan los experimentos naturales a este debate y qué no pueden resolver, usando el caso de Nueva Jersey y Pensilvania, (3) reconocer al menos dos estudios que discrepen y (4) cerrar con una conclusión matizada.</p>",
+    "levels": [
+      "Inicial",
+      "En desarrollo",
+      "Competente"
+    ],
+    "rubric": [
+      {
+        "criterion": "Distingue tipo de afirmación",
+        "descriptors": [
+          "Acepta la frase del diputado tal cual",
+          "Señala que «demuestra» es excesivo pero no identifica el tipo de evidencia",
+          "Identifica que es una proyección con modelo y supuestos, no una observación, y que «demuestra» y «destruirá» no están respaldados"
+        ]
+      },
+      {
+        "criterion": "Experimentos naturales",
+        "descriptors": [
+          "No los menciona o los confunde con experimentos aleatorizados",
+          "Explica la comparación NJ-PA pero sin supuestos",
+          "Explica la comparación, el supuesto de tendencias paralelas y al menos un límite (medición o generalización)"
+        ]
+      },
+      {
+        "criterion": "Evidencia contrapuesta",
+        "descriptors": [
+          "Cita un solo lado",
+          "Cita dos estudios pero sin decir en qué discrepan",
+          "Cita estudios en ambos sentidos y explica el eje de discrepancia (datos, diseño, alcance)"
+        ]
+      },
+      {
+        "criterion": "Conclusión matizada",
+        "descriptors": [
+          "Absoluta en uno u otro sentido",
+          "Prudente pero sin alcance ni incertidumbre",
+          "Afirmación proporcionada con alcance, evidencia en contra e incertidumbre"
+        ]
+      }
+    ],
+    "assesses": [
+      "o1",
+      "o2",
+      "o3"
+    ],
+    "evaluation": "<p>Evalúa tu texto con la rúbrica (autoevaluación). Para una valoración externa, pide a una persona de edición que lo lea sin ver la rúbrica y diga qué le falta. No hay corrección automática.</p>",
+    "model": "<p><strong>Ejemplo.</strong> «La frase del diputado presenta como hecho una proyección. La Oficina Presupuestaria del Congreso (CBO) estimó en 2019 que un mínimo federal de 15 dólares en 2025 reduciría el empleo en una mediana de 1,3 millones de trabajadores (0,8 %), con unos dos tercios de probabilidad de que la cifra esté entre cero y 3,7 millones; el mismo informe estima que el salario subiría a unos 17 millones de trabajadores y que 1,3 millones de personas saldrían de la pobreza. No es un recuento de lo ocurrido, sino un modelo con supuestos sobre cuánto responde el empleo. Los experimentos naturales, como la comparación entre Nueva Jersey y Pensilvania en 1992, aportan un grupo de comparación, pero dependen de que ambos lugares habrían evolucionado igual sin la ley, de la calidad de los datos (Neumark y Wascher, con nóminas, hallaron una caída; Card y Krueger, con encuestas, no) y de que el resultado valga para otros casos. Otros estudios discrepan: Cengiz y coautores no ven pérdida de empleos de salario bajo con 138 subidas estatales, mientras que una revisión de Neumark y Shirley ve predominio de estimaciones negativas. Conclusión: los resultados son mixtos y la cifra de 1,3 millones es una estimación mediana incierta de un modelo; “demostrará” no está respaldado.»</p>"
+  },
+  "knowledgeArchitecture": {
+    "summary": "Una cadena de ideas sobre causalidad (correlación, confusión, contrafactual, experimento natural) más dos lentes transversales, los límites de un diseño y el peso de la evidencia, y un hábito: matizar las afirmaciones.",
+    "concepts": [
+      {
+        "id": "corr-vs-cause",
+        "label": "Correlación frente a causalidad",
+        "type": "hierarchical",
+        "lessons": [
+          "correlacion-y-causalidad"
+        ]
+      },
+      {
+        "id": "confounding",
+        "label": "Variable de confusión",
+        "type": "hierarchical",
+        "lessons": [
+          "correlacion-y-causalidad"
+        ]
+      },
+      {
+        "id": "reverse-causation",
+        "label": "Causalidad inversa",
+        "type": "hierarchical",
+        "lessons": [
+          "correlacion-y-causalidad"
+        ]
+      },
+      {
+        "id": "counterfactual",
+        "label": "Contrafactual y grupo de comparación",
+        "type": "hierarchical",
+        "lessons": [
+          "correlacion-y-causalidad",
+          "experimento-natural"
+        ]
+      },
+      {
+        "id": "natural-experiment",
+        "label": "Experimento natural",
+        "type": "hierarchical",
+        "lessons": [
+          "experimento-natural"
+        ]
+      },
+      {
+        "id": "parallel-trends",
+        "label": "Tendencias paralelas",
+        "type": "hierarchical",
+        "lessons": [
+          "experimento-natural"
+        ]
+      },
+      {
+        "id": "limits-of-design",
+        "label": "Límites de un diseño (medición, generalización)",
+        "type": "horizontal",
+        "lessons": [
+          "experimento-natural",
+          "evidencia-en-conflicto"
+        ]
+      },
+      {
+        "id": "weigh-evidence",
+        "label": "Pesar evidencia que discrepa",
+        "type": "horizontal",
+        "lessons": [
+          "evidencia-en-conflicto"
+        ]
+      }
+    ],
+    "prerequisites": [
+      {
+        "from": "corr-vs-cause",
+        "to": "confounding"
+      },
+      {
+        "from": "corr-vs-cause",
+        "to": "reverse-causation"
+      },
+      {
+        "from": "confounding",
+        "to": "counterfactual"
+      },
+      {
+        "from": "counterfactual",
+        "to": "natural-experiment"
+      },
+      {
+        "from": "natural-experiment",
+        "to": "parallel-trends"
+      }
+    ],
+    "hubs": [
+      {
+        "id": "strength",
+        "label": "Fuerza de la evidencia",
+        "lens": "Toda afirmación causal es tan fuerte como la comparación que la sostiene y los datos que la miden",
+        "concepts": [
+          "counterfactual",
+          "limits-of-design",
+          "weigh-evidence"
+        ]
+      }
+    ],
+    "dispositions": [
+      {
+        "id": "qualify-claims",
+        "label": "Matizar las afirmaciones causales sin que nadie lo pida",
+        "lessons": [
+          "evidencia-en-conflicto"
+        ],
+        "bands": [
+          {
+            "level": 1,
+            "descriptor": "Repite la afirmación causal del titular o de la fuente"
+          },
+          {
+            "level": 2,
+            "descriptor": "Matiza cuando se le pide"
+          },
+          {
+            "level": 3,
+            "descriptor": "Matiza por iniciativa propia: alcance, evidencia en contra e incertidumbre"
+          }
+        ]
+      }
+    ],
+    "assessmentModes": {
+      "corr-vs-cause": "auto",
+      "confounding": "auto",
+      "reverse-causation": "auto",
+      "counterfactual": "auto",
+      "natural-experiment": "auto",
+      "parallel-trends": "auto",
+      "limits-of-design": "rubric",
+      "weigh-evidence": "rubric",
+      "qualify-claims": "observation"
+    }
+  },
+  "sources": [
+    {
+      "title": "Fuentes de las lecciones",
+      "kind": "reference",
+      "note": "Las fuentes con enlace y fecha de acceso están en cada lección."
+    }
+  ],
+  "theme": {
+    "profile": "social-science",
+    "layout": "reading"
+  }
+}
