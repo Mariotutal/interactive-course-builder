@@ -1,0 +1,339 @@
+{
+  "format": 1,
+  "id": "linear-vs-exponential-growth",
+  "version": "1.0.0",
+  "title": "Linear or exponential? Reading growth in tables and graphs",
+  "subtitle": "Secondary-school level; no logarithms required",
+  "language": "en",
+  "locale": "en-US",
+  "learner": {
+    "topic": "Linear and exponential growth: telling them apart from data and graphs",
+    "goals": [
+      "Decide from a table or graph whether growth is linear or exponential",
+      "Model a situation with y = m·x + b or y = a·b^x and interpret the parameters",
+      "Explain where each model stops being reasonable"
+    ],
+    "scope": "Secondary-school level; no logarithms required",
+    "language": "en",
+    "locale": "en-US",
+    "intake": {
+      "capability": "Look at a dataset and choose and justify a linear or exponential model",
+      "familiarity": "some",
+      "modality": "visual",
+      "practiceLoad": "balanced"
+    },
+    "learner": {
+      "startingKnowledge": "Comfortable with arithmetic, percentages and plotting points",
+      "background": "Synthetic benchmark learner: adult returning to maths",
+      "depth": "solid",
+      "knownGaps": []
+    },
+    "time": {
+      "totalHours": 2,
+      "sessionMinutes": 30
+    },
+    "sources": {
+      "provided": [],
+      "freshness": "unknown",
+      "evidenceStandard": "Open textbooks (e.g. OpenStax) or official curriculum references"
+    },
+    "exclusions": [],
+    "constraints": [],
+    "presentation": {
+      "visual": "high",
+      "interaction": "high",
+      "reducedMotion": false,
+      "readingLevel": "unknown"
+    },
+    "accessibility": {
+      "screenReader": false,
+      "notes": ""
+    },
+    "practice": {
+      "tools": [],
+      "equipment": [],
+      "software": [],
+      "datasets": [],
+      "realWorld": "unknown"
+    },
+    "output": {
+      "format": "web+markdown",
+      "host": "unknown"
+    },
+    "diagnostic": true,
+    "decisions": [
+      {
+        "because": "familiarity: some",
+        "decision": "Offer the diagnostic so known prerequisites can get a quick pass; keep the full core route available."
+      },
+      {
+        "because": "modality: visual",
+        "decision": "Lead each full lesson with a visual model and a manipulable activity before the long explanation."
+      },
+      {
+        "because": "practice load: balanced",
+        "decision": "Guided and independent practice in every full lesson plus spaced review."
+      },
+      {
+        "because": "sessions of 30 min",
+        "decision": "Size lessons to about 30 minutes and pack the schedule into sessions of that length."
+      }
+    ]
+  },
+  "assumptions": [
+    "Course decision: three 30-minute lessons plus a capstone (about 2 hours with practice), a benchmark-sized course.",
+    "Course decision: no knowledge architecture; the knowledge is one short chain (detect, model, bound), so lesson prerequisites suffice.",
+    "Simplification: all growth is modelled in discrete equal steps of x; continuous growth (e^x) is not covered.",
+    "All datasets in lessons are invented for teaching and are labelled illustrative; formulas and definitions come from the cited OpenStax sections.",
+    "Not verified: Common Core standard wording (official corestandards.org returned HTTP 404 to the fetch tool)."
+  ],
+  "outcomes": [
+    {
+      "id": "o1",
+      "text": "Decide from a table or a graph whether growth is linear or exponential, by testing equal-step differences and ratios.",
+      "level": "core"
+    },
+    {
+      "id": "o2",
+      "text": "Build y = m·x + b or y = a·b^x from a description or data, and interpret each parameter in context.",
+      "level": "core"
+    },
+    {
+      "id": "o3",
+      "text": "Explain, for a given situation, where a linear or an exponential model stops being reasonable.",
+      "level": "core"
+    }
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "title": "Detect, model and bound growth",
+      "summary": "Telling the two patterns apart, writing their equations, and knowing when a model should not be trusted.",
+      "prerequisites": [],
+      "lessons": [
+        "tell-them-apart",
+        "build-the-models",
+        "where-models-break"
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "linear growth",
+      "definition": "Growth in which the output changes by the same amount for every equal step of the input."
+    },
+    {
+      "term": "exponential growth",
+      "aka": [
+        "exponential function"
+      ],
+      "definition": "Growth in which the output is multiplied by the same factor for every equal step of the input (same percentage change per step). Written y = a·b^x with a ≠ 0, b > 0 and b ≠ 1."
+    },
+    {
+      "term": "common difference",
+      "definition": "The amount added from one row of a table to the next when x steps by a constant amount. Constant for linear growth."
+    },
+    {
+      "term": "common ratio",
+      "aka": [
+        "growth factor"
+      ],
+      "definition": "The number you multiply by from one row to the next (new value ÷ old value). Constant for exponential growth; it is the base b. A factor of 1.5 means growth of 50% per step."
+    },
+    {
+      "term": "slope",
+      "aka": [
+        "rate of change",
+        "m"
+      ],
+      "definition": "In y = m·x + b, the change in y for each one-unit increase in x."
+    },
+    {
+      "term": "initial value",
+      "aka": [
+        "y-intercept",
+        "a",
+        "b0"
+      ],
+      "definition": "The output when x = 0: b in y = m·x + b, and a in y = a·b^x."
+    },
+    {
+      "term": "growth rate",
+      "definition": "The percentage change per step written as a decimal: growth factor minus 1. A factor of 1.05 means a rate of 0.05, or 5%."
+    },
+    {
+      "term": "interpolation",
+      "definition": "Estimating a value inside the range of x values that the data covers."
+    },
+    {
+      "term": "extrapolation",
+      "definition": "Estimating a value outside the range of the data; much riskier because the pattern may change."
+    },
+    {
+      "term": "carrying capacity",
+      "definition": "An upper limit that real growth cannot exceed, such as the space or food available. Logistic models approach it."
+    }
+  ],
+  "routes": [
+    {
+      "id": "core",
+      "title": "Core route",
+      "description": "All three lessons in order, then the capstone. About two hours.",
+      "lessons": [
+        "tell-them-apart",
+        "build-the-models",
+        "where-models-break"
+      ]
+    }
+  ],
+  "review": {
+    "intervals": [
+      1,
+      3,
+      7,
+      21,
+      60
+    ]
+  },
+  "intro": "<p>You are handed a table of numbers, or a graph, and asked: <strong>is this linear or exponential, and what will it do next?</strong> That question comes up when you compare savings plans, read a news chart about spreading content, or sanity-check a forecast. This course trains one habit: before choosing a model, test what is constant between equal steps, a <em>difference</em> or a <em>ratio</em>.</p><p>You need arithmetic, percentages and plotting points. There are three 30-minute lessons (detect, model, know the limits) and a capstone. No logarithms are used.</p><p>Each lesson starts from a picture or a graph you can change, asks you to predict before it explains, and ends with a transfer task in a new context. Sources are linked beside the claims they support. Datasets are invented for practice and labelled as such.</p>",
+  "diagnostic": {
+    "intro": "<p>Three quick questions. They only suggest a pace; nothing is hidden.</p>",
+    "fastLabel": "Quick pass: predictions and checks",
+    "fullLabel": "Study every lesson fully",
+    "questions": [
+      {
+        "id": "dg1",
+        "prompt": "A table has y = 4, 7, 10, 13 for x = 0, 1, 2, 3. What stays constant?",
+        "options": [
+          "The amount added each step (+3)",
+          "The factor multiplied each step",
+          "Nothing; it is neither pattern",
+          "The percentage change"
+        ],
+        "correct": 0,
+        "explanation": "Each row adds 3, so the differences are constant: linear.",
+        "feedback": {
+          "1": "Ratios 7/4, 10/7, 13/10 are 1.75, 1.43, 1.3: not constant.",
+          "2": "It is a pattern: the constant difference of 3 makes it linear.",
+          "3": "The percentage change shrinks (75%, 43%, 30%), so it is not constant."
+        },
+        "lessons": [
+          "tell-them-apart"
+        ]
+      },
+      {
+        "id": "dg2",
+        "prompt": "A value grows 10% every year. After one year, by what number is it multiplied?",
+        "options": [
+          "0.10",
+          "1.10",
+          "10",
+          "1.0"
+        ],
+        "correct": 1,
+        "explanation": "Growing by 10% means keeping 100% and adding 10%: 100% + 10% = 110% = 1.10.",
+        "feedback": {
+          "0": "0.10 is the rate, not the factor; multiplying by 0.10 would shrink the value to a tenth.",
+          "2": "Multiplying by 10 is a 900% increase.",
+          "3": "A factor of 1.0 means no change at all."
+        },
+        "lessons": [
+          "build-the-models"
+        ]
+      },
+      {
+        "id": "dg3",
+        "prompt": "Can a quantity that doubles every day keep doing so for a year?",
+        "options": [
+          "Yes, doubling is a law of nature",
+          "Only if the numbers stay small",
+          "No; real limits such as space or resources eventually stop it",
+          "Yes, if it is measured carefully"
+        ],
+        "correct": 2,
+        "feedback": {
+          "0": "Doubling describes a pattern in a given range, not a law of nature.",
+          "1": "The size of the numbers does not stop doubling; limits come from resources.",
+          "3": "Measurement quality does not remove a physical limit."
+        },
+        "explanation": "Doubling for 365 days would multiply the start by 2^365; no real system has unlimited resources.",
+        "lessons": [
+          "where-models-break"
+        ]
+      }
+    ]
+  },
+  "capstone": {
+    "id": "capstone",
+    "title": "Capstone: advise on a forecast",
+    "task": "<p>A friend shows you two invented datasets and a claim. <strong>Plan X</strong> (savings in dollars at the end of month 0, 1, 2, 3, 4): 300, 345, 390, 435, 480. <strong>Plan Y</strong>: 300, 330, 363, 399.3, 439.23. The friend says \"Y grows faster, so Y will always beat X, and in 10 years I will be rich.\"</p><p>Write a short advisory note (about 150 to 250 words) that: (1) decides, with numbers, which plan is linear and which exponential; (2) writes an equation for each and says what every parameter means in dollars and months; (3) works out which plan is ahead at month 4 and at month 24 and explains the result; (4) names one limit of each model that the friend should keep in mind. The data are illustrative, not from a real bank.</p>",
+    "levels": [
+      "Beginning",
+      "Developing",
+      "Proficient"
+    ],
+    "rubric": [
+      {
+        "criterion": "Classifies with evidence",
+        "descriptors": [
+          "Names a model without checking differences or ratios",
+          "Checks one of difference or ratio",
+          "Shows constant difference (+45) for X and constant ratio (1.1) for Y"
+        ]
+      },
+      {
+        "criterion": "Equations and parameters",
+        "descriptors": [
+          "Equations missing or with wrong parameters",
+          "Correct equations, parameters only partly interpreted",
+          "X(m) = 300 + 45m and Y(m) = 300·1.1^m, with initial value, rate per month and growth factor explained in context"
+        ]
+      },
+      {
+        "criterion": "Comparison and conclusion",
+        "descriptors": [
+          "Claims Y always wins",
+          "Computes values but does not explain the change in who is ahead",
+          "Finds X ahead at month 4 (480 vs 439.23) and Y ahead by month 24, and explains that a growth factor beats a constant addition only eventually"
+        ]
+      },
+      {
+        "criterion": "Limits of each model",
+        "descriptors": [
+          "No limit stated",
+          "A vague limit (\"it might change\")",
+          "A specific limit tied to the context for each model, such as rate changes, or a decreasing balance going negative for a linear model"
+        ]
+      }
+    ],
+    "assesses": [
+      "o1",
+      "o2",
+      "o3"
+    ],
+    "evaluation": "<p>You cannot be graded by the app. Compare your note with the model, tick each rubric descriptor honestly, and, if possible, ask a friend or tutor to check that your numbers can be reproduced from your equations.</p>",
+    "model": "<p>X changes by +45 every month (345 − 300 = 45, 390 − 345 = 45, …), so it is linear: X(m) = 300 + 45m, with initial value $300 and slope $45 per month. Y has ratios 330/300 = 1.1, 363/330 = 1.1, 399.3/363 = 1.1, so it is exponential: Y(m) = 300·1.1<sup>m</sup>: start $300, growth factor 1.1, a 10% rate per month. At month 4, X = 480 and Y = 439.23, so X is ahead, which contradicts \"Y always beats X\". At month 24, X = 300 + 45·24 = 1,380 and Y = 300·1.1<sup>24</sup> ≈ 2,954. Y overtakes X later.</p><p>Check by computing: at month 7, X = 615 and Y = 300·1.1<sup>7</sup> ≈ 584.6; at month 8, X = 660 and Y ≈ 643.1; at month 9, X = 705 and Y ≈ 707.4. So Y first passes X at month 9. Limits: a sustained 10% per month is far above what real savings pay, and the rate would not stay fixed, so extrapolating 10 years (120 months) with Y is not credible. The linear plan assumes fixed $45 deposits every month for as long as the saver can keep paying them.</p>"
+  },
+  "sources": [
+    {
+      "title": "Algebra and Trigonometry 2e, section 6.1 Exponential Functions",
+      "kind": "textbook",
+      "author": "OpenStax"
+    },
+    {
+      "title": "Algebra and Trigonometry 2e, section 4.1 Linear Functions",
+      "kind": "textbook",
+      "author": "OpenStax"
+    },
+    {
+      "title": "Algebra and Trigonometry 2e, section 6.8 Fitting Exponential Models to Data",
+      "kind": "textbook",
+      "author": "OpenStax"
+    }
+  ],
+  "theme": {
+    "profile": "mathematics",
+    "diagramStyle": "outline",
+    "typeScale": "standard"
+  }
+}

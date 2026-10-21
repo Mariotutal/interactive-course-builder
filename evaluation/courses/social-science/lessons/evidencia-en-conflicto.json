@@ -1,0 +1,410 @@
+{
+  "format": 1,
+  "id": "evidencia-en-conflicto",
+  "title": "Evidencia en conflicto y conclusiones matizadas",
+  "summary": "Qué hacer cuando los estudios discrepan: pesar diseños, datos y alcance, y escribir una frase que diga lo que se sabe y lo que no.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 40,
+  "outcomes": [
+    "o3"
+  ],
+  "prerequisites": [
+    "correlacion-y-causalidad",
+    "experimento-natural"
+  ],
+  "prereqText": "<p>Necesitas las dos lecciones anteriores: la distinción entre correlación y causalidad, y la idea de experimento natural con sus límites.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>Dos fuentes te llegan el mismo día. Una dice: «La ciencia ha demostrado que subir el salario mínimo no destruye empleo». La otra: «Está demostrado que sí lo destruye». Ambas citan estudios reales con autores reputados. Tu redactor jefe quiere una frase de tres líneas para la pieza de mañana.</p><p>¿Se puede escribir algo honesto sin elegir bando a ciegas? Sí, pero hay que saber qué pesa más en cada estudio, y decirlo.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Piensa en un jurado con testimonios contradictorios. No cuenta solo cuántos testigos hay de cada lado: pregunta qué vio realmente cada uno, desde dónde, con qué motivo y si hay pruebas físicas. Del mismo modo, ante estudios que discrepan conviene preguntar por el diseño, los datos y el alcance de cada uno, y no solo cuántos hay a favor y en contra.</p>",
+      "limits": "<p>En un juicio hay que decidir. En ciencia social puede ser correcto que el veredicto quede abierto o dependa del subgrupo y del tamaño del cambio. Contar estudios tampoco es neutral: depende de qué se cuenta y de cómo se resumen.</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Comparar de un vistazo diseño, datos y hallazgo de cada estudio, para ver por qué pueden discrepar.",
+      "alt": "Tabla con seis filas. Card y Krueger 1994: comparación Nueva Jersey y Pensilvania, encuesta a 410 restaurantes, no halla efecto negativo sobre el empleo. Neumark y Wascher: mismo caso con nóminas de 230 restaurantes, halla caída de empleo del 4,6 %. Dube, Lester y Reich 2010: pares de condados fronterizos 1990-2006, sin efectos adversos. Cengiz y coautores 2019: 138 subidas estatales 1979-2016, número de empleos de salario bajo casi sin cambios. Neumark y Shirley, revisión: predominan estimaciones negativas, sobre todo en jóvenes y poco cualificados. CBO 2019: proyección para 15 dólares en 2025, mediana de 1,3 millones menos de empleados, con gran incertidumbre.",
+      "html": "<figure><table><caption>Seis fuentes sobre salario mínimo y empleo en EE. UU. (según sus propios resúmenes, leídos en la fecha indicada en las fuentes)</caption><thead><tr><th scope=\"col\">Fuente</th><th scope=\"col\">Diseño y datos</th><th scope=\"col\">Qué informa</th></tr></thead><tbody>\n<tr><th scope=\"row\">Card y Krueger (1993/94)</th><td>NJ frente a PA; encuesta, 410 restaurantes</td><td>Sin indicio de reducción de empleo; NJ +13 % relativo (documento de trabajo)</td></tr>\n<tr><th scope=\"row\">Neumark y Wascher (1995)</th><td>Mismo caso; registros de nóminas, 230 restaurantes</td><td>−4,6 % de empleo relativo a PA</td></tr>\n<tr><th scope=\"row\">Dube, Lester y Reich (2010)</th><td>Pares de condados vecinos entre estados, 1990-2006</td><td>Sin efectos adversos sobre el empleo</td></tr>\n<tr><th scope=\"row\">Cengiz et al. (2019)</th><td>138 subidas estatales, 1979-2016; método de «acumulación» de salarios</td><td>Empleos de salario bajo casi sin cambios a cinco años</td></tr>\n<tr><th scope=\"row\">Neumark y Shirley (2021/22)</th><td>Revisión de estudios publicados con variación subnacional en EE. UU.</td><td>Predominan estimaciones negativas, más en jóvenes y poco cualificados</td></tr>\n<tr><th scope=\"row\">CBO (2019)</th><td>Proyección con modelo para 15 $ en 2025</td><td>Mediana: 1,3 millones menos de empleados; incertidumbre alta</td></tr></tbody></table><figcaption>Tabla propia del curso que resume los resúmenes leídos de cada fuente; no sustituye a los artículos. Las cifras proceden de cada fuente citada más abajo.</figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "title": "Cómo pesar estudios que discrepan",
+      "html": "<p><strong>1. El caso de Nueva Jersey, otra vez.</strong> Neumark y Wascher volvieron a analizar el caso con registros de nóminas de 230 restaurantes y compararon con los datos de encuesta de Card y Krueger. Informan de dos cosas: la variación del empleo en los datos de encuesta era mucho mayor (la desviación típica del cambio era tres veces mayor) y, con las nóminas, la subida se asociaba a una caída del empleo del 4,6 % relativa a Pensilvania, estadísticamente significativa al 5 % <a data-source=\"nw-nber\">[1]</a>. Es una discrepancia de <em>medición</em>, no de diseño: ambos usan la misma comparación. Los datos de nóminas y los de encuesta son fuentes distintas y la disputa trata de cuál refleja mejor la realidad. Card y Krueger respondieron en la misma revista en 2000 <a data-source=\"ck-reply\">[2]</a>; no pude leer esa réplica y, por tanto, no resumo sus argumentos: <strong>no verificado</strong>.</p>\n<p><strong>2. Más comparaciones locales.</strong> Dube, Lester y Reich compararon todos los pares de condados contiguos separados por una frontera estatal entre 1990 y 2006 y no encontraron efectos adversos sobre el empleo; además, sostienen que los métodos que no tienen en cuenta las condiciones económicas locales tienden a producir efectos negativos espurios <a data-source=\"dlr\">[3]</a>. Es el mismo razonamiento del experimento natural llevado a muchos casos.</p>\n<p><strong>3. Muchas subidas a la vez.</strong> Cengiz y coautores usaron 138 subidas estatales entre 1979 y 2016, comparando los empleos «de más» justo por encima del nuevo mínimo con los «de menos» justo por debajo. Hallan que el número total de empleos de salario bajo se mantuvo casi igual durante cinco años, sin evidencia de pérdida de empleo con salarios mínimos más altos en su muestra, aunque sí algo de reducción en sectores comerciables <a data-source=\"cengiz\">[4]</a>.</p>\n<p><strong>4. Una lectura de conjunto, con otro resultado.</strong> Neumark y Shirley reúnen los estudios publicados con variación subnacional en EE. UU. y concluyen que hay una clara preponderancia de estimaciones negativas, más fuerte para jóvenes y poco cualificados, y menos unilateral en estudios de industrias de salario bajo <a data-source=\"ns\">[5]</a>. Observa que su propio resumen reconoce que los resúmenes de la literatura son muy distintos entre sí: desde «no reduce el empleo» hasta «la mayoría apunta a efectos adversos». La disputa también es sobre cómo resumir.</p>\n<p><strong>5. Una proyección, no un estudio.</strong> La Oficina Presupuestaria del Congreso (CBO) estimó en 2019 que subir el salario mínimo federal a 15 dólares en 2025 dejaría sin empleo, en una semana media de 2025, a 1,3 millones de trabajadores que de otro modo lo tendrían (un 0,8 % de los empleados); hay unos dos tercios de probabilidad de que el cambio esté entre cero y 3,7 millones. A la vez, subiría el salario de unos 17 millones de trabajadores y sacaría de la pobreza a 1,3 millones de personas según su estimación mediana <a data-source=\"cbo\">[6]</a>. Es un resultado de un modelo con supuestos sobre cuánto responde el empleo a los salarios, no una observación de lo ocurrido. CBO subraya la considerable incertidumbre.</p>\n<p><strong>Qué preguntas ayudan a pesar.</strong> (a) ¿Qué diseño hay detrás: comparación local, antes y después, corte transversal? (b) ¿Qué datos y cómo de buenos? (c) ¿Qué población y qué tamaño de subida cubre? (d) ¿Es observación o proyección de un modelo? (e) ¿Se ha replicado con otros métodos? Un estudio «gana» solo en el eje que realmente importa para tu frase.</p>\n<p><strong>Estado de la cuestión (para esta lección).</strong> No hay consenso simple. Hay resultados de cero o casi cero para el empleo total con subidas moderadas y hay estimaciones negativas, sobre todo para jóvenes y poco cualificados; el efecto de subidas mucho mayores es incierto. Es una síntesis del curso basada en las seis fuentes leídas, no un veredicto de la disciplina.</p>\n<p><strong>Una conclusión matizada</strong> es una frase que dice qué se sostiene, con qué fuerza, para quién y en qué condiciones, y reconoce la evidencia en contra. No es ambigua: puede ser concreta y a la vez prudente. Su estructura: (1) afirmación con verbo proporcionado; (2) alcance; (3) evidencia a favor; (4) evidencia en contra; (5) incertidumbre y qué la reduciría.</p>"
+    },
+    {
+      "type": "worked",
+      "title": "Construir una conclusión matizada",
+      "html": "<p>Parte de la frase de partida: «La ciencia ha demostrado que subir el salario mínimo no destruye empleo».</p>",
+      "steps": [
+        {
+          "prompt": "<p>Paso 1. ¿Es proporcionada la fuerza de «ha demostrado»?</p>",
+          "selfExplain": true,
+          "html": "<p>No: hay estudios con resultado cercano a cero (DLR, Cengiz et al.) y otros con estimaciones negativas (Neumark y Wascher; la revisión de Neumark y Shirley). «Demostrado» no encaja con una literatura en desacuerdo.</p>"
+        },
+        {
+          "prompt": "<p>Paso 2. Fija el alcance.</p>",
+          "html": "<p>Los estudios de comparación local cubren subidas estatales moderadas en EE. UU. entre 1979 y 2016. No cubren cualquier subida en cualquier país o sector.</p>"
+        },
+        {
+          "prompt": "<p>Paso 3. Evidencia a favor y evidencia en contra.</p>",
+          "html": "<p>A favor de efecto pequeño o nulo sobre el empleo total: DLR y Cengiz et al. En contra: Neumark y Wascher (nóminas) y la preponderancia de estimaciones negativas para jóvenes en Neumark y Shirley.</p>"
+        },
+        {
+          "prompt": "<p>Paso 4. Escribe la incertidumbre.</p>",
+          "html": "<p>El efecto de subidas grandes, como las de la proyección de CBO, es incierto; la proyección es de un modelo.</p>"
+        },
+        {
+          "prompt": "<p>Paso 5. Redacta.</p>",
+          "html": "<p>«Varios estudios con comparaciones locales no hallan pérdida de empleo total tras subidas estatales moderadas del salario mínimo en EE. UU., pero otros, en especial sobre jóvenes y trabajadores poco cualificados, sí hallan efectos negativos; para subidas mayores la evidencia es más incierta.»</p>"
+        }
+      ],
+      "result": "<p>La frase final cita ambos lados, delimita el alcance y marca dónde termina el conocimiento. Mantiene una sola afirmación comprobable por cada cláusula.</p>"
+    },
+    {
+      "type": "activity",
+      "id": "l3-a1",
+      "widget": "evidence-case",
+      "concepts": [
+        "weigh-evidence",
+        "limits-of-design"
+      ],
+      "instructions": "<p>Antes de elegir conclusión, abre al menos cuatro de los seis elementos de evidencia, leyendo lo que muestra cada uno y lo que no muestra. Luego elige la conclusión que mejor sostenga la evidencia que has visto y lee por qué las demás son más débiles. Piensa en qué eje (medición, diseño, alcance, tipo de evidencia) pesa cada estudio.</p>",
+      "debrief": "<p>Debías haber visto que ninguna fuente basta por sí sola y que difieren en cosas distintas: medición (Neumark y Wascher), diseño (DLR, Cengiz), alcance y subgrupos (Neumark y Shirley) y tipo de evidencia (CBO es una proyección). La conclusión mejor sostenida no es «ya está demostrado» en ningún sentido, sino una que delimita qué se observa, para quién y con qué incertidumbre.</p>",
+      "config": {
+        "title": "¿Qué conclusión sostiene la evidencia?",
+        "situation": "<p>Tu redactor jefe te pasa dos afirmaciones opuestas: «Está demostrado que subir el salario mínimo no destruye empleo» y «Está demostrado que lo destruye». Debes decidir qué frase puede publicarse con honestidad.</p>",
+        "question": "¿Qué conclusión está mejor respaldada por las seis fuentes?",
+        "evidence": [
+          {
+            "id": "e1",
+            "label": "Card y Krueger (1993/94)",
+            "source": "NBER WP 4509; AER 84(4)",
+            "key": true,
+            "content": "<p>Comparan restaurantes de NJ (donde subió el salario mínimo de 4,25 a 5,05 $) y de PA (sin cambio) con encuesta a 410 establecimientos. Informan de un aumento relativo del empleo del 13 % en NJ y de ningún indicio de reducción.</p>",
+            "reading": "<p>Es el caso fundacional del diseño de comparación. Muestra que una subida concreta no redujo el empleo en comida rápida con esos datos; no dice nada de otros sectores ni de subidas mayores, y depende de que los datos de encuesta sean fiables.</p>"
+          },
+          {
+            "id": "e2",
+            "label": "Neumark y Wascher (1995; 2000)",
+            "source": "NBER WP 5224; AER 90(5)",
+            "key": true,
+            "content": "<p>Con registros de nóminas de 230 restaurantes, estiman una caída del 4,6 % del empleo en NJ respecto a PA (significativa al 5 %), frente al +17,6 % que obtienen con los datos de encuesta para conjuntos comparables.</p>",
+            "reading": "<p>No cuestiona el diseño sino los datos: según ellos, la encuesta telefónica era más ruidosa. Prueba que el resultado del caso depende de la medición. Las cifras son del documento de trabajo de 1995; la versión de 2000 no se leyó íntegramente y la réplica de Card y Krueger tampoco.</p>"
+          },
+          {
+            "id": "e3",
+            "label": "Dube, Lester y Reich (2010)",
+            "source": "Rev. Econ. Stat. 92(4)",
+            "content": "<p>Comparan todos los pares de condados contiguos entre estados de EE. UU., 1990-2006, y no hallan efectos adversos sobre el empleo. Sostienen que los métodos sin control de condiciones locales producen efectos negativos espurios.</p>",
+            "reading": "<p>Generaliza el diseño local a muchos casos. Es un argumento contra los resultados negativos de métodos que comparan lugares muy distintos, pero no cubre subidas que ningún estado haya aplicado.</p>"
+          },
+          {
+            "id": "e4",
+            "label": "Cengiz et al. (2019)",
+            "source": "NBER WP 25434",
+            "content": "<p>Con 138 subidas estatales (1979-2016) hallan que el número de empleos de salario bajo apenas cambió en cinco años, sin evidencia de pérdida de empleo con mínimos más altos en su muestra, aunque sí algo de reducción en sectores comerciables.</p>",
+            "reading": "<p>Refuerza la evidencia de efecto total cercano a cero con un método distinto, pero el matiz sobre sectores comerciables recuerda que el promedio puede ocultar diferencias. Es documento de trabajo en la versión leída.</p>"
+          },
+          {
+            "id": "e5",
+            "label": "Neumark y Shirley (2021/22)",
+            "source": "NBER WP 28388",
+            "key": true,
+            "content": "<p>Revisan los estudios publicados con variación subnacional en EE. UU. y concluyen que predominan claramente las estimaciones negativas, con evidencia más fuerte para jóvenes y poco cualificados y menos unilateral en industrias de salario bajo.</p>",
+            "reading": "<p>Es una lectura distinta de la misma literatura. Muestra que el desacuerdo también se da en cómo resumirla. Su conclusión y la de Cengiz et al. no se pueden reconciliar de forma trivial.</p>"
+          },
+          {
+            "id": "e6",
+            "label": "CBO (2019)",
+            "source": "Informe de la Oficina Presupuestaria del Congreso",
+            "content": "<p>Proyecta que un mínimo federal de 15 $ en 2025 reduciría el empleo en una mediana de 1,3 millones de trabajadores (probabilidad de unos dos tercios de entre cero y 3,7 millones) y sacaría a 1,3 millones de personas de la pobreza.</p>",
+            "reading": "<p>No es una observación sino una proyección con un modelo y supuestos sobre cuánto responde el empleo. Expresa incertidumbre explícita y los dos efectos a la vez: pérdida de empleo y reducción de la pobreza.</p>"
+          }
+        ],
+        "conclusions": [
+          {
+            "id": "c1",
+            "label": "Está demostrado que subir el salario mínimo no reduce el empleo.",
+            "verdict": "wrong",
+            "explanation": "Hay estudios con resultado cercano a cero, pero otros con estimaciones negativas y la literatura se resume de formas distintas. «Demostrado» es excesivo."
+          },
+          {
+            "id": "c2",
+            "label": "Está demostrado que subir el salario mínimo destruye empleo.",
+            "verdict": "wrong",
+            "explanation": "Hay evidencia de efectos negativos, sobre todo en jóvenes, pero también estudios sin efecto sobre el empleo total. Tampoco es una prueba concluyente."
+          },
+          {
+            "id": "c3",
+            "label": "Los estudios discrepan: varios con comparaciones locales no hallan pérdida de empleo total con subidas moderadas, otros hallan efectos negativos, sobre todo en jóvenes y poco cualificados, y para subidas grandes la evidencia es más incierta.",
+            "verdict": "best",
+            "explanation": "Refleja el desacuerdo, delimita el alcance (subgrupos y tamaño de la subida) y no usa «demostrado». Es la que se apoya en las seis fuentes."
+          },
+          {
+            "id": "c4",
+            "label": "En promedio los efectos sobre el empleo total parecen pequeños con subidas moderadas, aunque hay estimaciones negativas y la incertidumbre es mayor para subidas grandes.",
+            "verdict": "defensible",
+            "explanation": "Es compatible con las fuentes si se explicita que no todos los estudios coinciden. Se acerca a la mejor, pero da menos peso al resumen que halla predominio de estimaciones negativas."
+          },
+          {
+            "id": "c5",
+            "label": "La evidencia es tan contradictoria que no se puede decir nada útil.",
+            "verdict": "weak",
+            "explanation": "Hay discrepancia, pero también hay resultados repetidos, diseños comparables y información sobre subgrupos y alcance. «No se puede decir nada» ignora esa estructura."
+          }
+        ],
+        "debrief": "<p>Las conclusiones «demostrado» pierden por exceso de seguridad; la de «no se sabe nada», por defecto.</p>",
+        "assumptions": [
+          "Las seis fuentes se resumen a partir de sus resúmenes públicos, no de los artículos completos",
+          "La selección de seis fuentes no es una revisión exhaustiva de la literatura"
+        ]
+      }
+    },
+    {
+      "type": "practice",
+      "id": "l3-pr1",
+      "level": "guided",
+      "setting": "in-app",
+      "concepts": [
+        "weigh-evidence"
+      ],
+      "task": "<p>Mejora esta frase de una nota de prensa: «Un estudio demuestra que el salario mínimo de 15 dólares destruirá 1,3 millones de empleos.» Reescríbela usando la información de CBO de esta lección: verbo proporcionado, tipo de evidencia, incertidumbre y el otro efecto estimado.</p>",
+      "hints": [
+        "<p>¿Es un estudio sobre algo observado o una proyección? ¿«Demuestra» o «estima»?</p>",
+        "<p>CBO da una mediana y un rango; y, además de la pérdida de empleo, un efecto sobre la pobreza.</p>"
+      ],
+      "rubric": [
+        "Sustituye «demuestra» por un verbo como «proyecta» o «estima»",
+        "Indica que 1,3 millones es una mediana con incertidumbre",
+        "Menciona que la estimación también incluye subida de salarios o menos pobreza"
+      ],
+      "solution": "<p>«La Oficina Presupuestaria del Congreso proyectó en 2019 que un mínimo federal de 15 dólares en 2025 reduciría el empleo en una mediana de 1,3 millones de trabajadores (con unos dos tercios de probabilidad de que la cifra esté entre cero y 3,7 millones), y que a la vez subiría el salario de unos 17 millones y reduciría la pobreza en 1,3 millones de personas.»</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l3-pr2",
+      "level": "independent",
+      "setting": "in-app",
+      "concepts": [
+        "weigh-evidence",
+        "qualify-claims"
+      ],
+      "task": "<p>Sin pistas: escribe en 3-4 frases tu conclusión matizada sobre «subir el salario mínimo y el empleo en EE. UU.», usando solo lo leído en esta lección. Debe incluir afirmación proporcionada, alcance, evidencia a favor y en contra, e incertidumbre.</p>",
+      "rubric": [
+        "No usa «demostrado» ni «prueba» sin matiz",
+        "Cita evidencia en ambos sentidos",
+        "Delimita alcance (subgrupo, tamaño de la subida o tipo de evidencia)",
+        "Dice dónde termina el conocimiento"
+      ],
+      "solution": "<p>Ejemplo: «Varios estudios con comparaciones locales no encuentran pérdida de empleo total tras subidas estatales moderadas del salario mínimo en EE. UU., pero otros, y una revisión de la literatura, hallan estimaciones negativas, sobre todo para jóvenes y poco cualificados. Para subidas grandes solo hay proyecciones de modelos, como la de CBO, con mucha incertidumbre. Lo que más ayudaría a reducirla es evidencia sobre subidas mayores y sectores concretos.»</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l3-pr3",
+      "level": "independent",
+      "setting": "real-world",
+      "concepts": [
+        "qualify-claims"
+      ],
+      "task": "<p>Práctica real (fuera de la app): elige una noticia real de tu medio, de las últimas semanas, que afirme el efecto de una política. Subraya los verbos causales, localiza el estudio de origen y reescribe la afirmación con los cinco elementos de una conclusión matizada. Repite con una segunda noticia unas semanas después.</p>",
+      "rubric": [
+        "Identifica los verbos causales de la noticia",
+        "Localiza la fuente original y su diseño",
+        "Reescribe con los cinco elementos",
+        "En la segunda noticia matiza sin que se lo pidan"
+      ],
+      "externalFeedback": "<p>Pide a una persona de edición o a un colega que lea tu reescritura sin ver la tuya original y diga si la afirmación le parece proporcionada. Es una práctica de observación: el progreso se aprecia comparando la primera y la segunda noticia, no con una nota automática.</p>",
+      "solution": "<p>No hay una solución única: lo observable es que la reescritura nombre diseño, alcance y límites.</p>"
+    },
+    {
+      "type": "check",
+      "html": "<p>Preguntas de reconocimiento, aplicación y propias palabras.</p>",
+      "questions": [
+        {
+          "id": "l3-c1",
+          "assesses": [
+            "o3"
+          ],
+          "concepts": [
+            "weigh-evidence"
+          ],
+          "prompt": "Dos estudios discrepan sobre el mismo caso, uno con encuesta telefónica y otro con registros de nóminas. ¿Qué tipo de discrepancia es esa?",
+          "options": [
+            "De medición: usan datos distintos y hay que decidir cuál refleja mejor la realidad.",
+            "De diseño: uno usa un experimento aleatorizado.",
+            "De alcance: estudian países distintos.",
+            "Es imposible que discrepen si ambos usan la misma comparación."
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "En el caso de Nueva Jersey ambos usan la misma comparación natural; ninguno asignó al azar.",
+            "2": "Ambos estudian Nueva Jersey y Pensilvania.",
+            "3": "Pueden discrepar justo porque miden distinto."
+          },
+          "explanation": "Con el mismo diseño, la fuente de datos distinta puede dar resultados distintos."
+        },
+        {
+          "id": "l3-c2",
+          "assesses": [
+            "o3"
+          ],
+          "concepts": [
+            "weigh-evidence"
+          ],
+          "prompt": "¿Qué tipo de evidencia es la cifra de 1,3 millones de empleos de CBO?",
+          "options": [
+            "Una proyección con un modelo y supuestos, con incertidumbre declarada.",
+            "Un recuento de empleos realmente perdidos.",
+            "Un experimento natural.",
+            "Una encuesta a empresas."
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "CBO la presenta como estimación mediana de una proyección a 2025, no como un recuento.",
+            "2": "No usa un experimento natural por sí misma; se basa en un modelo con supuestos sobre la respuesta del empleo.",
+            "3": "No se describe como encuesta."
+          },
+          "explanation": "CBO basa sus estimaciones en valores medianos de rangos probables del crecimiento salarial y de la respuesta del empleo."
+        },
+        {
+          "id": "l3-c3",
+          "assesses": [
+            "o3"
+          ],
+          "concepts": [
+            "qualify-claims"
+          ],
+          "prompt": "¿Cuál de estas frases es una conclusión matizada?",
+          "options": [
+            "«El salario mínimo siempre destruye empleo.»",
+            "«Varios estudios no hallan pérdida de empleo total con subidas moderadas; otros hallan efectos negativos en jóvenes; con subidas grandes la evidencia es más incierta.»",
+            "«Nada de esto se puede saber.»",
+            "«La ciencia ya ha resuelto el debate.»"
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "«Siempre» es absoluto y no reconoce la evidencia en contra.",
+            "2": "Es un abandono, no un matiz: ignora lo que sí se sabe.",
+            "3": "Afirma un consenso que las fuentes no muestran."
+          },
+          "explanation": "Una conclusión matizada combina alcance, evidencia en ambos sentidos e incertidumbre."
+        },
+        {
+          "id": "l3-c4",
+          "assesses": [
+            "o3"
+          ],
+          "concepts": [
+            "qualify-claims",
+            "weigh-evidence"
+          ],
+          "kind": "open",
+          "prompt": "Con tus palabras: ¿por qué conviene citar la evidencia en contra de tu propia conclusión? Da un ejemplo con el salario mínimo.",
+          "rubric": [
+            "Explica que evita exceso de seguridad o sesgo de selección",
+            "Da un ejemplo concreto con el salario mínimo"
+          ],
+          "model": "<p>Porque una conclusión que solo cita lo que la apoya parece más segura de lo que es, y el lector no puede juzgarla. Por ejemplo, decir que subir el salario mínimo no cuesta empleo sin mencionar los estudios que hallan efectos negativos en jóvenes oculta parte de la literatura.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l3-t1",
+      "assesses": [
+        "o3"
+      ],
+      "concepts": [
+        "weigh-evidence",
+        "qualify-claims",
+        "limits-of-design"
+      ],
+      "task": "<p>Contexto nuevo (<strong>hipotético, cifras inventadas</strong>): tres estudios sobre una semana laboral de cuatro días. El A (comparación entre empresas similares) halla un aumento de productividad. El B (encuesta a empleados) halla más satisfacción. El C (un solo sector) no halla cambios en la facturación. Redacta una conclusión matizada de 3-4 frases para una pieza de prensa.</p>",
+      "rubric": [
+        "Cita evidencia en ambos sentidos",
+        "Delimita alcance (un sector, satisfacción frente a facturación)",
+        "Señala límites de cada tipo de dato",
+        "Evita «demuestra»"
+      ],
+      "model": "<p>«Un estudio que compara empresas similares halla aumentos de productividad con la semana de cuatro días, y una encuesta recoge más satisfacción de los empleados, pero un estudio en un solo sector no halla cambios en la facturación. Como los datos proceden de contextos y medidas distintas, no se puede afirmar que el efecto sea general; se necesitan estudios en más sectores.»</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "l3-r1",
+      "prompt": "Escribe la regla que seguirás la próxima vez que dos estudios con resultados opuestos te lleguen el mismo día, en una frase."
+    }
+  ],
+  "sources": [
+    {
+      "id": "nw-nber",
+      "title": "The Effect of New Jersey's Minimum Wage Increase on Fast-Food Employment: A Re-Evaluation Using Payroll Records (NBER Working Paper 5224)",
+      "kind": "research",
+      "author": "David Neumark, William Wascher",
+      "date": "1995",
+      "url": "https://www.nber.org/papers/w5224",
+      "accessed": "2026-10-20",
+      "note": "Resumen leído en texto original. La versión publicada es AER 90(5), 1362-1396 (2000); en la página del AER solo se leyó la ficha bibliográfica, no el resumen ni el texto."
+    },
+    {
+      "id": "ck-reply",
+      "title": "Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania: Reply (American Economic Review 90(5), 1397-1420)",
+      "kind": "research",
+      "author": "David Card, Alan B. Krueger",
+      "date": "2000",
+      "url": "https://www.aeaweb.org/articles?id=10.1257/aer.90.5.1397",
+      "accessed": "2026-10-20",
+      "status": "unverified",
+      "note": "Solo se leyó la ficha bibliográfica; no se leyó el contenido de la réplica. Pendiente de relectura."
+    },
+    {
+      "id": "dlr",
+      "title": "Minimum Wage Effects Across State Borders: Estimates Using Contiguous Counties (Review of Economics and Statistics 92(4), 945-964)",
+      "kind": "research",
+      "author": "Arindrajit Dube, T. William Lester, Michael Reich",
+      "date": "2010",
+      "url": "https://ideas.repec.org/a/tpr/restat/v92y2010i4p945-964.html",
+      "accessed": "2026-10-20",
+      "note": "Resumen leído vía IDEAS/RePEc. No se accedió al texto completo."
+    },
+    {
+      "id": "cengiz",
+      "title": "The Effect of Minimum Wages on Low-Wage Jobs: Evidence from the United States Using a Bunching Estimator (NBER Working Paper 25434)",
+      "kind": "research",
+      "author": "Doruk Cengiz, Arindrajit Dube, Attila Lindner, Ben Zipperer",
+      "date": "2019",
+      "url": "https://www.nber.org/papers/w25434",
+      "accessed": "2026-10-20",
+      "note": "Resumen leído en texto original (documento de trabajo; existe versión publicada en QJE, no leída)."
+    },
+    {
+      "id": "ns",
+      "title": "Myth or Measurement: What Does the New Minimum Wage Research Say about Minimum Wages and Job Loss in the United States? (NBER Working Paper 28388)",
+      "kind": "research",
+      "author": "David Neumark, Peter Shirley",
+      "date": "2021 (revisado 2022)",
+      "url": "https://www.nber.org/papers/w28388",
+      "accessed": "2026-10-20",
+      "note": "Resumen leído en texto original. Los autores son parte del debate; la versión publicada es de Industrial Relations (no leída)."
+    },
+    {
+      "id": "cbo",
+      "title": "The Effects on Employment and Family Income of Increasing the Federal Minimum Wage",
+      "kind": "official",
+      "author": "Congressional Budget Office",
+      "date": "8 de julio de 2019",
+      "url": "https://www.cbo.gov/publication/55410",
+      "accessed": "2026-10-20",
+      "note": "El sitio de CBO bloqueó el acceso automatizado (HTTP 403). El texto se leyó en una copia de archivo web (web.archive.org/web/2020/https://www.cbo.gov/publication/55410). Estados Unidos, proyección para 2025."
+    },
+    {
+      "title": "Ejemplos hipotéticos",
+      "kind": "pedagogical",
+      "note": "La semana de cuatro días y los titulares son inventados; la tabla comparativa es síntesis propia del curso (decisión del curso)."
+    }
+  ],
+  "next": "<p>Cierra el curso con la tarea final: valorar, con todo lo aprendido, una afirmación política sobre el salario mínimo y redactar una conclusión matizada.</p>"
+}

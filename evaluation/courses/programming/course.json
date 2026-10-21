@@ -1,0 +1,316 @@
+{
+  "format": 1,
+  "id": "python-lists-references",
+  "version": "1.0.0",
+  "title": "Python lists and references",
+  "subtitle": "Why changing one variable changes another (Python 3, lists, the copy module)",
+  "language": "en",
+  "locale": "en-US",
+  "learner": {
+    "topic": "Python lists and references: why changing one variable changes another",
+    "goals": [
+      "Predict the output of code that aliases, copies and mutates lists",
+      "Debug a function that mutates its argument by accident",
+      "Explain the difference between shallow and deep copies"
+    ],
+    "scope": "Python 3; built-in lists, the copy module",
+    "language": "en",
+    "locale": "en-US",
+    "intake": {
+      "capability": "Trace short Python programs with nested lists and fix aliasing bugs",
+      "familiarity": "some",
+      "modality": "hands-on",
+      "practiceLoad": "heavy"
+    },
+    "learner": {
+      "startingKnowledge": "Writes simple Python scripts with loops and functions",
+      "background": "Synthetic benchmark learner: data analyst",
+      "depth": "solid",
+      "knownGaps": []
+    },
+    "time": {
+      "totalHours": 2,
+      "sessionMinutes": 25
+    },
+    "practice": {
+      "tools": [],
+      "equipment": [],
+      "software": [
+        "Python 3 installed locally"
+      ],
+      "datasets": [],
+      "realWorld": "unknown"
+    },
+    "sources": {
+      "provided": [],
+      "freshness": "unknown",
+      "evidenceStandard": "The official Python documentation and language reference"
+    },
+    "exclusions": [],
+    "constraints": [],
+    "presentation": {
+      "visual": "high",
+      "interaction": "high",
+      "reducedMotion": false,
+      "readingLevel": "unknown"
+    },
+    "accessibility": {
+      "screenReader": false,
+      "notes": ""
+    },
+    "output": {
+      "format": "web+markdown",
+      "host": "unknown"
+    },
+    "diagnostic": true,
+    "decisions": [
+      {
+        "because": "familiarity: some",
+        "decision": "Offer the diagnostic so known prerequisites can get a quick pass; keep the full core route available."
+      },
+      {
+        "because": "modality: hands-on",
+        "decision": "Put an activity or practice before the explanation and include more in-app or real-world practice."
+      },
+      {
+        "because": "practice load: heavy",
+        "decision": "Extra independent practice and cumulative review sets; more transfer tasks."
+      },
+      {
+        "because": "sessions of 25 min",
+        "decision": "Size lessons to about 25 minutes and pack the schedule into sessions of that length."
+      }
+    ]
+  },
+  "assumptions": [
+    "Unknown: learner.realWorld practice: not needed; all practice is in the learner's own Python 3",
+    "Code outputs shown as 'ran locally' were produced with python3 3.14.5 on macOS; the page itself does not execute code",
+    "Documentation was read at docs.python.org current pages (3.15 at access date); behaviour taught is unchanged across supported Python 3 versions as far as the author knows, but this was only run on 3.14.5",
+    "Benchmark course: scope capped at three lessons plus a capstone; no advanced route"
+  ],
+  "outcomes": [
+    {
+      "id": "o1",
+      "text": "Predict the output of short programs that alias, copy and mutate lists, including nested lists",
+      "level": "core"
+    },
+    {
+      "id": "o2",
+      "text": "Debug a function that accidentally mutates its argument or a shared default, and fix it",
+      "level": "core"
+    },
+    {
+      "id": "o3",
+      "text": "Explain the difference between shallow and deep copies and choose between them for a given situation",
+      "level": "core"
+    }
+  ],
+  "modules": [
+    {
+      "id": "m1",
+      "title": "References, mutation and copies",
+      "summary": "From names and objects to function arguments to nested copies.",
+      "prerequisites": [],
+      "lessons": [
+        "names-and-mutation",
+        "functions-and-accidental-mutation",
+        "shallow-and-deep-copies"
+      ]
+    }
+  ],
+  "glossary": [
+    {
+      "term": "name",
+      "aka": [
+        "variable"
+      ],
+      "definition": "A label bound to an object. Assignment binds (or rebinds) a name; it does not copy the object."
+    },
+    {
+      "term": "identity",
+      "aka": [
+        "id"
+      ],
+      "definition": "What distinguishes one object from another; fixed for the object's life. The <code>is</code> operator compares identities."
+    },
+    {
+      "term": "mutable",
+      "definition": "An object whose value can change after creation (lists, dictionaries). Numbers, strings and tuples are immutable."
+    },
+    {
+      "term": "alias",
+      "definition": "A second name bound to the same object."
+    },
+    {
+      "term": "mutation",
+      "definition": "Changing an existing object in place, for example with append or item assignment; every name bound to it sees the change."
+    },
+    {
+      "term": "rebinding",
+      "definition": "Pointing a name at a different object, for example <code>y = [9]</code>; other names are unaffected."
+    },
+    {
+      "term": "shallow copy",
+      "definition": "A new container holding references to the same items as the original."
+    },
+    {
+      "term": "deep copy",
+      "definition": "A new container holding recursively made copies of the original's items."
+    },
+    {
+      "term": "sentinel",
+      "definition": "A special value, usually None, used as a default meaning 'create a fresh object inside the function'."
+    }
+  ],
+  "routes": [
+    {
+      "id": "core",
+      "title": "Core route",
+      "description": "All three lessons in order, then the capstone.",
+      "lessons": [
+        "names-and-mutation",
+        "functions-and-accidental-mutation",
+        "shallow-and-deep-copies"
+      ]
+    }
+  ],
+  "review": {
+    "intervals": [
+      1,
+      3,
+      7,
+      21,
+      60
+    ]
+  },
+  "intro": "<p>This short benchmark course is for someone who already writes Python scripts with loops and functions. In three 25-minute lessons and a capstone you learn to <strong>predict</strong> what code with aliased, copied and mutated lists prints, <strong>debug</strong> functions that mutate their arguments by accident, and <strong>explain</strong> shallow versus deep copies.</p><p>Because you chose hands-on practice, each lesson starts with a prediction or a debugging activity before the explanation, and practice asks you to run code in your own Python 3 install. <strong>This page never runs Python.</strong> Every output shown as 'ran locally' was produced by the course author with python3 3.14.5 and is static text; the interactive trace and evidence widgets display hand-written states.</p><p>Sources are the official Python documentation (access date 2026-10-20; the live docs showed Python 3.15 at that date, the behaviour taught here is long-standing Python 3 behaviour).</p>",
+  "diagnostic": {
+    "intro": "<p>Four quick questions. They only suggest a pace; nothing is hidden.</p>",
+    "fastLabel": "quick pass: predictions and checks",
+    "fullLabel": "study fully",
+    "questions": [
+      {
+        "id": "dg1",
+        "prompt": "<code>a = [1]; b = a; b.append(2)</code>. What is a?",
+        "options": [
+          "[1]",
+          "[1, 2]",
+          "[2]"
+        ],
+        "correct": 1,
+        "explanation": "b and a name the same list.",
+        "lessons": [
+          "names-and-mutation"
+        ],
+        "feedback": {
+          "0": "Assignment b = a does not copy; a is mutated through b.",
+          "2": "append adds at the end; it does not replace."
+        }
+      },
+      {
+        "id": "dg2",
+        "prompt": "<code>def f(x): x = x + [0]</code>. Does <code>f(L)</code> change the caller's list L?",
+        "options": [
+          "Yes",
+          "No"
+        ],
+        "correct": 1,
+        "explanation": "x + [0] builds a new list and rebinds the local x.",
+        "lessons": [
+          "functions-and-accidental-mutation"
+        ],
+        "feedback": {
+          "0": "Rebinding the local x does not touch the caller's list."
+        }
+      },
+      {
+        "id": "dg3",
+        "prompt": "<code>b = a.copy()</code> where a = [[1],[2]]. Does <code>b[0].append(9)</code> change a?",
+        "options": [
+          "Yes",
+          "No"
+        ],
+        "correct": 0,
+        "explanation": "copy() is shallow; the inner lists are shared.",
+        "lessons": [
+          "shallow-and-deep-copies"
+        ],
+        "feedback": {
+          "1": "copy() only copies the outer list; inner lists are shared."
+        }
+      },
+      {
+        "id": "dg4",
+        "prompt": "<code>def f(v=[]): v.append(1); return v</code>. Two calls f() and f() return?",
+        "options": [
+          "[1] then [1]",
+          "[1] then [1, 1]"
+        ],
+        "correct": 1,
+        "explanation": "The default list is created once.",
+        "lessons": [
+          "functions-and-accidental-mutation"
+        ],
+        "feedback": {
+          "0": "The default is evaluated once, so it is shared by calls."
+        }
+      }
+    ]
+  },
+  "capstone": {
+    "id": "capstone",
+    "title": "Capstone: debug the gradebook",
+    "task": "<p>A teaching assistant's script has three aliasing bugs. Its code is below (it needs no files).</p><pre><code>import copy\n\ndef make_gradebook(names):\n    empty = []\n    return {name: empty for name in names}\n\ndef record(book, name, score):\n    book[name].append(score)\n\ndef curve(scores, bonus):\n    for i in range(len(scores)):\n        scores[i] += bonus\n    return scores\n\ndef snapshot(book):\n    return book.copy()\n\nbook = make_gradebook([\"ana\", \"bo\"])\nrecord(book, \"ana\", 70)\nprint(book)\n\nraw = [60, 70]\ncurved = curve(raw, 5)\nprint(raw, curved)\n\nbook = {\"ana\": [70], \"bo\": [80]}\nbefore = snapshot(book)\nrecord(book, \"ana\", 90)\nprint(before)</code></pre><p><strong>1.</strong> Without running it, predict the three printed lines and say what the author intended instead. <strong>2.</strong> Run it in your own Python 3 and compare. <strong>3.</strong> Fix each function, naming for each bug whether it is a shared object, a mutating argument, or a shallow copy, and justify the copy depth you chose. <strong>4.</strong> Write two sentences explaining to a colleague why the original printed what it did.</p>",
+    "levels": [
+      "Beginning",
+      "Developing",
+      "Proficient"
+    ],
+    "rubric": [
+      {
+        "criterion": "Prediction of output (o1)",
+        "descriptors": [
+          "Predicts fewer than two lines correctly",
+          "Predicts two lines, or all with partial reasons",
+          "Predicts all three lines and traces each to a shared object"
+        ]
+      },
+      {
+        "criterion": "Debugging functions (o2)",
+        "descriptors": [
+          "Finds one bug",
+          "Finds the mutating curve and the shared list but fixes are incomplete",
+          "Finds and fixes all bugs without changing intended behaviour, and verifies by running"
+        ]
+      },
+      {
+        "criterion": "Shallow vs deep (o3)",
+        "descriptors": [
+          "Uses a copy without justification",
+          "Distinguishes shallow and deep but justification is generic",
+          "Justifies deepcopy for snapshot because the values are mutable lists, and notes costs or when shallow would do"
+        ]
+      }
+    ],
+    "assesses": [
+      "o1",
+      "o2",
+      "o3"
+    ],
+    "evaluation": "<p>Self-assessed against the rubric. For human feedback, ask a peer or mentor to read your predictions and your explanation before you run the code.</p>",
+    "model": "<p>Predicted and actual output (python3 3.14.5, run locally by the course author): <code>{'ana': [70], 'bo': [70]}</code> (both students share one list), <code>[65, 75] [65, 75]</code> (curve mutates the caller's list, so raw is curved too), and <code>{'ana': [70, 90], 'bo': [80]}</code> (a shallow copy shares the score lists). Fixes: <code>{name: [] for name in names}</code>; <code>return [s + bonus for s in scores]</code>; <code>copy.deepcopy(book)</code>. After the fixes the course author's run printed <code>{'ana': [70], 'bo': []}</code>, <code>[60, 70] [65, 75]</code>, <code>{'ana': [70], 'bo': [80]}</code>. Deepcopy is justified because the values are mutable lists that record() mutates; a dict comprehension copying each list would also work and avoids deep copying unrelated data.</p>"
+  },
+  "sources": [
+    {
+      "title": "Python documentation (official)",
+      "kind": "official",
+      "url": "https://docs.python.org/3/",
+      "accessed": "2026-10-20"
+    }
+  ],
+  "theme": {
+    "profile": "programming",
+    "codeTheme": "auto",
+    "layout": "standard"
+  }
+}

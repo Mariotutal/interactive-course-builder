@@ -43,6 +43,14 @@ The runtime keeps four kinds of evidence apart, and so should your wording:
 
 Rubric checklists are self-assessed and are labelled that way. Never claim mastery from clicks or time spent. Where evaluation needs human judgment, such as pronunciation, essays or physical skills, say so and give criteria the learner or a tutor can apply.
 
+## Assessment mode follows the kind of knowledge
+
+- **Procedural, hierarchical knowledge** can be auto-checked: MCQ with misconception feedback, or numeric with tolerance. Examples: computing a value, choosing the next step of an algorithm.
+- **Reasoning across lenses (horizontal concepts)** needs open responses with a rubric. Examples: explaining a trade-off, interpreting a source.
+- **Dispositions** need observation over time: by a tutor, a peer, or the learner in real practice. Use progression bands. Never auto-score them.
+
+The optional `knowledgeArchitecture` records this choice per concept, and the validator checks that matching evidence exists. Concept review schedules auto-checked retrieval with expanding intervals. It never turns visits, clicks or self-rated confidence into a mastery claim.
+
 ## Varying the method by subject
 
 These are examples, not a taxonomy:

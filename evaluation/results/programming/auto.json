@@ -1,0 +1,105 @@
+{
+  "course": "evaluation/courses/programming",
+  "date": "2026-10-21",
+  "validate": {
+    "errors": 0,
+    "warnings": 0,
+    "errorList": [],
+    "warningList": []
+  },
+  "integrity": {
+    "built": true,
+    "problems": []
+  },
+  "metrics": {
+    "language": "en",
+    "lessons": 3,
+    "minutes": 75,
+    "profiles": {
+      "full": 3
+    },
+    "words": {
+      "total": 3137,
+      "perLesson": [
+        1165,
+        892,
+        1080
+      ]
+    },
+    "activities": {
+      "count": 4,
+      "patterns": [
+        "code-trace",
+        "evidence-case",
+        "classify"
+      ],
+      "custom": []
+    },
+    "questions": {
+      "total": 14,
+      "byKind": {
+        "mcq": 11,
+        "open": 3
+      },
+      "mcqWithFullMisconceptionFeedbackPct": 100
+    },
+    "practice": {
+      "guided": 3,
+      "independent": 3,
+      "realWorld": 0
+    },
+    "transfer": {
+      "tasks": 3,
+      "capstone": true,
+      "outcomesWithTransferPct": 100
+    },
+    "outcomes": {
+      "count": 3,
+      "minAssessingItems": 6,
+      "detail": [
+        {
+          "id": "o1",
+          "assessedBy": 10,
+          "transfer": true
+        },
+        {
+          "id": "o2",
+          "assessedBy": 6,
+          "transfer": true
+        },
+        {
+          "id": "o3",
+          "assessedBy": 8,
+          "transfer": true
+        }
+      ]
+    },
+    "visuals": {
+      "count": 3,
+      "withPurposePct": 100
+    },
+    "sources": {
+      "count": 14,
+      "byKind": {
+        "official": 11,
+        "pedagogical": 3
+      },
+      "unverified": 0,
+      "webWithAccessDatePct": 100
+    },
+    "knowledgeArchitecture": null,
+    "intake": {
+      "present": true,
+      "decisions": 4
+    },
+    "theme": {
+      "profile": "programming",
+      "codeTheme": "auto",
+      "layout": "standard"
+    },
+    "density": {
+      "interactionsPer1000Words": 5.7,
+      "assessmentItemsPerOutcome": 8
+    }
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "format": 1,
+  "id": "functions-and-accidental-mutation",
+  "title": "Functions that mutate their arguments",
+  "summary": "How an argument is shared with a function, how to spot accidental mutation, and three ways to fix it.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 25,
+  "outcomes": [
+    "o2",
+    "o1"
+  ],
+  "prerequisites": [
+    "names-and-mutation"
+  ],
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>A reviewer notices that <code>normalize(data)</code>, a function that should only <em>return</em> the smallest value, leaves your list in a different order. A report that ran on <code>data</code> afterwards silently changed. The function never assigned to <code>data</code>. How is that possible?</p>"
+    },
+    {
+      "type": "activity",
+      "id": "l2-debug",
+      "widget": "evidence-case",
+      "config": {
+        "title": "Find the bug before the lesson explains it",
+        "situation": "<p>This function is meant to return the smallest value and nothing else:</p><pre><code>def normalize(values):\n    values.sort()\n    return values[0]\n\ndata = [3, 1, 2]\nprint(normalize(data))\nprint(data)</code></pre><p>The author expected the last line to print <code>[3, 1, 2]</code>.</p>",
+        "question": "Which conclusion is best supported by the evidence you examine?",
+        "evidence": [
+          {
+            "id": "e1",
+            "label": "Run the program",
+            "terminal": true,
+            "content": "1\n[1, 2, 3]",
+            "key": true,
+            "reading": "<p>The returned value is right, but <code>data</code> has been sorted. Something inside the function changed the caller's list.</p>"
+          },
+          {
+            "id": "e2",
+            "label": "Read the library docs for list.sort",
+            "source": "Python docs, list.sort",
+            "content": "<p><code>list.sort()</code> sorts the list in place. It is a method of the list object and returns <code>None</code>.</p>",
+            "reading": "<p>This documents in-place sorting; check the exact wording in the docs, since I did not quote them here.</p>"
+          },
+          {
+            "id": "e3",
+            "label": "Check whether the parameter is a copy",
+            "terminal": true,
+            "content": "def f(v): print(v is data)\nf(data)  ->  True",
+            "key": true,
+            "reading": "<p>Inside the call, the parameter is the same object as the caller's list.</p>"
+          }
+        ],
+        "conclusions": [
+          {
+            "id": "c1",
+            "label": "Python passes a copy of the list to the function, and sort changed the wrong copy.",
+            "verdict": "wrong",
+            "explanation": "Evidence e3 shows the parameter is the caller's own object. No copy is made."
+          },
+          {
+            "id": "c2",
+            "label": "The parameter name is bound to the caller's list, and sort() mutates that shared list in place.",
+            "verdict": "best",
+            "explanation": "Matches both the run and the identity check: one object, mutated through the parameter."
+          },
+          {
+            "id": "c3",
+            "label": "The print statement reordered the list.",
+            "verdict": "wrong",
+            "explanation": "print only reads the list; the order was already changed when normalize ran."
+          }
+        ],
+        "debrief": "<p>Arguments are passed by assignment, so the parameter is another name for the caller's object. A method that mutates (like <code>sort</code>) therefore reaches the caller.</p>",
+        "terminalLabel": "Output from the author's local python3 3.14.5 run, shown as static text (this page does not execute code)",
+        "assumptions": [
+          "The evidence items are static text from a local run; nothing here executes Python."
+        ]
+      },
+      "instructions": "Open the evidence you think will discriminate between the explanations, then choose a conclusion.",
+      "debrief": "<p>You should have found that the bug is not in what the function returns, but in a side effect on a shared object.</p>",
+      "assesses": [
+        "o2"
+      ]
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Imagine lending a colleague the <em>address of a shared spreadsheet</em> rather than a printout. Anything they edit appears in your copy of the sheet, but if they decide to start a fresh spreadsheet and keep working in that one, yours stays as it was.</p>",
+      "limits": "A spreadsheet address suggests the colleague can follow it anywhere; in Python the function only gets another name for the object, and cannot change which object your variable points to. It also hides that immutable objects (numbers, strings, tuples) can never be edited, however they are shared."
+    },
+    {
+      "type": "visual",
+      "purpose": "Contrast mutation with rebinding of a parameter inside a function.",
+      "alt": "Two stacked diagrams. In the first, the caller's name my and the parameter scores both point to one list, which append changes to [70, 80, 100]. In the second, scores = scores + [100] makes scores point to a new list, leaving my pointing at the original [70, 80].",
+      "html": "<figure><svg viewBox=\"0 0 640 250\" role=\"img\" aria-label=\"Two panels comparing mutation and rebinding inside a function. Top: caller name my and parameter scores both point to one list; append changes that list. Bottom: after scores = scores + [100], scores points to a new list while my still points to the original.\">\n<text class=\"ts\" x=\"20\" y=\"20\">Mutation inside the function: scores.append(100)</text>\n<rect class=\"n3\" x=\"20\" y=\"35\" width=\"90\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"65\" y=\"55\" text-anchor=\"middle\">my (caller)</text>\n<rect class=\"n3\" x=\"20\" y=\"80\" width=\"90\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"65\" y=\"100\" text-anchor=\"middle\">scores</text>\n<rect class=\"n1\" x=\"230\" y=\"55\" width=\"200\" height=\"40\" rx=\"6\"/><text class=\"t\" x=\"330\" y=\"80\" text-anchor=\"middle\">[70, 80, 100]</text>\n<path class=\"edge\" d=\"M110 50 L228 68\" marker-end=\"url(#arrow)\"/><path class=\"edge\" d=\"M110 95 L228 83\" marker-end=\"url(#arrow)\"/>\n<text class=\"tm\" x=\"450\" y=\"80\">caller sees the change</text>\n<text class=\"ts\" x=\"20\" y=\"150\">Rebinding inside the function: scores = scores + [100]</text>\n<rect class=\"n3\" x=\"20\" y=\"165\" width=\"90\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"65\" y=\"185\" text-anchor=\"middle\">my (caller)</text>\n<rect class=\"n3\" x=\"20\" y=\"210\" width=\"90\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"65\" y=\"230\" text-anchor=\"middle\">scores</text>\n<rect class=\"n1\" x=\"230\" y=\"165\" width=\"170\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"315\" y=\"185\" text-anchor=\"middle\">[70, 80]</text>\n<rect class=\"n2\" x=\"230\" y=\"210\" width=\"170\" height=\"30\" rx=\"6\"/><text class=\"t\" x=\"315\" y=\"230\" text-anchor=\"middle\">new [70, 80, 100]</text>\n<path class=\"edge\" d=\"M110 180 L228 180\" marker-end=\"url(#arrow)\"/><path class=\"edge\" d=\"M110 225 L228 225\" marker-end=\"url(#arrow)\"/>\n<text class=\"tm\" x=\"420\" y=\"185\">caller is unaffected</text>\n</svg><figcaption>Argument passing in Python is assignment: the parameter name is bound to the caller's object. Course-drawn diagram. <a data-source=\"faq-output\">[source]</a></figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "title": "What 'pass by assignment' means",
+      "html": "<p>The Python FAQ says arguments are passed by assignment, that assignment creates references to objects, and that consequently there is no alias between an argument name in the caller and the callee in the sense of call by reference <a data-source=\"faq-output\">[FAQ]</a>. The tutorial gives a similar description: the value passed is an object reference, and 'call by object reference' would be a better description, because a caller sees changes the callee makes to a mutable object <a data-source=\"defaults\">[tutorial 4.9]</a>.</p><p>Practical consequences, each verified by running the code locally with python3 3.14.5:</p><ul><li><strong>Mutating</strong> the parameter (<code>append</code>, <code>sort</code>, <code>lst[0] = ...</code>, <code>+=</code> on a list) changes the caller's object.</li><li><strong>Rebinding</strong> the parameter (<code>lst = []</code>, <code>lst = lst + [x]</code>) does not affect the caller.</li></ul><div class=\"output\" data-label=\"Output from a local python3 run (3.14.5), not produced by this page\"><pre>def reset(lst):\n    lst = []\nk = [1, 2]; reset(k); print(k)    # [1, 2]  (rebinding: no effect)\n\ndef clear(lst):\n    lst.clear()\nk = [1, 2]; clear(k); print(k)    # []      (mutation: caller sees it)</pre></div><p><strong>Default arguments.</strong> A second source of hidden sharing: the default value is evaluated only once, when the function is defined, so a mutable default such as a list is shared by every call that omits the argument <a data-source=\"defaults\">[tutorial 4.9.1]</a>.</p><div class=\"output\" data-label=\"Output from a local python3 run (3.14.5), not produced by this page\"><pre>def f(a, L=[]):\n    L.append(a)\n    return L\n\nprint(f(1))   # [1]\nprint(f(2))   # [1, 2]\nprint(f(3))   # [1, 2, 3]</pre></div><p><strong>Three fixes</strong> (course decision: choose by intent, not by habit): (1) <em>do not mutate</em>: build and return a new object, e.g. <code>sorted(values)</code> instead of <code>values.sort()</code>; (2) <em>copy at the entry</em> if you need to mutate your own version, e.g. <code>values = list(values)</code>; (3) use <code>None</code> as the default and create the list inside <a data-source=\"defaults\">[tutorial 4.9.1]</a>. Document intended mutation in the docstring; some functions mutate on purpose.</p>"
+    },
+    {
+      "type": "worked",
+      "title": "Debug normalize step by step",
+      "html": "<p>The buggy function from the opening, and its fix. Outputs were produced with a local python3 run.</p><pre><code>def normalize(values):\n    values.sort()\n    return values[0]\n\ndata = [3, 1, 2]\nprint(normalize(data))\nprint(data)</code></pre>",
+      "steps": [
+        {
+          "prompt": "Observe the symptom",
+          "html": "<p>Printed: <code>1</code> then <code>[1, 2, 3]</code>. The return value is correct; the list changed.</p>"
+        },
+        {
+          "prompt": "Find lines that could mutate",
+          "html": "<p>Only <code>values.sort()</code> acts on <code>values</code> without rebinding it. It sorts in place.</p>",
+          "selfExplain": true
+        },
+        {
+          "prompt": "Connect parameter to caller",
+          "html": "<p><code>values</code> is bound to the same list as <code>data</code>, so the in-place sort is visible to the caller.</p>"
+        },
+        {
+          "prompt": "Choose a fix",
+          "html": "<p>Replace with <code>return sorted(values)[0]</code> (or simply <code>min(values)</code>). <code>sorted</code> returns a new list and leaves the original alone.</p>",
+          "selfExplain": true
+        },
+        {
+          "prompt": "Verify",
+          "html": "<p>Rerun: the program prints <code>1</code> then <code>[3, 1, 2]</code> (confirmed locally).</p>"
+        }
+      ],
+      "result": "<p>Debugging pattern: observe the symptom, list the possible mutations of shared objects, connect them to the caller, fix, then re-run to verify.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "l2-predict-default",
+      "prompt": "Predict the output.<pre><code>def total(values, extra=[]):\n    extra.append(sum(values))\n    return extra\n\nprint(total([1, 2]))\nprint(total([3]))</code></pre>",
+      "options": [
+        "[3] then [3]",
+        "[3] then [3, 3]",
+        "[3] then [3, 6]",
+        "An error on the second call"
+      ],
+      "correct": 1,
+      "feedback": {
+        "0": "This expects a fresh [] each call. The default is evaluated once, at definition time.",
+        "2": "extra gets sum([3]) = 3, not a running total of both calls' sums.",
+        "3": "Nothing raises; the shared default list just grows."
+      },
+      "explanation": "The same default list is reused: first call appends 3, second appends another 3 to the same list. I ran this locally and got [3] then [3, 3]. <a data-source=\"defaults\">[source]</a>"
+    },
+    {
+      "type": "practice",
+      "id": "l2-guided",
+      "level": "guided",
+      "setting": "in-app",
+      "task": "<p>This function should return the two largest scores without changing the input. Find the bug, then fix it:</p><pre><code>def top2(scores):\n    scores.sort(reverse=True)\n    return scores[:2]\n\nd = [5, 9, 1]\nprint(top2(d), d)</code></pre>",
+      "hints": [
+        "What does <code>print(d)</code> show after the call?",
+        "Which line mutates, and what non-mutating tool could replace it?"
+      ],
+      "rubric": [
+        "I found the mutating line",
+        "My fix leaves d as [5, 9, 1]",
+        "I re-ran the fixed code in my own Python"
+      ],
+      "solution": "<p>The buggy version prints <code>[9, 5] [9, 5, 1]</code> (local run). Fix: <code>return sorted(scores, reverse=True)[:2]</code>; d stays <code>[5, 9, 1]</code>.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l2-independent",
+      "level": "independent",
+      "setting": "offline",
+      "task": "<p>Write a function <code>add_tag(tags, new, seen=[])</code> style helper of your own that has two accidental-mutation bugs (one from the argument, one from a default), predict what two successive calls print, run them, then fix both and explain each fix in a comment.</p>",
+      "hints": [],
+      "rubric": [
+        "Both bugs genuinely occur when run",
+        "Prediction written before running",
+        "Each fix targets the cause (copy or None default)",
+        "Comments explain mutation vs rebinding"
+      ],
+      "model": "<pre><code>def add_tag(tags, new, history=[]):\n    tags.append(new)\n    history.append(new)\n    return tags\n# fixed:\ndef add_tag(tags, new, history=None):\n    history = [] if history is None else history\n    tags = tags + [new]\n    history.append(new)\n    return tags</code></pre>",
+      "externalFeedback": "Run your own version in Python 3; the interpreter output is the check. A peer review of your comments is useful."
+    },
+    {
+      "type": "check",
+      "html": "<p>Application checks.</p>",
+      "questions": [
+        {
+          "id": "l2-q1",
+          "prompt": "Which function leaves the caller's list unchanged?",
+          "options": [
+            "def f(v): v.append(1)",
+            "def f(v): v += [1]",
+            "def f(v): v = v + [1]",
+            "def f(v): v[0] = 1"
+          ],
+          "correct": 2,
+          "feedback": {
+            "0": "append mutates the shared list.",
+            "1": "+= on a list is in-place, so it mutates the caller's object.",
+            "3": "Item assignment mutates the shared list."
+          },
+          "explanation": "Only <code>v = v + [1]</code> rebinds the local name to a new list. Confirmed in a local run for the analogous reset/clear pair.",
+          "assesses": [
+            "o2"
+          ]
+        },
+        {
+          "id": "l2-q2",
+          "prompt": "A function's default is <code>seen=[]</code> and results from different calls seem to leak. Best fix?",
+          "options": [
+            "Use seen=None and create [] inside",
+            "Call the function with a copy",
+            "Use is instead of ==",
+            "Use seen=list"
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "Works only when callers remember; the trap stays in the function.",
+            "2": "Comparison operators are unrelated to the shared default.",
+            "3": "That sets the default to the type, not a new empty list."
+          },
+          "explanation": "The None sentinel creates a fresh list per call <a data-source=\"defaults\">[tutorial 4.9.1]</a>.",
+          "assesses": [
+            "o2"
+          ],
+          "kind": "mcq"
+        },
+        {
+          "id": "l2-q3",
+          "prompt": "Why does Python's documentation say 'call by object reference' is a better description than call by value?",
+          "kind": "open",
+          "rubric": [
+            "Parameter is a reference to the caller's object",
+            "Mutations are visible to the caller",
+            "Rebinding is not visible"
+          ],
+          "model": "<p>The value passed is a reference to the object. A mutable object changed through that reference is changed for the caller too, but rebinding the parameter leaves the caller's name alone <a data-source=\"defaults\">[tutorial 4.9]</a>.</p>",
+          "assesses": [
+            "o2"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l2-transfer",
+      "task": "<p>You maintain a plotting helper: <code>def style(opts, **extra): opts.update(extra); return opts</code>, called as <code>style(DEFAULTS, color='red')</code> for several charts. After the first chart, every chart is red. Using what you know about lists (the same reasoning applies to dicts), diagnose the cause and write two safe versions of the helper.</p>",
+      "rubric": [
+        "Identifies that DEFAULTS is the same dict as opts and update mutates it",
+        "Applies the mutation vs rebinding distinction",
+        "Provides fix 1: copy first (opts = dict(opts) or {**opts, **extra})",
+        "Provides fix 2: build a new dict without touching the argument"
+      ],
+      "model": "<p>opts is bound to DEFAULTS; <code>update</code> mutates the dict in place, so the change persists. Fix: <code>def style(opts, **extra): return {**opts, **extra}</code> or <code>merged = dict(opts); merged.update(extra); return merged</code>. Either way the caller's dict stays untouched. Not run here; test both in your interpreter.</p>",
+      "assesses": [
+        "o2"
+      ]
+    },
+    {
+      "type": "reflect",
+      "id": "l2-reflect",
+      "prompt": "In your own words, how do you decide whether a function should mutate its argument, and how do you make that choice visible to its callers?"
+    }
+  ],
+  "sources": [
+    {
+      "id": "faq-alias",
+      "title": "Python Programming FAQ: Why did changing list y also change list x?",
+      "kind": "official",
+      "url": "https://docs.python.org/3/faq/programming.html#why-did-changing-list-y-also-change-list-x",
+      "accessed": "2026-10-20",
+      "note": "FAQ entry; page fetched as the current docs (3.15 at access date); quotes checked in raw page text"
+    },
+    {
+      "id": "faq-output",
+      "title": "Python Programming FAQ: How do I write a function with output parameters?",
+      "kind": "official",
+      "url": "https://docs.python.org/3/faq/programming.html#how-do-i-write-a-function-with-output-parameters-call-by-reference",
+      "accessed": "2026-10-20",
+      "note": "States arguments are passed by assignment"
+    },
+    {
+      "id": "defaults",
+      "title": "Python Tutorial 4.9.1: Default Argument Values (and 4.9: defining functions)",
+      "kind": "official",
+      "url": "https://docs.python.org/3/tutorial/controlflow.html#default-argument-values",
+      "accessed": "2026-10-20",
+      "note": "Default evaluated once; mutable default warning"
+    },
+    {
+      "id": "local-run",
+      "title": "Course author's local runs of every code sample and output shown (python3 3.14.5, macOS, `python3 -I`)",
+      "kind": "pedagogical",
+      "note": "Not a web source. Outputs shown as 'ran locally' were produced this way on 2026-10-20; other Python 3 versions may differ in details such as object identity of small ints, not in the behaviour taught here."
+    }
+  ],
+  "next": "<p>Next: copying. Fixing aliasing with a copy works until the list contains other lists; that is where shallow and deep copies differ.</p>"
+}

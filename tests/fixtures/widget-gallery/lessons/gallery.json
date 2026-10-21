@@ -13,6 +13,20 @@
    "html": "<p>Fixture start.</p>"
   },
   {
+   "type": "predict",
+   "id": "g-p",
+   "prompt": "Pick 1",
+   "options": [
+    "0",
+    "1"
+   ],
+   "correct": 1,
+   "explanation": "It is 1.",
+   "feedback": {
+    "0": "No."
+   }
+  },
+  {
    "type": "explain",
    "html": "<p>Fixture <span class='term' data-term='fixture'>fixture</span>.</p>"
   },
@@ -34,20 +48,6 @@
      "prompt": "<p>Why?</p>"
     }
    ]
-  },
-  {
-   "type": "predict",
-   "id": "g-p",
-   "prompt": "Pick 1",
-   "options": [
-    "0",
-    "1"
-   ],
-   "correct": 1,
-   "explanation": "It is 1.",
-   "feedback": {
-    "0": "No."
-   }
   },
   {
    "type": "activity",
@@ -447,10 +447,33 @@
     "title": "Trace",
     "code": "total = 0\ntotal = total + 2",
     "steps": [
-     { "line": 1, "state": { "total": 0 }, "html": "<p>Initialize.</p>" },
-     { "line": 2, "state": { "total": 2 }, "html": "<p>Add two.</p>", "predict": { "prompt": "What is total?", "options": ["0", "2"], "correct": 1, "explanation": "The second line adds two." } }
+     {
+      "line": 1,
+      "state": {
+       "total": 0
+      },
+      "html": "<p>Initialize.</p>"
+     },
+     {
+      "line": 2,
+      "state": {
+       "total": 2
+      },
+      "html": "<p>Add two.</p>",
+      "predict": {
+       "prompt": "What is total?",
+       "options": [
+        "0",
+        "2"
+       ],
+       "correct": 1,
+       "explanation": "The second line adds two."
+      }
+     }
     ],
-    "assumptions": ["Synthetic trace."]
+    "assumptions": [
+     "Synthetic trace."
+    ]
    }
   },
   {
@@ -462,14 +485,39 @@
    "config": {
     "title": "Flow",
     "nodes": [
-     { "id": "controller", "label": "Controller", "kind": "control", "html": "<p>Reconciles the desired state.</p>" },
-     { "id": "worker", "label": "Worker", "kind": "workload", "html": "<p>Runs the work.</p>" }
+     {
+      "id": "controller",
+      "label": "Controller",
+      "kind": "control",
+      "html": "<p>Reconciles the desired state.</p>"
+     },
+     {
+      "id": "worker",
+      "label": "Worker",
+      "kind": "workload",
+      "html": "<p>Runs the work.</p>"
+     }
     ],
     "steps": [
-     { "event": "Apply", "active": ["controller"], "html": "<p>The controller exists.</p>" },
-     { "event": "Reconcile", "active": ["controller", "worker"], "html": "<p>The worker starts.</p>" }
+     {
+      "event": "Apply",
+      "active": [
+       "controller"
+      ],
+      "html": "<p>The controller exists.</p>"
+     },
+     {
+      "event": "Reconcile",
+      "active": [
+       "controller",
+       "worker"
+      ],
+      "html": "<p>The worker starts.</p>"
+     }
     ],
-    "assumptions": ["Synthetic flow."]
+    "assumptions": [
+     "Synthetic flow."
+    ]
    }
   },
   {
@@ -481,16 +529,53 @@
    "config": {
     "title": "Causal map",
     "nodes": [
-     { "id": "policy", "label": "Policy", "kind": "intervention", "html": "<p>A proposed change.</p>" },
-     { "id": "outcome", "label": "Outcome", "kind": "measure", "html": "<p>A measured result.</p>" },
-     { "id": "context", "label": "Context", "kind": "confounder", "html": "<p>Can affect the outcome independently.</p>" }
+     {
+      "id": "policy",
+      "label": "Policy",
+      "kind": "intervention",
+      "html": "<p>A proposed change.</p>"
+     },
+     {
+      "id": "outcome",
+      "label": "Outcome",
+      "kind": "measure",
+      "html": "<p>A measured result.</p>"
+     },
+     {
+      "id": "context",
+      "label": "Context",
+      "kind": "confounder",
+      "html": "<p>Can affect the outcome independently.</p>"
+     }
     ],
     "links": [
-     { "id": "policy-outcome", "from": "policy", "to": "outcome", "label": "hypothesis", "explanation": "<p>Needs evidence.</p>" },
-     { "id": "context-outcome", "from": "context", "to": "outcome", "label": "alternative", "explanation": "<p>Can bias an observed difference.</p>" }
+     {
+      "id": "policy-outcome",
+      "from": "policy",
+      "to": "outcome",
+      "label": "hypothesis",
+      "explanation": "<p>Needs evidence.</p>"
+     },
+     {
+      "id": "context-outcome",
+      "from": "context",
+      "to": "outcome",
+      "label": "alternative",
+      "explanation": "<p>Can bias an observed difference.</p>"
+     }
     ],
-    "challenge": { "prompt": "Which link is an alternative explanation?", "options": ["policy-outcome", "context-outcome"], "correct": "context-outcome", "explanation": "Context can affect the result independently." },
-    "assumptions": ["Synthetic map."]
+    "challenge": {
+     "prompt": "Which link is an alternative explanation?",
+     "options": [
+      "policy-outcome",
+      "context-outcome"
+     ],
+     "correct": "context-outcome",
+     "explanation": "Context can affect the result independently."
+    },
+    "assumptions": [
+     "Synthetic map."
+    ]
    }
   },
   {

@@ -1,0 +1,34 @@
+{
+  "topic": "Python lists and references: why changing one variable changes another",
+  "goals": [
+    "Predict the output of code that aliases, copies and mutates lists",
+    "Debug a function that mutates its argument by accident",
+    "Explain the difference between shallow and deep copies"
+  ],
+  "scope": "Python 3; built-in lists, the copy module",
+  "language": "en",
+  "locale": "en-US",
+  "intake": {
+    "capability": "Trace short Python programs with nested lists and fix aliasing bugs",
+    "familiarity": "some",
+    "modality": "hands-on",
+    "practiceLoad": "heavy"
+  },
+  "learner": {
+    "startingKnowledge": "Writes simple Python scripts with loops and functions",
+    "background": "Synthetic benchmark learner: data analyst",
+    "depth": "solid"
+  },
+  "time": {
+    "totalHours": 2,
+    "sessionMinutes": 25
+  },
+  "practice": {
+    "software": [
+      "Python 3 installed locally"
+    ]
+  },
+  "sources": {
+    "evidenceStandard": "The official Python documentation and language reference"
+  }
+}

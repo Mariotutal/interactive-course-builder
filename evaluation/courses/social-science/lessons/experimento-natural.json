@@ -1,0 +1,421 @@
+{
+  "format": 1,
+  "id": "experimento-natural",
+  "title": "El experimento natural: Nueva Jersey frente a Pensilvania",
+  "summary": "Qué aporta comparar un lugar que cambia una política con un vecino que no la cambia, y qué supuestos y límites tiene esa comparación.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 35,
+  "outcomes": [
+    "o2"
+  ],
+  "prerequisites": [
+    "correlacion-y-causalidad"
+  ],
+  "prereqText": "<p>Necesitas la lección anterior: correlación, causalidad, variable de confusión y contrafactual. Sin econometría: solo restas y comparaciones.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>El 1 de abril de 1992, el salario mínimo de Nueva Jersey subió de 4,25 a 5,05 dólares por hora; el de la vecina Pensilvania siguió en 4,25 <a data-source=\"card-nber\">[1]</a>. Un reportero económico de la época tendría una pregunta sencilla: ¿hubo menos empleo en los restaurantes de comida rápida de Nueva Jersey después de la subida?</p><p>Mirar solo Nueva Jersey, antes y después, no responde a la pregunta: en esos meses cambiaron muchas cosas más. Imagina que el empleo baja un poco. ¿Es por la subida, o porque la economía de la región iba flojo? Esa duda es exactamente el problema del contrafactual.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Piensa en dos huertos vecinos con el mismo suelo y el mismo clima. Uno recibe un abono nuevo y el otro no. Si ambos huertos evolucionaban igual antes del abono, la diferencia de cosecha de esta temporada es una buena pista del efecto del abono, porque la meteorología afecta por igual a los dos. El huerto sin abono funciona como el contrafactual del que sí lo recibió.</p>",
+      "limits": "<p>Dos estados no son dos huertos idénticos: tienen empresas, clientes y trabajadores distintos, y nadie asignó el «abono» al azar. El salario mínimo lo decidió el legislativo de un estado por sus propios motivos. La comparación solo funciona si podemos defender que, sin esa ley, los dos lugares habrían evolucionado de forma parecida, y eso es un supuesto, no un dato.</p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Mostrar cómo la evolución del lugar de comparación estima lo que habría pasado sin la política.",
+      "alt": "Gráfico con dos líneas entre «antes» y «después». La línea de Nueva Jersey sube de 18 a 18,6 empleados por restaurante. La línea de Pensilvania baja de 22 a 21. Una línea discontinua parte del punto inicial de Nueva Jersey y baja en paralelo a la de Pensilvania, hasta 17: es lo que habría pasado sin la subida, según el supuesto. La diferencia entre el punto real final y el punto discontinuo es el efecto estimado, 1,6 empleados. Datos ilustrativos, inventados para el curso.",
+      "html": "<figure><svg viewBox=\"0 0 560 300\" role=\"img\" aria-labelledby=\"v2t v2d\"><title id=\"v2t\">Esquema de diferencias entre dos lugares</title><desc id=\"v2d\">Dos líneas reales y una línea contrafactual discontinua entre antes y después. Datos ilustrativos.</desc>\n<line class=\"edge\" x1=\"70\" y1=\"250\" x2=\"500\" y2=\"250\"/><line class=\"edge\" x1=\"70\" y1=\"30\" x2=\"70\" y2=\"250\"/>\n<text class=\"tm\" x=\"95\" y=\"272\">Antes</text><text class=\"tm\" x=\"400\" y=\"272\">Después</text>\n<text class=\"tm\" x=\"6\" y=\"22\">Empleados por restaurante (ilustrativo)</text>\n<line class=\"edge\" x1=\"110\" y1=\"140\" x2=\"440\" y2=\"125\"/><circle class=\"n1\" cx=\"110\" cy=\"140\" r=\"6\"/><circle class=\"n1\" cx=\"440\" cy=\"125\" r=\"6\"/><text class=\"t\" x=\"300\" y=\"112\">Nueva Jersey: 18 → 18,6</text>\n<line class=\"edge\" x1=\"110\" y1=\"60\" x2=\"440\" y2=\"80\"/><circle class=\"n2\" cx=\"110\" cy=\"60\" r=\"6\"/><circle class=\"n2\" cx=\"440\" cy=\"80\" r=\"6\"/><text class=\"t\" x=\"300\" y=\"52\">Pensilvania: 22 → 21</text>\n<line class=\"edge dashed\" x1=\"110\" y1=\"140\" x2=\"440\" y2=\"160\"/><circle class=\"n-warn\" cx=\"440\" cy=\"160\" r=\"6\"/><text class=\"t\" x=\"260\" y=\"185\">Sin la subida (supuesto): 17</text>\n<line class=\"edge\" x1=\"470\" y1=\"130\" x2=\"470\" y2=\"156\" marker-end=\"url(#arrow)\"/><text class=\"tm\" x=\"40\" y=\"215\">Efecto estimado = distancia entre el punto real de NJ y el contrafactual = 1,6</text>\n</svg><figcaption>Esquema con cifras inventadas para ilustrar el método. No reproduce los datos de Card y Krueger. Diagrama propio del curso.</figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "title": "Qué hicieron Card y Krueger y por qué se llama «experimento natural»",
+      "html": "<p>Un <span class=\"term\" data-term=\"experimento natural\">experimento natural</span> es una situación de la vida real que se parece a un experimento aleatorizado: algunos individuos quedan expuestos a una intervención y otros, similares, no, sin que el investigador lo decida. Así lo describe la Real Academia Sueca de las Ciencias: situaciones «that resemble randomised experiments» (se parecen a experimentos aleatorizados) <a data-source=\"nobel2021\">[4]</a>. En un ensayo clínico el investigador controla quién recibe el tratamiento; aquí no, y de ahí la cautela.</p>\n<p>David Card y Alan Krueger encuestaron a 410 restaurantes de comida rápida de Nueva Jersey y del este de Pensilvania antes y después de la subida. Compararon la evolución del empleo, los salarios y los precios entre los dos estados. También compararon, dentro de Nueva Jersey, los restaurantes que ya pagaban salarios altos (y por tanto casi no se veían afectados por la ley) con los que debieron subirlos <a data-source=\"card-nber\">[1]</a>.</p>\n<p>La lógica es la de <span class=\"term\" data-term=\"diferencias en diferencias\">diferencias en diferencias</span>, que aquí explicamos sin fórmulas: se calcula el cambio del empleo en el lugar tratado, se calcula el cambio en el lugar de comparación, y se resta. Si el cambio en Pensilvania es una buena estimación de lo que habría pasado en Nueva Jersey sin la subida, la resta estima el efecto de la subida.</p>\n<p>Esa frase contiene el supuesto central, las <span class=\"term\" data-term=\"tendencias paralelas\">tendencias paralelas</span>: sin la política, ambos lugares habrían evolucionado de manera similar. No se puede demostrar, porque el contrafactual no se ve; solo se pueden dar razones a favor (por ejemplo, que ambos lugares compartían mercado laboral cercano a la frontera) o en contra.</p>\n<p><strong>Lo que los autores afirmaron.</strong> En la versión de trabajo, informan de que, en relación con Pensilvania, el empleo en los restaurantes de Nueva Jersey aumentó un 13 %, y de que los establecimientos que no tuvieron que subir salarios evolucionaron como los de Pensilvania mientras que los que sí tuvieron que subirlos aumentaron empleo <a data-source=\"card-nber\">[1]</a>. En la versión publicada, el resumen concluye que no hay indicio de que la subida redujera el empleo <a data-source=\"card-aer\">[2]</a>.</p>\n<p><strong>Qué añade el diseño.</strong> Frente a la correlación entre ciudades, controla tendencias comunes (el ciclo económico regional) y evita parte de la confusión. Mitiga también la causalidad inversa (razonamiento del curso): la subida fue una decisión legislativa fechada, anterior a la medición «después».</p>\n<p><strong>Qué no puede resolver.</strong></p><ul>\n<li><em>El supuesto de tendencias paralelas</em> sigue siendo un supuesto: si Nueva Jersey iba a evolucionar distinto de Pensilvania por otras razones, la estimación se sesga (lo probarás en la actividad).</li>\n<li><em>La medición.</em> Los datos de Card y Krueger procedían de encuestas; Neumark y Wascher usaron registros de nóminas de 230 restaurantes y obtuvieron un resultado distinto <a data-source=\"nw-nber\">[3]</a> (lo veremos en la lección 3). Un diseño bueno con datos ruidosos no sirve.</li>\n<li><em>La generalización.</em> Es una subida concreta de 80 centavos, en un sector (comida rápida), en un par de estados y en unos meses. No dice qué pasaría con una subida mayor, en otro sector o a largo plazo. A eso se le llama <span class=\"term\" data-term=\"validez externa\">validez externa</span>.</li>\n<li><em>Los mecanismos.</em> Aunque no haya efecto sobre el empleo, el diseño no explica por qué.</li></ul>\n<p><strong>Reconocimiento académico.</strong> Card recibió en 2021 el Premio de Ciencias Económicas en memoria de Alfred Nobel, compartido con Angrist e Imbens <a data-source=\"nobel2021\">[4]</a>. Un premio no convierte un resultado en indiscutible; la lección 3 muestra cómo siguió el debate.</p>"
+    },
+    {
+      "type": "worked",
+      "title": "Calcular la estimación con cifras ilustrativas",
+      "html": "<p>Cifras <strong>inventadas</strong> para ilustrar el cálculo (empleados a tiempo completo por restaurante, media). No son los datos reales del estudio.</p>",
+      "steps": [
+        {
+          "prompt": "<p>Paso 1. Cambio en el lugar tratado: Nueva Jersey pasa de 18 a 18,6.</p>",
+          "html": "<p>18,6 − 18 = +0,6. Ojo: este cambio por sí solo no es el efecto de la ley, porque mezcla la ley con todo lo demás que cambió.</p>"
+        },
+        {
+          "prompt": "<p>Paso 2. Cambio en el lugar de comparación: Pensilvania pasa de 22 a 21.</p>",
+          "html": "<p>21 − 22 = −1,0. Es la pista de lo que le ocurrió a la región por otras causas (por ejemplo, el ciclo económico).</p>"
+        },
+        {
+          "prompt": "<p>Paso 3. ¿Qué haces con los dos cambios para estimar el efecto?</p>",
+          "selfExplain": true,
+          "html": "<p>Se restan: +0,6 − (−1,0) = +1,6. Si Nueva Jersey habría caído igual que Pensilvania sin la ley, el efecto estimado es +1,6 empleados por restaurante.</p>"
+        },
+        {
+          "prompt": "<p>Paso 4. ¿Qué pasa si, sin la ley, Nueva Jersey habría subido 0,5 más que Pensilvania?</p>",
+          "selfExplain": true,
+          "html": "<p>Entonces parte de esa diferencia no se debe a la ley: 1,6 − 0,5 = 1,1. El supuesto de tendencias paralelas importa porque mueve el resultado.</p>"
+        }
+      ],
+      "result": "<p>Estimación = (cambio en el lugar tratado) − (cambio en el lugar de comparación). La calidad del resultado depende de cuánto te creas que el segundo cambio representa el contrafactual del primero.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "l2-p1",
+      "concepts": [
+        "parallel-trends"
+      ],
+      "assesses": [
+        "o2"
+      ],
+      "prompt": "Supón que, justo en ese año, Pensilvania sufrió un cierre de fábricas que afectó a su empleo en restaurantes, y Nueva Jersey no. ¿Qué ocurre con la estimación de diferencias?",
+      "options": [
+        "Sigue siendo igual de fiable, porque el diseño elimina todos los factores.",
+        "Queda sesgada: parte de la diferencia se debe al cierre de fábricas y no a la ley.",
+        "Queda sesgada, pero solo si el cierre fuera en Nueva Jersey.",
+        "Deja de poder calcularse."
+      ],
+      "correct": 1,
+      "feedback": {
+        "0": "El diseño elimina solo los factores que afectan por igual a ambos lugares; un golpe específico de un lado rompe el supuesto.",
+        "2": "Sesga en cualquiera de los dos lados: lo que importa es que el lugar de comparación ya no representa el contrafactual.",
+        "3": "Se puede calcular; lo que falla es su interpretación causal."
+      },
+      "explanation": "El experimento natural resta lo que le pasa a ambos lugares por igual. Un choque que afecta solo a uno es una variable de confusión que viola las tendencias paralelas."
+    },
+    {
+      "type": "activity",
+      "id": "l2-a1",
+      "widget": "parameter-explorer",
+      "concepts": [
+        "parallel-trends",
+        "natural-experiment"
+      ],
+      "instructions": "<p>Antes de mover nada, predice: si Nueva Jersey tuviera sin la ley una tendencia 1 empleado mejor que Pensilvania, ¿qué haría la estimación corregida? Luego cambia las cifras ilustrativas y el supuesto de «tendencia extra» y observa la gráfica. Cuando la corrección haga que el efecto cambie de signo, pregúntate qué evidencia necesitarías para creer en ese supuesto.</p>",
+      "debrief": "<p>La estimación no es un dato: depende de un supuesto sobre el contrafactual. Con una tendencia extra de 1,6 el efecto estimado desaparece; con una mayor se invierte. Los investigadores intentan apoyar ese supuesto con tendencias anteriores o comparaciones locales; el lector debe preguntar si se ha hecho. El modelo omite además problemas de medición y de muestra.</p>",
+      "config": {
+        "title": "Sensibilidad de la estimación al supuesto de tendencias paralelas",
+        "intro": "<p>Modelo con <strong>datos ilustrativos, no reales</strong>: empleados por restaurante, antes y después, en el lugar tratado (NJ) y en el de comparación (PA).</p>",
+        "inputs": [
+          {
+            "id": "njb",
+            "label": "NJ antes",
+            "min": 10,
+            "max": 30,
+            "step": 0.5,
+            "value": 18
+          },
+          {
+            "id": "nja",
+            "label": "NJ después",
+            "min": 10,
+            "max": 30,
+            "step": 0.1,
+            "value": 18.6
+          },
+          {
+            "id": "pab",
+            "label": "PA antes",
+            "min": 10,
+            "max": 30,
+            "step": 0.5,
+            "value": 22
+          },
+          {
+            "id": "paa",
+            "label": "PA después",
+            "min": 10,
+            "max": 30,
+            "step": 0.1,
+            "value": 21
+          },
+          {
+            "id": "gap",
+            "label": "Tendencia extra de NJ sin la ley (supuesto)",
+            "min": -3,
+            "max": 3,
+            "step": 0.1,
+            "value": 0
+          }
+        ],
+        "outputs": [
+          {
+            "id": "dnj",
+            "label": "Cambio en NJ",
+            "expr": "nja - njb",
+            "format": {
+              "digits": 2
+            }
+          },
+          {
+            "id": "dpa",
+            "label": "Cambio en PA",
+            "expr": "paa - pab",
+            "format": {
+              "digits": 2
+            }
+          },
+          {
+            "id": "did",
+            "label": "Estimación (NJ − PA)",
+            "expr": "(nja - njb) - (paa - pab)",
+            "format": {
+              "digits": 2
+            }
+          },
+          {
+            "id": "adj",
+            "label": "Estimación corregida por el supuesto",
+            "expr": "(nja - njb) - (paa - pab) - gap",
+            "format": {
+              "digits": 2
+            }
+          }
+        ],
+        "chart": {
+          "x": {
+            "var": "x",
+            "from": -3,
+            "to": 3
+          },
+          "series": [
+            {
+              "label": "estimación corregida según el supuesto",
+              "expr": "(nja - njb) - (paa - pab) - x"
+            }
+          ],
+          "current": {
+            "label": "Supuesto actual",
+            "x": "gap"
+          },
+          "xLabel": "tendencia extra de NJ sin la ley",
+          "yLabel": "efecto estimado (empleados)",
+          "ariaLabel": "Efecto estimado según el supuesto de tendencia extra"
+        },
+        "interpret": [
+          {
+            "when": "(nja - njb) - (paa - pab) - gap < 0",
+            "tone": "warn",
+            "html": "Con este supuesto el efecto estimado es negativo: el signo depende del supuesto."
+          },
+          {
+            "when": "(nja - njb) - (paa - pab) - gap >= 0",
+            "tone": "info",
+            "html": "Con este supuesto el efecto estimado sigue siendo cero o positivo. Aun así, el supuesto no se puede comprobar directamente."
+          }
+        ],
+        "assumptions": [
+          "Cifras ilustrativas inventadas; no son los datos reales de Card y Krueger",
+          "Modelo de dos lugares y dos momentos, sin error muestral ni medición",
+          "La «tendencia extra» es un supuesto que el investigador no observa"
+        ]
+      }
+    },
+    {
+      "type": "practice",
+      "id": "l2-pr1",
+      "level": "guided",
+      "setting": "in-app",
+      "concepts": [
+        "natural-experiment"
+      ],
+      "task": "<p>Ejemplo hipotético: una ciudad introduce una tasa a los alquileres turísticos y una ciudad vecina, de tamaño similar, no. Antes: 1 000 anuncios en cada una. Después: 900 en la ciudad con tasa y 950 en la vecina. Calcula el cambio en cada ciudad, la estimación de diferencias y escribe una frase prudente.</p>",
+      "hints": [
+        "<p>Cambio en la ciudad tratada: 900 − 1 000. Cambio en la vecina: 950 − 1 000.</p>",
+        "<p>Resta los dos cambios y pregúntate qué supuesto sostiene que la vecina es un buen contrafactual.</p>"
+      ],
+      "rubric": [
+        "Calcula −100 y −50",
+        "Estima −50 como diferencia",
+        "Menciona el supuesto de que ambas ciudades habrían evolucionado igual sin la tasa"
+      ],
+      "solution": "<p>Cambio con tasa: −100. Cambio sin tasa: −50. Estimación: −100 − (−50) = −50 anuncios. Frase: «Si ambas ciudades habrían evolucionado igual sin la tasa, la tasa se asocia con 50 anuncios menos; el cálculo depende de que la vecina sea un buen contrafactual». Cifras inventadas.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l2-pr2",
+      "level": "independent",
+      "setting": "in-app",
+      "concepts": [
+        "natural-experiment",
+        "limits-of-design"
+      ],
+      "task": "<p>Sin pistas: para el ejemplo de la tasa turística, enumera tres razones por las que la ciudad vecina podría no ser un buen contrafactual y tres cosas que el diseño, aunque fuera perfecto, no podría decirte.</p>",
+      "rubric": [
+        "Razones concretas sobre diferencias previas o choques locales",
+        "Menciona generalización o mecanismos",
+        "No presenta el diseño como prueba definitiva"
+      ],
+      "solution": "<p>Contrafactual dudoso: diferencias previas en el turismo (una ciudad ya caía), un evento local (festival, obra), tamaños de mercado distintos. Límites: no dice si el efecto se mantendrá a largo plazo, si se repetiría en otra ciudad con otro mercado, ni por qué ocurre (¿menos oferta o más reservas ilegales?).</p>"
+    },
+    {
+      "type": "check",
+      "html": "<p>Preguntas de reconocimiento, aplicación y propias palabras.</p>",
+      "questions": [
+        {
+          "id": "l2-c1",
+          "assesses": [
+            "o2"
+          ],
+          "concepts": [
+            "natural-experiment"
+          ],
+          "prompt": "¿Qué hace que el caso de Nueva Jersey y Pensilvania se llame «experimento natural»?",
+          "options": [
+            "Una subida de salario mínimo en un estado y no en el vecino creó, sin que el investigador la decidiera, un grupo expuesto y otro no.",
+            "Los investigadores asignaron al azar los restaurantes a cada estado.",
+            "Se realizó en un laboratorio con restaurantes simulados.",
+            "Los dos estados eran idénticos en todo."
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "Ese sería un experimento aleatorizado; aquí la asignación la hizo una ley.",
+            "2": "El estudio usó restaurantes reales.",
+            "3": "No lo eran; el supuesto es que habrían evolucionado de forma parecida, no que fueran idénticos."
+          },
+          "explanation": "Un experimento natural aprovecha una variación de la vida real (una ley) que se parece a un experimento, sin que el investigador la controle."
+        },
+        {
+          "id": "l2-c2",
+          "assesses": [
+            "o2"
+          ],
+          "concepts": [
+            "counterfactual"
+          ],
+          "prompt": "En el diseño de Card y Krueger, ¿qué papel cumple Pensilvania?",
+          "options": [
+            "Estima lo que habría pasado en Nueva Jersey sin la subida (contrafactual).",
+            "Es el lugar donde se aplicó la política.",
+            "Prueba que no hay ningún efecto.",
+            "Sirve solo para ampliar la muestra."
+          ],
+          "correct": 0,
+          "feedback": {
+            "1": "La política se aplicó en Nueva Jersey; Pensilvania no cambió su salario mínimo.",
+            "2": "Un lugar de comparación no prueba nada por sí solo: aproxima un contrafactual bajo un supuesto.",
+            "3": "Su función es la comparación, no el tamaño de la muestra."
+          },
+          "explanation": "Pensilvania aproxima el contrafactual: la evolución probable de Nueva Jersey sin la subida."
+        },
+        {
+          "id": "l2-c3",
+          "assesses": [
+            "o2"
+          ],
+          "concepts": [
+            "limits-of-design"
+          ],
+          "kind": "multi",
+          "prompt": "¿Qué cosas NO puede resolver por sí solo este tipo de diseño? (marca todas las correctas)",
+          "options": [
+            "Si el resultado se mantiene para una subida mucho mayor",
+            "Si los datos de encuesta eran exactos",
+            "Si el lugar de comparación evolucionaba igual",
+            "Si 5,05 dólares era mayor que 4,25"
+          ],
+          "correct": [
+            0,
+            1,
+            2
+          ],
+          "feedback": {
+            "3": "Es una comparación aritmética, no un problema de inferencia."
+          },
+          "explanation": "Los tres primeros son los límites: generalización, medición y el supuesto de tendencias paralelas. El cuarto es un hecho trivial."
+        },
+        {
+          "id": "l2-c4",
+          "assesses": [
+            "o2"
+          ],
+          "concepts": [
+            "natural-experiment",
+            "limits-of-design"
+          ],
+          "kind": "open",
+          "prompt": "Con tus palabras: explica a un compañero qué aporta un experimento natural frente a comparar ciudades, y un límite que debe recordar.",
+          "rubric": [
+            "Menciona la comparación con un lugar parecido y un cambio fechado",
+            "Nombra el supuesto de tendencias paralelas u otro límite (medición, generalización)"
+          ],
+          "model": "<p>Aporta un grupo de comparación parecido y un cambio de política con fecha, de modo que se resta lo que le pasa a ambos lugares. Su límite: depende de que el lugar de comparación represente lo que habría pasado sin la política y no dice si el resultado vale para otros sectores o subidas mayores.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l2-t1",
+      "assesses": [
+        "o2"
+      ],
+      "concepts": [
+        "natural-experiment",
+        "parallel-trends",
+        "limits-of-design"
+      ],
+      "task": "<p>Contexto nuevo (hipotético): una región prohíbe los móviles en las escuelas públicas; la región vecina, no. Dos años después, las notas medias suben en la región con prohibición. Evalúa si esto es un experimento natural razonable: qué comparas, qué supuesto necesitas, qué podría romperlo y qué no podría resolver aunque se cumpliera.</p>",
+      "rubric": [
+        "Identifica grupo tratado y de comparación",
+        "Nombra tendencias paralelas y cómo podrían romperse (otros cambios en la región)",
+        "Señala límites: generalización o medición",
+        "No concluye causalidad de forma tajante"
+      ],
+      "model": "<p>Se comparan notas antes y después en ambas regiones y se restan. Supuesto: sin la prohibición, las notas habrían evolucionado igual. Podría romperse si la región con prohibición cambió también el currículo, o si tenía tendencias distintas previas. Aunque se cumpliera, no diría si el efecto vale para otras edades, ni por qué (menos distracción o más disciplina). Conclusión prudente: «es compatible con un efecto positivo, bajo supuestos».</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "l2-r1",
+      "prompt": "¿Qué pregunta harías a un investigador que te presenta un experimento natural para comprobar si su lugar de comparación es creíble? Escribe tres."
+    }
+  ],
+  "sources": [
+    {
+      "id": "card-nber",
+      "title": "Minimum Wages and Employment: A Case Study of the Fast Food Industry in New Jersey and Pennsylvania (NBER Working Paper 4509)",
+      "kind": "research",
+      "author": "David Card, Alan B. Krueger",
+      "date": "1993",
+      "url": "https://www.nber.org/papers/w4509",
+      "accessed": "2026-10-20",
+      "note": "Resumen leído en texto original: 410 restaurantes; salario de NJ de 4,25 a 5,05 el 1 de abril de 1992; empleo de NJ +13 % relativo a PA."
+    },
+    {
+      "id": "card-aer",
+      "title": "Minimum Wages and Employment: A Case Study of the Fast-Food Industry in New Jersey and Pennsylvania (American Economic Review 84(4), 772-793)",
+      "kind": "research",
+      "author": "David Card, Alan B. Krueger",
+      "date": "1994",
+      "url": "https://ideas.repec.org/a/aea/aecrev/v84y1994i4p772-93.html",
+      "accessed": "2026-10-20",
+      "note": "Resumen publicado leído vía IDEAS/RePEc. No se accedió al texto completo."
+    },
+    {
+      "id": "nw-nber",
+      "title": "The Effect of New Jersey's Minimum Wage Increase on Fast-Food Employment: A Re-Evaluation Using Payroll Records (NBER Working Paper 5224)",
+      "kind": "research",
+      "author": "David Neumark, William Wascher",
+      "date": "1995",
+      "url": "https://www.nber.org/papers/w5224",
+      "accessed": "2026-10-20",
+      "note": "Resumen: 230 restaurantes con registros de nóminas. Versión publicada: AER 90(5), 2000."
+    },
+    {
+      "id": "nobel2021",
+      "title": "Popular science background: Natural experiments help answer important questions (Prize in Economic Sciences 2021)",
+      "kind": "official",
+      "author": "Royal Swedish Academy of Sciences",
+      "date": "2021",
+      "url": "https://www.nobelprize.org/prizes/economic-sciences/2021/popular-information/",
+      "accessed": "2026-10-20",
+      "note": "Descripción de experimento natural y del estudio de NJ y PA. Texto original leído."
+    },
+    {
+      "title": "Cifras y ejemplos ilustrativos",
+      "kind": "pedagogical",
+      "note": "Las cifras del gráfico, de la actividad, del ejemplo de la tasa turística y de los móviles son inventadas para enseñar el cálculo; no son datos reales. Decisión del curso: se evita la fórmula."
+    }
+  ],
+  "next": "<p>El diseño no zanjó el debate. En la lección 3 verás qué dijeron otros estudios con otros datos y otros métodos, y cómo escribir una conclusión honesta cuando la evidencia no coincide.</p>"
+}

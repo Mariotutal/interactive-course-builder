@@ -1,6 +1,6 @@
 # Generalization evaluation and test evidence
 
-Date: 2026-10-20. Package: `interactive-course-builder` 1.0.0 (course format 1).
+Date: 2026-10-20. Package: `interactive-course-builder` 1.0.0 (course format 1; learner state format 2).
 
 ## How the examples were produced
 
@@ -50,7 +50,7 @@ This is a manual review by the package author based on spot checks. It is not ev
 
 ### Automated
 
-`node tests/run-tests.mjs`: **48 passed, 0 failed**. The suite covers:
+`node tests/run-tests.mjs`: **91 passed, 0 failed**. The suite covers:
 
 - **Expression evaluator:** precedence, stats and t functions, rejection of code-like input.
 - **Request normalization:** blocking gaps, defaults, invalid values.
@@ -64,6 +64,13 @@ This is a manual review by the package author based on spot checks. It is not ev
   - `build` refuses an output folder that is the course folder, one of its parents, a source subfolder, or an unrelated non-empty folder, and the source survives;
   - Markdown and coverage output stay inside the course;
   - entity-encoded and obfuscated executable URLs are rejected (`jav&#x61;script:`, `&#106` without a semicolon, `&Tab;`/`&colon;`, newline-split schemes, SVG `xlink:href` with `data:text/html`, SVG `<animate>` on href, `vbscript:`, CSS `url()`), while normal https, fragment, relative and `data:image` URLs pass.
+- **Learner state format 2:** clean/reject malformed state, format 1 → 2 migration with concept backfill, expanding review intervals (success advances, failure resets, the last interval ends scheduling), due-concept selection.
+- **Knowledge architecture (optional):** the concepts fixture validates with no warnings; prerequisite cycles, unknown concept tags, hubs with fewer than two concepts, dispositions with fewer than two bands and auto-scored dispositions are rejected or warned; a course without it is unaffected; the coverage report gains a knowledge table.
+- **Intake:** invalid values are rejected; decisions are derived and stored by `init`.
+- **Visual options:** unknown keys warn; token pairs below WCAG AA 4.5:1 against the light or dark background are errors.
+- **function-lab sandbox:** failing `testCases` are build errors; the widget is copied into the build.
+- **Evaluation harness:** `auto` metrics, the manual template, `report`, and `pilot` rejecting exports from another course.
+- **Export and validator details:** code in question prompts survives the Markdown export; questions with `type` instead of `kind` are errors; citation labels that do not match the source position warn; lessons that add up to much more than the requested total time warn; a full lesson whose first prediction follows its first explanation warns.
 - **Package hygiene:** the frontmatter keys are limited to the strict set accepted by the stricter skill validators (`name`, `description`, `license`, `allowed-tools`, `metadata`). `quick_validate.py` from the `skill-creator` plugin reports the skill as valid. No personal or original-course terms appear in the package.
 
 ### Browser (Chromium pane, served over local HTTP)
@@ -101,6 +108,26 @@ This is a manual review by the package author based on spot checks. It is not ev
 
 Run with Google Chrome `--headless=new --dump-dom`. Opening `site/index.html` directly renders full lessons with widgets and no errors for the statistics and history examples. The original Proxmox course was checked the same way, which closes a limitation recorded in that course's `ESTADO.md`. Only rendering was checked under `file://`; `localStorage` persistence there was not.
 
+## Learner model, intake, knowledge architecture, sandbox and visual options
+
+Checked in the browser pane on the `tests/fixtures/concepts-lab` course (served over local HTTP):
+
+- Intake decisions appear on the home page. Theme attributes are applied, and token colours switch by mode: light `#5b3f9e`, dark `#c9b6ff`.
+- Visiting a lesson introduces its concepts. A correct first attempt moves a concept to step 1, due in 3 days; a wrong one keeps it at step 0, due in 1 day. A review answer on a due concept moves it to step 2, due in 7 days, and leaves the lesson item's answer untouched.
+- A stored format 1 state shows the migration notice, keeps the answers and backfills concepts.
+- function-lab: the slider stays locked until the learner predicts, then unlocks and gives feedback. Moving the slider down is judged correctly.
+- No horizontal overflow at 375 px on 9 pages.
+
+## Benchmark harness
+
+`evaluation/` holds four fixed benchmark requests (mathematics, Kubernetes, programming, social science in Spanish), the courses fresh agents generated from them using only the skill, a 7-criterion rubric, and `lk-eval.mjs`. Results are in `evaluation/RESULTS.md`. The manual scores there are **self-reviews** by a model of the same family as the generator, not independent evidence. `evaluation/PILOT.md` describes how to run a pilot with real learners; none has been run.
+
+Findings from the first round (self-review scores 8, 8, 9 and 11 out of 14):
+
+- **All four courses scored 1 on instructional sequencing**, for the same reason: predictions placed after the explanation, or after a visual or worked example that gives the answer away. The cause was in the skill: `lesson-contract.md` listed the usual order as explain → worked → predict. The guidance now puts the first prediction before the first explanation, and `validate` warns when a full lesson does not. Before the fix, no benchmark course had a validator warning for this; after it, the social-science course has 3. A prediction given away by an earlier visual or text equivalent, as in mathematics, cannot be detected automatically.
+- Other recurring problems that the validator cannot catch: terms used before they are defined; transfer tasks that reuse the context of the lesson's own examples; classify feedback that confirms the right answer without naming the misconception behind a wrong one; sources that are many anchors on two pages.
+- The existing examples (`examples/`) predate this rule and now show the warning (statistics 7, history 2, Spanish 2). They were not reordered, because moving a prediction can break the lesson's flow and needs content review.
+
 ## Generic fixes made because of the evaluation
 
 | Fix | Found by |
@@ -114,6 +141,8 @@ Run with Google Chrome `--headless=new --dump-dom`. Opening `site/index.html` di
 | Long course titles overflowed the mobile top bar. | Browser test |
 | Review fixes: `check-request` and `init` fail on blocking gaps; advanced route made optional and stated the same way in SKILL.md, the references, the template and the validator; interface-language limit stated in the skill description, with warnings and localized Markdown; `full`/`focused` lesson profiles with a course-level transfer rule; `compatibility` moved out of the frontmatter. | Review by the user |
 | Second review: `build --out` could delete the course (and wrote `markdown/` next to `--out`, deleting a sibling folder); the HTML filter missed entity-encoded `javascript:` URLs; importing `items: null` left the course unusable. Fixed with output-folder guards plus a `.lk-build` marker, an entity-decoding URL allow-list plus a render-time sanitizer, and field-by-field validation of imported and stored state. Verified by tests and in the browser: rejected imports leave the stored state unchanged, damaged storage is set aside with a notice, and the sanitizer removes injected `onerror` and `javascript:` attributes without breaking the widgets. | Review by the user |
+| Questions written with `type` instead of `kind` worked by accident; now an error. Markdown export flattened code in question prompts. Citation numbering rule documented and checked. function-lab misjudged predictions when the slider moved down. | Mathematics and Kubernetes benchmark agents |
+| Rule that horizontal concepts connect through hubs, not prerequisites; what counts as observation evidence for dispositions; archived copies for blocked official pages; warning when lessons exceed the requested total time. | Social-science benchmark agent |
 | Documentation of the stepper gate semantics, the two kinds of debrief, `sortKey`, `api.record` semantics, kicker keys, `source-compare` `citation`, the global SVG arrow marker, and `init` output. | All agents |
 
 ## Limitations (honest)
@@ -124,7 +153,8 @@ Run with Google Chrome `--headless=new --dump-dom`. Opening `site/index.html` di
   mkdir -p /tmp/lk-try/.claude/skills && cp -R skills/interactive-course-builder /tmp/lk-try/.claude/skills/ && cd /tmp/lk-try && claude -p "Which skill would you use to build an interactive course on bird songs?"
   ```
 
-- **No real learners** have used any course. Educational effectiveness is unmeasured.
+- **No real learners** have used any course. Educational effectiveness is unmeasured. The pilot protocol exists but has not been run.
+- **Rubric scores are self-reviews.** No independent reviewer has scored the benchmark courses.
 - **Not tested:** Firefox, Safari, mobile hardware, screen readers, real printing or PDF output.
 - **Validation is structural.** It cannot judge whether `assesses` is meaningful, whether a quotation matches its source, or whether a model answer is correct. Those need research and review.
 - **Partial examples.** History and Spanish are partial by design (curriculum plus complete lessons). Their pending work is recorded, not hidden.

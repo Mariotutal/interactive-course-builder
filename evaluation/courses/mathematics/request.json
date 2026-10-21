@@ -1,0 +1,29 @@
+{
+  "topic": "Linear and exponential growth: telling them apart from data and graphs",
+  "goals": [
+    "Decide from a table or graph whether growth is linear or exponential",
+    "Model a situation with y = m·x + b or y = a·b^x and interpret the parameters",
+    "Explain where each model stops being reasonable"
+  ],
+  "scope": "Secondary-school level; no logarithms required",
+  "language": "en",
+  "locale": "en-US",
+  "intake": {
+    "capability": "Look at a dataset and choose and justify a linear or exponential model",
+    "familiarity": "some",
+    "modality": "visual",
+    "practiceLoad": "balanced"
+  },
+  "learner": {
+    "startingKnowledge": "Comfortable with arithmetic, percentages and plotting points",
+    "background": "Synthetic benchmark learner: adult returning to maths",
+    "depth": "solid"
+  },
+  "time": {
+    "totalHours": 2,
+    "sessionMinutes": 30
+  },
+  "sources": {
+    "evidenceStandard": "Open textbooks (e.g. OpenStax) or official curriculum references"
+  }
+}

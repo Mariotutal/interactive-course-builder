@@ -23,6 +23,8 @@ The tool is used from **Claude Code** (desktop app, Code tab; CLI 2.1.220 verifi
 | Validating course and lesson contracts, outcome coverage, ids, safety of HTML content | `scripts/lk.mjs validate` (deterministic) |
 | Bundling into an offline site, hashing activities for learner-state compatibility, Markdown export, coverage report | `scripts/lk.mjs build`, `coverage` (deterministic) |
 | Rendering, interaction, feedback, progress, export/import | `assets/runtime/` in the learner's browser (deterministic; no network) |
+| Learner-state validation, format migration and concept review scheduling | `assets/runtime/lk-state.js` (pure functions shared by the browser and the Node tests) |
+| Measuring whether changes improve courses | `evaluation/lk-eval.mjs` (maintainer tool outside the skill): automatic metrics, rubric reports, pilot summaries |
 
 ## Portable core vs host-specific parts
 

@@ -21,45 +21,34 @@
   document.documentElement.lang = C.language || 'en';
   if (C.dir) document.documentElement.dir = C.dir;
   document.documentElement.dataset.profile = (C.theme && C.theme.profile) || 'general';
+  // Visual options with a teaching purpose (legibility, diagram clarity, reading width, code readability); validated at build time.
+  const TH = C.theme || {};
+  [['typeScale', 'type'], ['diagramStyle', 'diagram'], ['layout', 'layout'], ['codeTheme', 'code']].forEach(([k, attr]) => { if (TH[k]) document.documentElement.dataset[attr] = TH[k]; });
+  // Per-mode colour tokens ({ light: {...}, dark: {...} }); contrast is checked by the validator.
+  const TOKENS = { accent: '--accent', accent2: '--accent-2', ok: '--ok', warn: '--warn', danger: '--danger' };
+  const tokenCss = set => Object.entries(set || {}).filter(([k, v]) => TOKENS[k] && /^#[0-9a-f]{6}$/i.test(v)).map(([k, v]) => `${TOKENS[k]}: ${v};`).join(' ');
+  if (TH.tokens && typeof TH.tokens === 'object') {
+    const st = document.createElement('style'); const L = tokenCss(TH.tokens.light), Dk = tokenCss(TH.tokens.dark);
+    // Same or higher specificity than the profile rules (:root[data-profile=…]) and inserted after the stylesheet, so tokens win.
+    st.textContent = (L ? `:root[data-profile] { ${L} }` : '') + (Dk ? ` @media (prefers-color-scheme: dark) { :root[data-profile]:not([data-theme="light"]) { ${Dk} } } :root[data-profile][data-theme="dark"] { ${Dk} }` : '');
+    document.head.appendChild(st);
+  }
 
-  /* ---------- Learner state ---------- */
-  const KEY = 'lk:' + C.id + ':v1';
-  const EMPTY = () => ({ format: 1, courseId: C.id, courseVersion: C.version || '', items: {}, texts: {}, criteria: {}, visited: {}, confidence: {}, reviews: {}, diag: null, prefs: {} });
-  let storageOk = true; let staleReport = [];
-  function reconcile(s) {
-    // Discard results for activities whose content hash changed (or that no longer exist).
-    const H = D.hashes || {}; const stale = [];
-    for (const [id, rec] of Object.entries(s.items || {})) { if (!H[id] || rec.h !== H[id]) { stale.push(id); delete s.items[id]; } }
-    for (const [id, rec] of Object.entries(s.criteria || {})) { if (!H[id] || rec.h !== H[id]) { stale.push(id); delete s.criteria[id]; } }
-    for (const rec of Object.values(s.texts || {})) rec.changed = !!(rec.h && H[rec.id] && rec.h !== H[rec.id]);
-    return stale;
-  }
-  // Validate learner state field by field before it is used or saved (imported files and stored data are untrusted).
-  const isObj = x => x !== null && typeof x === 'object' && !Array.isArray(x);
-  const isDate = x => typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x);
-  const isAnswer = x => typeof x === 'number' || (typeof x === 'string' && x.length <= 200) || (Array.isArray(x) && x.length <= 50 && x.every(n => Number.isInteger(n)));
-  function cleanState(data) {
-    if (!isObj(data) || data.format !== 1) throw new Error('format');
-    if (data.courseId !== C.id) throw new Error(t('wrongCourse'));
-    const s = EMPTY(); let dropped = 0;
-    for (const key of ['items', 'texts', 'criteria', 'visited', 'confidence', 'reviews', 'prefs']) if (key in data && !isObj(data[key])) throw new Error(`"${key}" must be an object`);
-    const each = (src, fn) => { for (const [k, v] of Object.entries(src || {})) { if (k.length > 200) { dropped++; continue; } const r = fn(v, k); if (r === undefined) dropped++; } };
-    each(data.items, (v, k) => { if (!isObj(v) || !(Number.isInteger(v.attempts) && v.attempts >= 0) || (v.h != null && typeof v.h !== 'string')) return; const r = { h: v.h, attempts: v.attempts }; if (v.first != null) { if (!isAnswer(v.first)) return; r.first = v.first; } if (v.last != null) { if (!isAnswer(v.last)) return; r.last = v.last; } if (v.correctFirst != null) r.correctFirst = v.correctFirst === true; if (isDate(v.at)) r.at = v.at; if (v.data !== undefined) { try { const j = JSON.stringify(v.data); if (j.length <= 20000) r.data = JSON.parse(j); } catch (e) { return; } } s.items[k] = r; return r; });
-    each(data.texts, (v, k) => { if (!isObj(v) || typeof v.v !== 'string' || v.v.length > 100000) return; return (s.texts[k] = { id: k, v: v.v, h: typeof v.h === 'string' ? v.h : undefined, at: isDate(v.at) ? v.at : undefined }); });
-    each(data.criteria, (v, k) => { if (!isObj(v) || !Array.isArray(v.checks) || v.checks.length > 50) return; return (s.criteria[k] = { h: typeof v.h === 'string' ? v.h : undefined, checks: v.checks.map(x => x === true) }); });
-    each(data.visited, (v, k) => { if (!isDate(v)) return; return (s.visited[k] = v); });
-    each(data.confidence, (v, k) => { if (![1, 2, 3, 4].includes(v)) return; return (s.confidence[k] = v); });
-    each(data.reviews, (v, k) => { if (!Array.isArray(v) || !v.every(isDate)) return; return (s.reviews[k] = v.slice(0, 20)); });
-    if (isObj(data.prefs) && ['light', 'dark'].includes(data.prefs.theme)) s.prefs.theme = data.prefs.theme;
-    s.courseVersion = typeof data.courseVersion === 'string' ? data.courseVersion : '';
-    return { state: s, dropped };
-  }
-  let corruptNotice = false;
+  /* ---------- Learner state (validation, migration and concept model live in lk-state.js) ---------- */
+  const LS = window.LKState;
+  const KEY = 'lk:' + C.id + ':v1'; // storage key kept stable across formats; the stored data carries its own "format"
+  const INTERVALS = (C.review && C.review.intervals) || [1, 3, 7, 21, 60];
+  const CM = LS.conceptModel(C, LESSONS); // null when the course has no knowledgeArchitecture
+  const EMPTY = () => LS.empty(C.id, C.version);
+  const reconcile = s => LS.reconcile(s, D.hashes);
+  const cleanState = data => LS.clean(data, C.id, { wrongCourse: t('wrongCourse') });
+  let storageOk = true; let staleReport = []; let corruptNotice = false; let migratedNotice = false;
+  function prepare(result) { const st = result.state; staleReport = reconcile(st); if (result.migratedFrom) { LS.backfillConcepts(st, CM, INTERVALS); migratedNotice = true; } return st; }
   function load() {
     let raw;
     try { raw = localStorage.getItem(KEY); } catch (e) { storageOk = false; return EMPTY(); }
     if (!raw) return EMPTY();
-    try { const { state } = cleanState(JSON.parse(raw)); staleReport = reconcile(state); return state; }
+    try { return prepare(cleanState(JSON.parse(raw))); }
     catch (e) {
       // Keep the damaged data aside instead of crashing on every visit; the course starts clean.
       try { localStorage.setItem(KEY + ':damaged', raw); localStorage.removeItem(KEY); } catch (x) { /* storage unavailable */ }
@@ -68,7 +57,8 @@
   }
   let S = load(); let saveTimer = null;
   function save() { clearTimeout(saveTimer); saveTimer = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(S)); storageOk = true; } catch (e) { storageOk = false; } }, 120); }
-  if (staleReport.length) save();
+  if (staleReport.length || migratedNotice) save();
+  const conceptLabel = id => { const c = CM && CM.concepts.find(x => x.id === id); return c ? c.label : id; };
 
   /* ---------- Glossary & search index ---------- */
   const GLOSS = new Map();
@@ -153,6 +143,8 @@
     const rec = S.items[id] || { h: H[id], attempts: 0 };
     rec.attempts++; rec.last = value; rec.at = today();
     if (q && rec.attempts === 1) { rec.first = value; rec.correctFirst = isCorrect(q, value); }
+    // Concept model: a first attempt (in a lesson or in one review session) is one retrieval event for the item's concepts.
+    if (CM && q && !q.diag && rec.attempts === 1) { const base = id.startsWith('review:') ? id.split(':').slice(2).join(':') : id; const ids = CM.itemConcepts[base]; if (ids) LS.retrieval(S, ids, rec.correctFirst, today(), INTERVALS, base); }
     S.items[id] = rec; save(); return rec;
   }
 
@@ -323,10 +315,13 @@
     let h = `<section class="hero"><h1>${esc(C.title)}</h1>${C.subtitle ? `<p class="lead">${esc(C.subtitle)}</p>` : ''}
       <div class="row">${first ? `<a class="btn primary" href="#/l/${esc(first.id)}">${esc(Object.keys(S.visited).length ? t('continue') : t('start'))}: ${esc(first.title)}</a>` : ''}${C.diagnostic ? `<a class="btn" href="#/diagnostic">${esc(t('diagnostic'))}</a>` : ''}<a class="btn" href="#/map">${esc(t('map'))}</a></div></section>`;
     if (corruptNotice) h += `<div class="notice">${esc(t('stateDamaged'))}</div>`;
+    if (migratedNotice) h += `<div class="notice">${esc(t('stateMigrated'))}</div>`;
     if (staleReport.length) h += `<div class="notice">${esc(t('staleNotice'))} ${staleReport.map(esc).join(', ')}</div>`;
     if (!storageOk) h += `<div class="notice">${esc(t('storageBlocked'))}</div>`;
     h += C.intro || '';
     h += `<h2>${esc(t('outcomes'))}</h2><ul>${(C.outcomes || []).map(o => `<li>${esc(o.text)}${o.level === 'advanced' ? ` <span class="pill">${esc(t('advanced'))}</span>` : ''}</li>`).join('')}</ul>`;
+    const dec = C.learner && Array.isArray(C.learner.decisions) ? C.learner.decisions : [];
+    if (dec.length) h += `<h2>${esc(t('whyDesign'))}</h2><ul>${dec.map(d => `<li><strong>${esc(d.because)}</strong> → ${esc(d.decision)}</li>`).join('')}</ul>`;
     if (C.assumptions && C.assumptions.length) h += `<h2>${esc(t('modelNote'))}</h2><ul>${C.assumptions.map(a => `<li>${esc(a)}</li>`).join('')}</ul>`;
     h += `<p class="meta">${order.length} · ≈ ${Math.round(total / 6) / 10} h</p>`;
     h += `<h2>${esc(t('map'))}</h2>${mapSvg()}`;
@@ -351,7 +346,17 @@
       if (C.capstone && (C.capstone.assesses || []).includes(o.id)) asses.push(t('capstone'));
       h += `<tr><td>${esc(o.text)}</td><td>${ls.map(l => `<a href="#/l/${esc(l.id)}">${esc(l.title)}</a>`).join('<br>')}</td><td class="small">${asses.map(esc).join('<br>')}</td></tr>`;
     });
-    return h + '</tbody></table></div>';
+    return h + '</tbody></table></div>' + kaHtml();
+  }
+  function kaHtml() {
+    const ka = C.knowledgeArchitecture; if (!ka) return '';
+    const pre = id => (ka.prerequisites || []).filter(e => e.to === id).map(e => conceptLabel(e.from));
+    let h = `<h2>${esc(t('knowledgeArchitecture'))}</h2>${ka.summary ? `<p>${esc(ka.summary)}</p>` : ''}<div class="table-wrap"><table><thead><tr><th>${esc(t('concepts'))}</th><th>${esc(t('ctype'))}</th><th>${esc(t('prerequisites'))}</th><th>${esc(t('lesson'))}</th><th>${esc(t('amode'))}</th></tr></thead><tbody>`;
+    (ka.concepts || []).forEach(c => { h += `<tr><td>${esc(c.label)}${c.description ? `<br><span class="small">${esc(c.description)}</span>` : ''}</td><td>${esc(t('ctype_' + c.type))}</td><td>${pre(c.id).map(esc).join(', ') || '—'}</td><td>${(c.lessons || []).map(id => { const l = lessonById(id); return l ? `<a href="#/l/${esc(id)}">${esc(l.title)}</a>` : esc(id); }).join('<br>')}</td><td>${esc(t('amode_' + ((ka.assessmentModes || {})[c.id] || '')))}</td></tr>`; });
+    h += '</tbody></table></div>';
+    if ((ka.hubs || []).length) h += `<h3>${esc(t('hubs'))}</h3><ul>${ka.hubs.map(hb => `<li><strong>${esc(hb.label)}</strong>${hb.lens ? ` — ${esc(hb.lens)}` : ''}: ${(hb.concepts || []).map(c => esc(conceptLabel(c))).join(', ')}</li>`).join('')}</ul>`;
+    (ka.dispositions || []).forEach(d => { h += `<h3>${esc(t('dispositions'))}: ${esc(d.label)}</h3><p class="small">${esc(t('amode'))}: ${esc(t('amode_' + ((ka.assessmentModes || {})[d.id] || '')))}</p><ol>${(d.bands || []).map(b => `<li>${esc(b.descriptor)}</li>`).join('')}</ol>`; });
+    return h;
   }
   function pageRoutes() {
     const sm = (C.learner && C.learner.time && C.learner.time.sessionMinutes) || 40;
@@ -385,7 +390,12 @@
     const rows = order.map(l => { const s = lessonStatus(l); return `<tr><td><a href="#/l/${esc(l.id)}">${esc(l.title)}</a></td><td>${s.visited ? '✓ ' + esc(S.visited[l.id]) : '—'}</td><td>${s.actsDone}/${s.acts}</td><td>${s.qsRight}/${s.qs}</td><td>${s.opensDone}/${s.opens}</td><td>${s.conf ? esc(t('conf' + s.conf)) : '—'}</td></tr>`; }).join('');
     return `<h1>${esc(t('progress'))}</h1><div class="notice">${esc(t('progressNote'))}</div><p class="small">${esc(t('distinguish'))}</p>
       <div class="row no-print"><button class="btn primary" id="exp" type="button">${esc(t('export'))}</button><label class="btn" for="impf">${esc(t('import'))}</label><input id="impf" type="file" accept=".json,application/json" class="sr-only"><button class="btn" id="expn" type="button">${esc(t('exportNotes'))}</button><button class="btn" id="rst" type="button">${esc(t('reset'))}</button></div><p id="iomsg" class="meta" aria-live="polite"></p>
-      <div class="table-wrap"><table><thead><tr><th>${esc(t('lesson'))}</th><th>${esc(t('visited'))}</th><th>${esc(t('attempted'))}</th><th>${esc(t('demonstrated'))}</th><th>${esc(t('written'))}</th><th>${esc(t('selfRated'))}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      <div class="table-wrap"><table><thead><tr><th>${esc(t('lesson'))}</th><th>${esc(t('visited'))}</th><th>${esc(t('attempted'))}</th><th>${esc(t('demonstrated'))}</th><th>${esc(t('written'))}</th><th>${esc(t('selfRated'))}</th></tr></thead><tbody>${rows}</tbody></table></div>${conceptTable()}`;
+  }
+  function conceptTable() {
+    if (!CM) return '';
+    const rows = CM.concepts.map(c => { const st = S.concepts[c.id]; const sm = st && LS.summary(st); return `<tr><td>${esc(c.label)}</td><td>${esc(t('ctype_' + c.type))}</td><td>${sm ? esc(sm.introduced) : '—'}</td><td>${sm ? sm.successful + '/' + sm.retrievals : '—'}</td><td>${sm && sm.last ? (sm.last.ok ? '✓' : '✗') + ' ' + esc(sm.last.d) : '—'}</td><td>${sm ? (sm.due ? esc(sm.due) : esc(t('notScheduled'))) : '—'}</td></tr>`; }).join('');
+    return `<h2>${esc(t('concepts'))}</h2><p class="small">${esc(t('retrievalNote'))}</p><div class="table-wrap"><table><thead><tr><th>${esc(t('concepts'))}</th><th>${esc(t('ctype'))}</th><th>${esc(t('introducedOn'))}</th><th>${esc(t('retrievals'))}</th><th>${esc(t('lastResult'))}</th><th>${esc(t('nextDue'))}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
   function download(name, text, type) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
   function bindProgress() {
@@ -399,9 +409,9 @@
       const f = ev.target.files[0]; if (!f) return; const r = new FileReader();
       r.onload = () => {
         try {
-          const { state: s, dropped } = cleanState(JSON.parse(r.result)); // throws before anything is assigned or saved
+          const result = cleanState(JSON.parse(r.result)); const dropped = result.dropped; // throws before anything is assigned or saved
           if (!confirm(t('importConfirm'))) return;
-          staleReport = reconcile(s); S = s; save(); route();
+          S = prepare(result); save(); route();
           setTimeout(() => { const m = $('#iomsg'); if (m) m.textContent = t('importOk') + (dropped ? ' ' + t('importDropped').replace('{n}', dropped) : '') + (staleReport.length ? ' ' + t('staleNotice') + ' ' + staleReport.join(', ') : ''); }, 30);
         } catch (e) { $('#iomsg').textContent = t('importBad') + e.message; }
       };
@@ -410,9 +420,22 @@
     $('#rst').onclick = () => { if (confirm(t('resetConfirm'))) { S = EMPTY(); save(); route(); } };
   }
   let REVIEW = [];
-  const INTERVALS = (C.review && C.review.intervals) || [1, 3, 7, 21, 60];
   function nextDue(id) { const v = S.visited[id]; if (!v) return null; const n = (S.reviews[id] || []).length; return n >= INTERVALS.length ? null : addDays(v, INTERVALS[n]); }
+  function conceptReview(mode) {
+    const due = LS.dueConcepts(S, today()); const introduced = Object.keys(S.concepts);
+    let h = `<h1>${esc(t('review'))}</h1><p class="meta">${esc(t('conceptReviewIntro'))}</p><div class="row no-print"><a class="btn primary" href="#/review/due">${esc(t('reviewDue'))} (${due.length})</a><a class="btn" href="#/review/mixed">${esc(t('reviewMixed'))}</a></div>`;
+    if (due.length) h += `<h2>${esc(t('dueConcepts'))}</h2><ul>${due.map(id => { const sm = LS.summary(S.concepts[id]); return `<li><strong>${esc(conceptLabel(id))}</strong> — ${esc(t('lastResult'))}: ${sm.last ? (sm.last.ok ? '✓' : '✗') + ' ' + esc(sm.last.d) : esc(t('never'))}</li>`; }).join('')}</ul>`;
+    if (!mode) return h;
+    const ids = mode === 'due' ? due : (introduced.length ? introduced : CM.concepts.map(c => c.id));
+    const seen = new Set(); const qs = [];
+    ids.forEach(cid => (CM.conceptItems[cid] || []).forEach(qid => { const q = QUESTIONS.get(qid); if (q && q.kind !== 'open' && !q.diag && !seen.has(qid)) { seen.add(qid); qs.push(q); } }));
+    if (!qs.length) return h + `<p class="status-ok">${esc(t('noDue'))}</p>`;
+    for (let i = qs.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [qs[i], qs[j]] = [qs[j], qs[i]]; }
+    h += qs.slice(0, 8).map((q, i) => { const rq = Object.assign({}, q, { id: 'review:' + i + ':' + q.id }); QUESTIONS.set(rq.id, rq); delete S.items[rq.id]; return `<p class="small">${(CM.itemConcepts[q.id] || []).map(c => esc(conceptLabel(c))).join(' · ')}</p>` + questionHtml(rq); }).join('');
+    return h;
+  }
   function pageReview(mode) {
+    if (CM) return conceptReview(mode);
     const visited = order.filter(l => S.visited[l.id]); const due = visited.filter(l => { const d = nextDue(l.id); return d && d <= today(); });
     let h = `<h1>${esc(t('review'))}</h1><p class="meta">${esc(t('reviewIntro'))}</p><div class="row no-print"><a class="btn primary" href="#/review/due">${esc(t('reviewDue'))} (${due.length})</a><a class="btn" href="#/review/mixed">${esc(t('reviewMixed'))}</a></div>`;
     if (!mode) return h;
@@ -448,7 +471,7 @@
     let html = '', active = '#/' + (seg[0] || ''), after = null, print = false;
     switch (seg[0]) {
       case undefined: html = pageHome(); active = '#/'; break;
-      case 'l': { const l = lessonById(seg[1]); if (!l) { html = `<h1>${esc(t('notFound'))}</h1>`; break; } S.visited[l.id] = S.visited[l.id] || today(); save(); active = '#/l/' + l.id; html = lessonHtml(l); if (seg[2]) after = () => { const el = document.getElementById('act-' + seg[2]) || document.getElementById('b-' + seg[2]); if (el) el.scrollIntoView(); }; break; }
+      case 'l': { const l = lessonById(seg[1]); if (!l) { html = `<h1>${esc(t('notFound'))}</h1>`; break; } S.visited[l.id] = S.visited[l.id] || today(); if (CM && CM.byLesson[l.id]) LS.introduce(S, CM.byLesson[l.id], today(), INTERVALS); save(); active = '#/l/' + l.id; html = lessonHtml(l); if (seg[2]) after = () => { const el = document.getElementById('act-' + seg[2]) || document.getElementById('b-' + seg[2]); if (el) el.scrollIntoView(); }; break; }
       case 'map': html = pageMap(); break;
       case 'routes': html = pageRoutes(); break;
       case 'glossary': html = pageGlossary(); after = () => { const inp = $('#gf'); inp.oninput = () => { const v = norm(inp.value); $$('.gentry').forEach(e => { e.hidden = v && !e.dataset.n.includes(v); }); }; }; break;

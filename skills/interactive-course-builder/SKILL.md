@@ -3,7 +3,7 @@ name: interactive-course-builder
 description: Builds rigorous, visual and interactive offline courses on any subject from a learning request (topic, goals, learner profile, language, time, practice resources). Use when someone asks for a course, tutorial series, curriculum with exercises, study program or interactive learning material, or wants to extend, fix or regenerate a course built with this skill. Output is a validated static web app (works offline, progress export/import) plus Markdown. Course content can be in any language; built-in interface strings exist only in English and Spanish (other languages need translated strings). Not for one-off explanations or quick answers.
 metadata:
   version: "1.0.0"
-  format: "course format 1"
+  format: "course format 1; learner state format 2"
   requires: "Node.js 18+ to validate and build; a web browser to view; web access recommended for source research"
 ---
 
@@ -30,9 +30,14 @@ Scripts are in this skill's `scripts/` folder. Run `node <this-skill-dir>/script
 ## Workflow
 
 1. **Understand the request.**
-   - Write `request.json` following [references/input-contract.md](references/input-contract.md), then run `check-request`.
-   - If it reports blocking gaps (topic, goals), ask the requester. Also ask about equipment that a specific lab depends on. Ask at most three questions at a time.
+   - Start with the short intake, three answers that drive most design decisions:
+     - the target capability;
+     - current familiarity;
+     - preferred modality and practice load.
+     Put them in `request.json` → `intake`, following [references/input-contract.md](references/input-contract.md), then run `check-request`.
+   - If it reports blocking gaps (topic, goals) or `intakeQuestions`, ask the requester. Also ask about equipment that a specific lab depends on. Ask at most three questions at a time.
    - Proceed with stated defaults for everything else.
+   - `check-request` prints `decisions`, the design choices the intake caused. `init` stores them in `course.json` → `learner.decisions`, and the course shows them to the learner. Keep them true: if you change course, update them.
 2. **Inspect supplied material** and decide the evidence standard. Read [references/evidence.md](references/evidence.md).
 3. **Design before writing.** Produce:
    - observable outcomes (a verb plus a condition);
@@ -43,6 +48,13 @@ Scripts are in this skill's `scripts/` folder. Run `node <this-skill-dir>/script
    - for each lesson, the activity type that fits the *kind of knowledge* (read [references/pedagogy.md](references/pedagogy.md), [references/domain-toolkit.md](references/domain-toolkit.md) and the selection table in [references/activities.md](references/activities.md));
    - a `theme.profile` that fits the subject, then a small visual system with a deliberate palette, typography and diagrams. Do not recycle the starter course's orange-blue look by default.
    - a map from every outcome to the lessons that teach it and the items that assess it. Include at least one transfer task per outcome, either in a lesson or in the capstone.
+   - **Optionally, a `knowledgeArchitecture`** (see [references/lesson-contract.md](references/lesson-contract.md)). Use it when knowledge is not a single chain: several interacting topics, cross-cutting lenses, or dispositional goals such as judging evidence or checking a model. Skip it for short procedural courses. It records:
+     - concepts as `hierarchical` or `horizontal`;
+     - prerequisite edges between concepts;
+     - hubs (lenses);
+     - dispositions with progression bands;
+     - an **assessment mode** per concept: `auto`, `rubric` or `observation`. Choose by knowledge type: a disposition is never auto-scored.
+   - Tag questions, practice and transfer tasks with `concepts: [ids]`. Tagged auto-checked questions drive the concept review queue in the learner's app, scheduled from first-attempt results with expanding intervals. This is a review schedule, not a mastery score.
 4. **Research** the central claims of each lesson in authoritative sources.
    - Record the title, kind, URL and access date.
    - Note versions or jurisdiction.
@@ -56,13 +68,20 @@ Scripts are in this skill's `scripts/` folder. Run `node <this-skill-dir>/script
      - an authentic start, and an intuition with its limits;
      - a purposeful visual with a text equivalent;
      - a rigorous explanation and a worked example;
-     - prediction before reveal, with misconception feedback;
+     - prediction before reveal, with misconception feedback: the first prediction comes before the first explanation, and no earlier visual, text equivalent or worked example gives its answer away;
      - guided, then independent practice;
      - checks that declare `assesses`;
      - a transfer task in a new context, and an own-words reflection.
    - **`focused`** is for short review, drill, listening, reading or consolidation lessons. It requires only an authentic start, an explanation, a check and sources. Add other functions where they help.
    - Every lesson has sources and a link to what comes next.
    - Choose a visual form for each idea: a sourced photograph or historical artifact, a labelled diagram, a comparison, a chart, or a model the learner can change. Use images found online when reuse is allowed and package them in `assets/` for offline use; generate an explanatory image when a suitable source image is unavailable. Record creator, source and license or generated status in the caption and lesson sources. See [references/evidence.md](references/evidence.md) and [references/lesson-contract.md](references/lesson-contract.md).
+   - Set visual options only for a teaching purpose, in `course.json` → `theme`:
+     - `typeScale` (compact, standard, large) for legibility;
+     - `diagramStyle` (filled, outline, high-contrast) for diagram clarity;
+     - `layout` (standard, reading, wide) for line length;
+     - `codeTheme` (auto, light, dark) for code readability;
+     - `tokens.light` and `tokens.dark` colours. The validator rejects text colours below WCAG AA contrast (4.5:1).
+   - For a mathematical or statistical model the learner should manipulate, copy `assets/templates/widgets/function-lab.js` into the course's `widgets/`. It runs predict → change a parameter or compute a value → see the consequence → state a limit of the model. Give it `testCases` with reference values; `validate` checks them. See [references/activities.md](references/activities.md).
    - Make dynamic visuals answer a learning question. Give learners a prediction, meaningful controls, a visible readout or comparison, and a debrief about what changed and what the model leaves out. Use a course-specific widget when a built-in pattern cannot show the relevant mechanism.
    - Use `exemptions`, with a reason, when a required function genuinely does not fit a `full` lesson.
    - Add a course-specific widget in `widgets/` only when no built-in pattern fits. Never edit the core runtime for one subject.

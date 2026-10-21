@@ -1,0 +1,464 @@
+{
+  "format": 1,
+  "id": "rolling-update-arithmetic",
+  "title": "Rolling updates: the arithmetic of maxSurge and maxUnavailable",
+  "summary": "Compute the Pod-count limits of a rolling update from the manifest, and use them to predict how a rollout proceeds or stalls.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 30,
+  "outcomes": [
+    "o1",
+    "o2"
+  ],
+  "prerequisites": [
+    "desired-state-replicasets"
+  ],
+  "prereqText": "<p>From the previous lesson: a template change creates a new ReplicaSet which is scaled up while the old one is scaled down.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>You push a new image of a web service with 3 replicas. You expect Pods to be swapped one at a time. But someone asks: <em>can the cluster ever run 4 Pods at once during the update? Can it ever run only 2?</em> Those are not trivia; they are capacity and cost questions during every deploy, and they decide whether a bad version can take your service down. Both answers come from two fields in the manifest.</p>"
+    },
+    {
+      "type": "predict",
+      "id": "l2-p1",
+      "prompt": "A Deployment has <code>replicas: 3</code> and the default rolling-update settings (maxSurge 25%, maxUnavailable 25%). What is the most Pods that may exist, and the fewest that must be available, during an update?",
+      "options": [
+        "Up to 4 Pods; at least 3 available",
+        "Up to 3 Pods; at least 2 available",
+        "Up to 4 Pods; at least 2 available"
+      ],
+      "correct": 0,
+      "feedback": {
+        "1": "Misconception: percentages round to nearest. Surge rounds up (25% of 3 = 0.75 → 1), so one extra Pod is allowed; the limit is not 3.",
+        "2": "Misconception: both percentages round the same way. Unavailable rounds down (25% of 3 = 0.75 → 0), so zero Pods may be unavailable, and at least 3 must be available."
+      },
+      "explanation": "Surge: 25% of 3 = 0.75, rounded up to 1, so at most 3 + 1 = 4 Pods. Unavailable: 25% of 3 = 0.75, rounded down to 0, so at least 3 − 0 = 3 must be available. <a data-source=\"k8s-deploy-rolling\">[source]</a>",
+      "assesses": [
+        "o1",
+        "o2"
+      ]
+    },
+    {
+      "type": "activity",
+      "id": "l2-a1",
+      "widget": "parameter-explorer",
+      "instructions": "<p>This is a <strong>model of the documented rules, not a cluster</strong>. First predict: with replicas 10, surge 30% and unavailable 20%, what are the max total Pods and minimum available? Then change the inputs. Find a setting where the percentages round to zero, and find the setting the docs say is not allowed.</p>",
+      "debrief": "<p>You should have noticed that surge rounds up and unavailable rounds down, so with small replica counts a small percentage can still allow one extra Pod but zero unavailable. Setting both to zero is rejected by the rules: the controller would have no room to make progress.</p>",
+      "assesses": [
+        "o1",
+        "o2"
+      ],
+      "config": {
+        "title": "Rolling-update limits",
+        "intro": "<p>Percentages follow the documented rounding: surge up, unavailable down.</p>",
+        "inputs": [
+          {
+            "id": "r",
+            "label": "replicas",
+            "min": 1,
+            "max": 30,
+            "step": 1,
+            "value": 10
+          },
+          {
+            "id": "sp",
+            "label": "maxSurge (%)",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "value": 30
+          },
+          {
+            "id": "up",
+            "label": "maxUnavailable (%)",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "value": 20
+          }
+        ],
+        "outputs": [
+          {
+            "id": "surge",
+            "label": "Extra Pods allowed (maxSurge, rounded up)",
+            "expr": "ceil(r * sp / 100)",
+            "format": {
+              "digits": 0
+            }
+          },
+          {
+            "id": "unav",
+            "label": "Pods allowed unavailable (rounded down)",
+            "expr": "floor(r * up / 100)",
+            "format": {
+              "digits": 0
+            }
+          },
+          {
+            "id": "tot",
+            "label": "Max Pods at any time",
+            "expr": "r + ceil(r * sp / 100)",
+            "format": {
+              "digits": 0
+            }
+          },
+          {
+            "id": "minav",
+            "label": "Min Pods available",
+            "expr": "r - floor(r * up / 100)",
+            "format": {
+              "digits": 0
+            }
+          }
+        ],
+        "chart": {
+          "x": {
+            "var": "x",
+            "from": 1,
+            "to": 30
+          },
+          "series": [
+            {
+              "label": "max total Pods",
+              "expr": "x + ceil(x * sp / 100)"
+            },
+            {
+              "label": "min available Pods",
+              "expr": "x - floor(x * up / 100)"
+            }
+          ],
+          "current": {
+            "label": "Current replicas",
+            "x": "r"
+          },
+          "xLabel": "replicas",
+          "yLabel": "Pods",
+          "ariaLabel": "Max total and min available Pods as the number of replicas changes"
+        },
+        "interpret": [
+          {
+            "when": "ceil(r * sp / 100) == 0 && floor(r * up / 100) == 0",
+            "tone": "warn",
+            "html": "<strong>Not a valid setting.</strong> The docs say maxUnavailable cannot be 0 if maxSurge is 0 (and vice versa): with no room to add or remove, no update could proceed."
+          },
+          {
+            "when": "floor(r * up / 100) == 0 && ceil(r * sp / 100) > 0",
+            "tone": "info",
+            "html": "<strong>Zero Pods may be unavailable.</strong> Capacity never drops, but every new Pod must become available before an old one can be removed."
+          },
+          {
+            "when": "floor(r * up / 100) > 0",
+            "tone": "warn",
+            "html": "<strong>Capacity can drop.</strong> A bad new version can reduce the number of serving Pods to the minimum shown."
+          }
+        ],
+        "assumptions": [
+          "Models only the two documented limits; the order of individual controller steps is not modelled.",
+          "Uses the documented percentage rounding (surge up, unavailable down).",
+          "Assumes absolute-number and percentage values are interchangeable here; absolute numbers skip rounding.",
+          "Illustrative values; it is not a cluster and does not predict timings."
+        ]
+      }
+    },
+    {
+      "type": "explain",
+      "title": "How the limits work",
+      "html": "<p>With the default strategy, <code>RollingUpdate</code>, the controller scales the new ReplicaSet up and the old one down in steps. Two fields bound those steps. <a data-source='k8s-deploy-rolling'>[source]</a></p><ul><li><span class='term' data-term='maxSurge'>maxSurge</span>: the most Pods that may exist <em>above</em> the desired count. An absolute number or a percentage; the number is computed by rounding <strong>up</strong>. Default 25%. So the ceiling is <code>replicas + maxSurge</code>.</li><li><span class='term' data-term='maxUnavailable'>maxUnavailable</span>: the most desired Pods that may be <em>unavailable</em>. Percentage rounds <strong>down</strong>. Default 25%. So the floor is <code>replicas − maxUnavailable</code> available Pods.</li><li>Neither can be 0 if the other is 0.</li></ul><p>Notice the word <em>available</em>. A Pod counts as available once it is ready; with <code>minReadySeconds</code> (default 0) it must stay ready that many seconds first. <a data-source='k8s-deploy-minready'>[source]</a> The next lesson covers what \"ready\" means. For now take it as: the Pod is working and accepting traffic.</p><p><strong>The rule that explains stalls.</strong> The controller may only remove an old Pod when doing so keeps available Pods at or above <code>replicas − maxUnavailable</code>, and may only create a new Pod when the total stays at or below <code>replicas + maxSurge</code>. If new Pods never become available, the available count never rises, so the controller runs out of permitted moves. That is a reading of the documented limits, together with the docs statement that the controller stops scaling up a bad ReplicaSet depending on maxUnavailable. <a data-source='k8s-deploy-bad'>[source]</a> Course reasoning, labelled: the docs show a stuck rollout caused by an image pull error; the same mechanism applies when Pods never become ready.</p><p>Compare <code>Recreate</code>: all old Pods are killed before new ones are created, so there is downtime but never two versions at once. <a data-source='k8s-deploy-rolling'>[source]</a></p>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Show the stalled state of a default rollout with 3 replicas: surge is used up, unavailable is zero, so nothing more can move.",
+      "alt": "Diagram of a rollout with 3 replicas, maxSurge 1 and maxUnavailable 0. On the left, the old ReplicaSet has 3 ready Pods. On the right, the new ReplicaSet has 1 Pod that is not ready. A bound shows total 4 equals replicas plus surge, so no more new Pods can be created. Another bound shows available 3 equals replicas minus unavailable 0, so no old Pod can be removed. The rollout is stuck until the new Pod becomes ready.",
+      "html": "<figure><svg viewBox='0 0 560 230' role='img' aria-labelledby='l2v-t l2v-d'><title id='l2v-t'>Stalled rollout, 3 replicas</title><desc id='l2v-d'>Old ReplicaSet 3 ready Pods; new ReplicaSet 1 Pod not ready; total 4 is at the ceiling and available 3 is at the floor.</desc><rect class='n1' x='10' y='20' width='250' height='110' rx='8'/><text class='t' x='22' y='44'>Old ReplicaSet</text><rect class='n-plain' x='24' y='64' width='64' height='44' rx='6'/><text class='ts' x='30' y='90'>ready ✓</text><rect class='n-plain' x='102' y='64' width='64' height='44' rx='6'/><text class='ts' x='108' y='90'>ready ✓</text><rect class='n-plain' x='180' y='64' width='64' height='44' rx='6'/><text class='ts' x='186' y='90'>ready ✓</text><rect class='n-warn' x='300' y='20' width='250' height='110' rx='8'/><text class='t' x='312' y='44'>New ReplicaSet</text><rect class='n-plain' x='314' y='64' width='100' height='44' rx='6' stroke-dasharray='4 3'/><text class='ts' x='320' y='84'>not ready ✗</text><text class='ts' x='320' y='100'>no traffic</text><text class='ts' x='430' y='90'>no room for more</text><text class='t' x='20' y='160'>Ceiling: total Pods 4 = replicas 3 + surge 1 (reached)</text><text class='t' x='20' y='186'>Floor: available 3 = replicas 3 − unavailable 0 (reached)</text><text class='ts' x='20' y='212'>Neither an old Pod can go, nor another new one be created.</text></svg><figcaption>Illustrative diagram, derived by the course from the documented limits; not captured from a cluster. Status is carried by the ✓ / ✗ words, not colour alone. <a data-source='k8s-deploy-rolling'>[source]</a></figcaption></figure>"
+    },
+    {
+      "type": "worked",
+      "title": "From manifest to limits to a predicted rollout",
+      "steps": [
+        {
+          "html": "<pre><code>spec:\n  replicas: 10\n  strategy:\n    type: RollingUpdate\n    rollingUpdate:\n      maxSurge: 3\n      maxUnavailable: 2</code></pre><p>Course manifest fragment (the 10/3/2 numbers also appear in the docs' proportional-scaling example, but the fragment itself is ours). <a data-source='k8s-deploy-scaling'>[source]</a></p>"
+        },
+        {
+          "prompt": "<p>What are the ceiling and floor?</p>",
+          "selfExplain": true,
+          "html": "<p>Ceiling: 10 + 3 = 13 Pods. Floor: 10 − 2 = 8 available Pods.</p>"
+        },
+        {
+          "prompt": "<p>You change the image. Right after, how many new Pods can be created, and how many old ones removed?</p>",
+          "selfExplain": true,
+          "html": "<p>Old: up to 2 may become unavailable at once, so 8 remain available. New: the total may reach 13, so with 8 old Pods up to 5 new Pods can exist. An early state could be old 8, new 5 (total 13). Illustrative; the controller may choose different intermediate counts within the limits.</p>"
+        },
+        {
+          "prompt": "<p>The new Pods crash on start and are never ready. What state does the rollout stop in, and what is serving traffic?</p>",
+          "selfExplain": true,
+          "html": "<p>The available count is at the floor of 8 (the old Pods), so no more old Pods can be removed, and the total of 13 is at the ceiling (8 old + 5 new), so no more new Pods can be created. The rollout waits at 8 old available + 5 not-ready new; 8 of 10 desired capacity serves traffic. This follows the documented limits (course derivation).</p>"
+        }
+      ],
+      "result": "<p>Stall check: <strong>floor reached and no new Pod becoming available means no further progress.</strong> Capacity at the stall is exactly the floor.</p>"
+    },
+    {
+      "type": "activity",
+      "id": "l2-a2",
+      "widget": "code-trace",
+      "instructions": "<p>Trace the default settings for 3 replicas, one decision at a time. This is a <strong>static trace of the course author's model</strong>, not a recording of a cluster. Answer each prediction before the state shows.</p>",
+      "debrief": "<p>You should have noticed the pattern: create one new Pod (surge), wait until it is available, only then remove one old Pod. With zero unavailable allowed, an old Pod is never removed ahead of its replacement.</p>",
+      "assesses": [
+        "o1",
+        "o2"
+      ],
+      "config": {
+        "title": "Default rollout of 3 replicas",
+        "code": "spec:\n  replicas: 3\n  strategy:\n    rollingUpdate:\n      maxSurge: 25%\n      maxUnavailable: 25%",
+        "steps": [
+          {
+            "line": 5,
+            "title": "Round up the surge",
+            "state": {
+              "maxSurge": "ceil(0.75) = 1"
+            },
+            "html": "<p>25% of 3 is 0.75, rounded up to 1. Ceiling is 4 Pods.</p>"
+          },
+          {
+            "line": 6,
+            "title": "Round down the unavailable",
+            "state": {
+              "maxUnavailable": "floor(0.75) = 0"
+            },
+            "html": "<p>Rounded down to 0: all 3 desired Pods must stay available.</p>"
+          },
+          {
+            "line": 2,
+            "title": "Template changed; start",
+            "state": {
+              "old": "3 ready",
+              "new": "0",
+              "total": 3
+            },
+            "predict": {
+              "prompt": "How many new Pods can the controller create right now?",
+              "options": [
+                "0, until an old Pod is removed",
+                "1 (total 4 = ceiling)",
+                "3, replacing all at once"
+              ],
+              "correct": 1,
+              "explanation": "The ceiling is 4 and there are 3 Pods, so exactly one new Pod can be created. No old Pod may be removed because zero may be unavailable."
+            },
+            "html": "<p>The controller creates 1 new Pod. Total 4.</p>"
+          },
+          {
+            "line": 2,
+            "title": "New Pod becomes ready",
+            "state": {
+              "old": "3 ready",
+              "new": "1 ready",
+              "total": 4
+            },
+            "predict": {
+              "prompt": "Which move is now allowed?",
+              "options": [
+                "Remove 1 old Pod (4 available → 3, floor is 3)",
+                "Remove 2 old Pods",
+                "Create 1 more new Pod"
+              ],
+              "correct": 0,
+              "explanation": "Available is 4, floor 3, so one old Pod may go. Creating another new Pod would exceed the ceiling of 4 until an old one is removed."
+            },
+            "html": "<p>Old drops to 2 ready, new gets a second Pod (total 4 again). Repeat until old is 0. In this model that takes three rounds.</p>"
+          },
+          {
+            "line": 2,
+            "title": "Stall case: new Pod never ready",
+            "state": {
+              "old": "3 ready",
+              "new": "1 not ready",
+              "total": 4,
+              "available": 3
+            },
+            "predict": {
+              "prompt": "The new Pod never becomes ready. What can the controller do next?",
+              "options": [
+                "Remove old Pods anyway",
+                "Nothing more: ceiling and floor are both reached",
+                "Create more new Pods to find a good one"
+              ],
+              "correct": 1,
+              "explanation": "Total is 4 (ceiling). Available is 3 (floor). Removing an old Pod would violate the floor; creating a new one the ceiling. The rollout waits."
+            },
+            "html": "<p>The service keeps serving from the 3 old Pods while the rollout waits. This is a stall, not an outage.</p>"
+          }
+        ],
+        "assumptions": [
+          "Models the documented limits, not every internal controller step.",
+          "Pod readiness is assumed to be decided elsewhere (next lesson).",
+          "Illustrative states, not from a real cluster."
+        ]
+      }
+    },
+    {
+      "type": "practice",
+      "id": "l2-pg",
+      "level": "guided",
+      "setting": "offline",
+      "task": "<p>A Deployment has <code>replicas: 5</code>, <code>maxSurge: 1</code>, <code>maxUnavailable: 0</code>. (a) Ceiling and floor? (b) If the new Pod never becomes ready, how many Pods exist and how many serve traffic when the rollout stalls? (c) The same Deployment with <code>maxUnavailable: 2</code> and <code>maxSurge: 0</code>: (a) and (b) again.</p>",
+      "hints": [
+        "Ceiling = replicas + surge; floor = replicas − unavailable.",
+        "A stall happens when you are at the limits and no new Pod is available.",
+        "With surge 0 the controller must remove old Pods before creating new ones."
+      ],
+      "rubric": [
+        "(a) Ceiling 6, floor 5",
+        "(b) 6 Pods exist, 5 old serve traffic",
+        "(c) Ceiling 5, floor 3; at stall old 3 available + 2 new not ready, 3 serve traffic"
+      ],
+      "solution": "<p>(a) 6 and 5. (b) 5 old ready + 1 new not ready = 6 Pods; 5 serve. (c) Ceiling 5, floor 3. The controller can remove 2 old Pods and create 2 new. If those never become ready: 3 old available + 2 not-ready new, so only 3 of 5 desired Pods serve traffic. Same defect, but with this setting the user sees reduced capacity.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "l2-pi",
+      "level": "independent",
+      "setting": "offline",
+      "task": "<p>You manage a service with <code>replicas: 4</code> that cannot lose any capacity during a deploy but has room for 2 extra Pods in the cluster. Write the strategy block you would choose, the ceiling and floor it gives, and one cost of that choice.</p>",
+      "rubric": [
+        "maxUnavailable 0 and maxSurge 2 (or equivalent)",
+        "Ceiling 6, floor 4",
+        "Names a cost: needs spare capacity, slower or more resource use during rollout, or a stall if new Pods never become ready"
+      ],
+      "model": "<p><code>strategy: {type: RollingUpdate, rollingUpdate: {maxSurge: 2, maxUnavailable: 0}}</code>. Ceiling 4 + 2 = 6; floor 4 − 0 = 4. Cost: during the rollout you pay for up to 6 Pods, and a bad version stalls rather than failing fast: it never reduces capacity, but you need a progress deadline to notice it. (Surge 50% of 4 = 2 also works.)</p>"
+    },
+    {
+      "type": "check",
+      "html": "<p>First attempts count as performance; later attempts are practice.</p>",
+      "questions": [
+        {
+          "id": "l2-c1",
+          "kind": "mcq",
+          "prompt": "<code>replicas: 8</code>, <code>maxSurge: 25%</code>, <code>maxUnavailable: 25%</code>. What are the ceiling and floor?",
+          "options": [
+            "Ceiling 10, floor 6",
+            "Ceiling 10, floor 7",
+            "Ceiling 9, floor 6"
+          ],
+          "correct": 0,
+          "explanation": "25% of 8 = 2 exactly, so no rounding matters: ceiling 8 + 2 = 10, floor 8 − 2 = 6.",
+          "feedback": {
+            "1": "That floor would mean unavailable 1; 25% of 8 is 2.",
+            "2": "Surge is 2, not 1: 25% of 8 is 2."
+          },
+          "assesses": [
+            "o1",
+            "o2"
+          ]
+        },
+        {
+          "id": "l2-c2",
+          "kind": "numeric",
+          "prompt": "<code>replicas: 6</code>, <code>maxUnavailable: 25%</code>. What is the largest number of Pods that may be unavailable? (Percentages round down.)",
+          "answer": 1,
+          "tolerance": 0,
+          "unit": "Pods",
+          "explanation": "25% of 6 = 1.5, rounded down to 1.",
+          "feedbackWrong": "Remember that maxUnavailable percentages round down, while maxSurge percentages round up.",
+          "assesses": [
+            "o1"
+          ]
+        },
+        {
+          "id": "l2-c3",
+          "kind": "mcq",
+          "prompt": "A rollout of 4 replicas with maxSurge 1 and maxUnavailable 0 has one new Pod that never becomes ready. Which is true?",
+          "options": [
+            "The controller removes an old Pod anyway after some time",
+            "All 4 old Pods keep serving and the rollout waits",
+            "The service is down"
+          ],
+          "correct": 1,
+          "explanation": "The floor is 4 available, reached by the old Pods; the ceiling 5 is reached by the extra new Pod. No legal move exists, so the rollout waits while old Pods serve.",
+          "feedback": {
+            "0": "That would violate maxUnavailable: 0; the controller does not do that.",
+            "2": "The old Pods remain available; capacity has not dropped."
+          },
+          "assesses": [
+            "o2"
+          ]
+        },
+        {
+          "id": "l2-c4",
+          "kind": "open",
+          "prompt": "In your own words: why is \"maxUnavailable: 0\" safer for capacity but not a guarantee of a successful deploy?",
+          "rubric": [
+            "Says old Pods are never removed ahead of ready replacements",
+            "Says a bad new version still stalls the rollout",
+            "Mentions detection (progress deadline) or a human fix"
+          ],
+          "model": "<p>With zero unavailable the controller only removes an old Pod after a replacement is available, so capacity never drops. But if new Pods never become ready the rollout simply waits; you still need to notice and fix or roll back.</p>",
+          "assesses": [
+            "o2"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "l2-t",
+      "task": "<p>New context: a batch-style worker Deployment with <code>replicas: 2</code> uses the defaults (25% / 25%). A teammate says \"that guarantees a smooth zero-downtime update\". Compute the ceiling and floor, then explain whether the guarantee is justified, and what happens to the rollout if the new version is broken.</p>",
+      "rubric": [
+        "Ceiling 3 (ceil 0.5 = 1), floor 2 (floor 0.5 = 0)",
+        "Identifies that zero may be unavailable",
+        "Explains a broken version stalls, with the old Pods still serving",
+        "Notes that zero downtime also depends on readiness being correct (next lesson)"
+      ],
+      "model": "<p>Surge: ceil(0.5) = 1 so ceiling 3. Unavailable: floor(0.5) = 0 so floor 2. Old Pods are only removed once a new Pod is available, so a healthy update keeps 2 available. A broken version leaves 2 old Pods serving and 1 new unready Pod: a stalled rollout, not an outage. The guarantee depends on \"available\" being truthful, which depends on the readiness probe.</p>",
+      "assesses": [
+        "o1",
+        "o2"
+      ]
+    },
+    {
+      "type": "reflect",
+      "id": "l2-r",
+      "prompt": "In your own words, write the two inequalities (ceiling and floor) a rolling update must respect, and describe how they cause a stalled rollout when the new Pods never become available."
+    }
+  ],
+  "sources": [
+    {
+      "id": "k8s-deploy-rolling",
+      "title": "Deployments: Rolling Update Deployment (maxUnavailable, maxSurge)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment",
+      "accessed": "2026-10-20",
+      "note": "Percent rounding: surge up, unavailable down; defaults 25%; neither can be 0 when the other is 0; Recreate described alongside."
+    },
+    {
+      "id": "k8s-deploy-minready",
+      "title": "Deployments: Min Ready Seconds",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#min-ready-seconds",
+      "accessed": "2026-10-20",
+      "note": "Default 0."
+    },
+    {
+      "id": "k8s-deploy-bad",
+      "title": "Deployments: Updating a Deployment (rollout stuck example, ImagePullBackOff)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment",
+      "accessed": "2026-10-20",
+      "note": "The docs example uses an image pull error; the note says the controller stops a bad rollout automatically depending on maxUnavailable (default 25%). Anchor approximates the section; verify in page."
+    },
+    {
+      "id": "k8s-deploy-scaling",
+      "title": "Deployments: Proportional scaling (10 replicas, maxSurge=3, maxUnavailable=2 example)",
+      "kind": "official",
+      "url": "https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#proportional-scaling",
+      "accessed": "2026-10-20"
+    },
+    {
+      "id": "l2-ped",
+      "title": "Course examples and simulations",
+      "kind": "pedagogical",
+      "note": "The stall reasoning, round-by-round traces and Pod counts are the course author's derivation from the documented limits, not outputs from a cluster."
+    }
+  ],
+  "next": "<p>You know why a rollout can wait. But what exactly makes a new Pod \"available\"? Next lesson: readiness probes, how they connect to rollouts, and how to choose settings for a simple web service.</p>"
+}

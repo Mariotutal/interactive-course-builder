@@ -1,0 +1,48 @@
+{
+  "version": 1,
+  "scale": "0 = absent or wrong, 1 = present but weak, 2 = solid. Score each course as a whole; cite concrete lessons in the rationale.",
+  "criteria": [
+    {
+      "id": "factual-accuracy",
+      "label": "Factual accuracy",
+      "descriptors": ["Errors in central claims, or claims that cannot be traced to any source.", "Central claims are correct but some lack inline sources, versions or labelled simplifications.", "Central claims are correct, traceable to cited sources (versions/jurisdiction stated), and simplifications are labelled."],
+      "howToCheck": "Spot-check at least five central claims per course against the cited sources, prioritising numbers, dates, quotations and version-specific instructions."
+    },
+    {
+      "id": "instructional-sequencing",
+      "label": "Instructional sequencing",
+      "descriptors": ["Terms used before they are defined, or lessons depend on later material.", "Order is workable but prerequisites are implicit or prediction comes after the reveal.", "Prerequisites are explicit and earlier; each lesson moves from an authentic start through prediction, explanation and practice to transfer."],
+      "howToCheck": "Read the lessons in route order; list every term used before definition and every prediction placed after its answer."
+    },
+    {
+      "id": "visual-purpose",
+      "label": "Visual purpose",
+      "descriptors": ["Visuals are decorative or missing where structure, change or evidence needed showing.", "Visuals relate to the content but some do not make the idea easier than prose.", "Each visual has one job (structure, comparison, change, evidence or a manipulable model) and a text equivalent that carries the same information."],
+      "howToCheck": "For each visual, state its job in one sentence; read only the text equivalent and check nothing essential is lost."
+    },
+    {
+      "id": "interaction-relevance",
+      "label": "Interaction relevance",
+      "descriptors": ["Interactions are clicks without thinking, or controls do not work.", "Interactions require some thinking but feedback or the debrief is thin.", "Every interaction requires predicting, deciding, producing or interpreting; consequences are visible; feedback names misconceptions; models state assumptions."],
+      "howToCheck": "Use every activity in the built site; note any control that does nothing, any feedback that only says right/wrong, and any model without assumptions."
+    },
+    {
+      "id": "accessibility",
+      "label": "Accessibility",
+      "descriptors": ["Content unusable without vision or a mouse, or broken at phone width.", "Mostly accessible with some gaps (missing text equivalents, colour-only meaning, overflow).", "Text equivalents for all visuals, keyboard-operable controls, no colour-only meaning, no horizontal overflow at 375 px, language attributes set."],
+      "howToCheck": "Navigate one full lesson by keyboard; check at 375 px; read text equivalents; check lang attributes for foreign-language content."
+    },
+    {
+      "id": "source-quality",
+      "label": "Source quality",
+      "descriptors": ["Sources missing, unreliable, or fabricated.", "Sources are reasonable but secondary where primary/official ones exist, or unverified sources are not labelled.", "Authoritative sources appropriate to the field, with access dates, versions, labelled unverified items and competing evidence where it exists."],
+      "howToCheck": "Classify each source by kind; open a sample; check that unverified sources are marked and that contested topics present more than one position."
+    },
+    {
+      "id": "transfer-coverage",
+      "label": "Transfer coverage",
+      "descriptors": ["No task asks the learner to use an idea in a new situation.", "Transfer tasks exist but repeat the examples' context or miss some outcomes.", "Every outcome has a transfer task (lesson or capstone) in a genuinely new context, with a rubric or model answer."],
+      "howToCheck": "For each outcome, find its transfer task and compare its context with the lesson examples."
+    }
+  ]
+}

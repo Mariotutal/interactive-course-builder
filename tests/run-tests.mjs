@@ -166,6 +166,130 @@ t('html: entity-encoded and obfuscated executable URLs are rejected', () => {
 });
 t('validate: entity-encoded javascript link in a lesson is an error (reported case)', () => hasErr(withCourse((c, l) => { l.blocks[3].html += '<a href="jav&#x61;script:alert(1)">x</a>'; }), /"javascript:" URL/));
 
+// --- Roadmap: learner state format 2 and concept review model (lk-state.js) ---
+const LS = createRequire(import.meta.url)(path.join(SKILL, 'assets', 'runtime', 'lk-state.js'));
+const CONCEPTS = path.join(ROOT, 'tests', 'fixtures', 'concepts-lab');
+const fixtureModel = () => { const v = lk.validateCourse(CONCEPTS); return LS.conceptModel(v.data.course, v.data.lessons); };
+t('state: format 1 data is accepted and migrated to format 2', () => {
+  const r = LS.clean({ format: 1, courseId: 'x', items: { q1: { h: 'a', attempts: 1, first: 0, last: 0, correctFirst: true, at: '2026-10-01' } }, visited: { l1: '2026-10-01' } }, 'x');
+  eq(r.migratedFrom, 1); eq(r.state.format, 2); eq(r.state.concepts, {}); eq(r.state.items.q1.correctFirst, true);
+});
+t('state: format 2 concept entries are validated; malformed ones are dropped and counted', () => {
+  const r = LS.clean({ format: 2, courseId: 'x', concepts: { ok: { introduced: '2026-10-01', step: 1, due: '2026-10-04', events: [{ d: '2026-10-01', ok: true }, { d: 'bad', ok: true }] }, bad1: { introduced: 'x', step: 0, events: [] }, bad2: null } }, 'x');
+  eq(Object.keys(r.state.concepts), ['ok']); eq(r.state.concepts.ok.events.length, 1); eq(r.dropped, 2);
+  let threw = false; try { LS.clean({ format: 2, courseId: 'x', concepts: [] }, 'x'); } catch (e) { threw = /concepts/.test(e.message); } ok(threw, 'array concepts must be rejected');
+  threw = false; try { LS.clean({ format: 3, courseId: 'x' }, 'x'); } catch (e) { threw = true; } ok(threw, 'unknown format rejected');
+});
+t('state: expanding intervals on success, reset on failure, unscheduled after the last interval', () => {
+  const s = LS.empty('x'); const iv = [1, 3, 7];
+  LS.introduce(s, ['a'], '2026-10-01', iv); eq(s.concepts.a.due, '2026-10-02');
+  LS.retrieval(s, ['a'], true, '2026-10-02', iv); eq([s.concepts.a.step, s.concepts.a.due], [1, '2026-10-05']);
+  LS.retrieval(s, ['a'], true, '2026-10-05', iv); eq([s.concepts.a.step, s.concepts.a.due], [2, '2026-10-12']);
+  LS.retrieval(s, ['a'], false, '2026-10-12', iv); eq([s.concepts.a.step, s.concepts.a.due], [0, '2026-10-13']);
+  LS.retrieval(s, ['a'], true, '2026-10-13', iv); LS.retrieval(s, ['a'], true, '2026-10-16', iv); LS.retrieval(s, ['a'], true, '2026-10-23', iv);
+  eq(s.concepts.a.due, null, 'all intervals done'); eq(LS.summary(s.concepts.a).retrievals, 6);
+});
+t('state: due queue is ordered by due date and excludes future concepts', () => {
+  const s = LS.empty('x'); LS.introduce(s, ['b'], '2026-10-03', [1]); LS.introduce(s, ['a'], '2026-10-01', [1]); LS.introduce(s, ['c'], '2026-10-20', [1]);
+  eq(LS.dueConcepts(s, '2026-10-10'), ['a', 'b']);
+});
+t('state: concept model maps tagged items and lessons from the fixture', () => {
+  const m = fixtureModel(); ok(m, 'model'); eq(m.itemConcepts.c2, ['evaluate-linear', 'intercept']); ok(m.conceptItems.slope.includes('r2')); eq(m.byLesson['line-review'].sort(), ['evaluate-linear', 'rate-of-change']);
+});
+t('state: migration backfills concept history from format 1 visits and first attempts', () => {
+  const m = fixtureModel();
+  const r = LS.clean({ format: 1, courseId: 'concepts-lab', visited: { 'slope-intercept': '2026-10-01' }, items: { c1: { h: 'h', attempts: 1, first: 0, last: 0, correctFirst: true, at: '2026-10-02' }, c2: { h: 'h', attempts: 2, first: '9', last: '3', correctFirst: false, at: '2026-10-02' } } }, 'concepts-lab');
+  LS.backfillConcepts(r.state, m, [1, 3, 7]);
+  eq(r.state.concepts.slope.introduced, '2026-10-01'); eq(r.state.concepts.slope.step, 1); eq(r.state.concepts.intercept.step, 0); eq(r.state.concepts['evaluate-linear'].events.length, 1);
+});
+t('state: reconcile drops results whose content hash changed', () => { const s = LS.empty('x'); s.items = { a: { h: '1', attempts: 1 }, b: { h: '2', attempts: 1 } }; eq(LS.reconcile(s, { a: '1', b: 'X' }), ['b']); eq(Object.keys(s.items), ['a']); });
+
+// --- Roadmap: optional knowledge architecture ---
+const withConcepts = mutate => { const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-k-')); fs.cpSync(CONCEPTS, dir, { recursive: true }); const c = JSON.parse(fs.readFileSync(path.join(dir, 'course.json'))); const lf = path.join(dir, 'lessons', 'slope-intercept.json'); const l = JSON.parse(fs.readFileSync(lf)); mutate(c, l); fs.writeFileSync(path.join(dir, 'course.json'), JSON.stringify(c)); fs.writeFileSync(lf, JSON.stringify(l)); const v = lk.validateCourse(dir); fs.rmSync(dir, { recursive: true, force: true }); return v; };
+const hasWarn = (v, re) => ok(v.warns.some(w => re.test(w)), `expected a warning matching ${re}; got:\n  ${v.warns.join('\n  ')}`);
+t('knowledge: the concepts fixture validates with no errors or warnings', () => { const v = lk.validateCourse(CONCEPTS); eq(v.errs, []); eq(v.warns, []); ok(v.knowledge.length === 5); });
+t('knowledge: optional — a course without it is unaffected', () => { const v = lk.validateCourse(STARTER); eq(v.errs, []); eq(v.knowledge, null); });
+t('knowledge: prerequisite cycle is an error', () => hasErr(withConcepts(c => { c.knowledgeArchitecture.prerequisites.push({ from: 'evaluate-linear', to: 'slope' }); }), /prerequisite cycle/));
+t('knowledge: unknown concept tag on a question is an error', () => hasErr(withConcepts((c, l) => { l.blocks.find(b => b.type === 'check').questions[0].concepts = ['nope']; }), /unknown concept "nope"/));
+t('knowledge: a disposition cannot be auto-assessed', () => hasErr(withConcepts(c => { c.knowledgeArchitecture.assessmentModes['check-models'] = 'auto'; }), /cannot be assessed with auto-checked/));
+t('knowledge: every concept needs an assessment mode', () => hasErr(withConcepts(c => { delete c.knowledgeArchitecture.assessmentModes.slope; }), /slope has no assessment mode/));
+t('knowledge: a hub needs at least two concepts', () => hasErr(withConcepts(c => { c.knowledgeArchitecture.hubs[0].concepts = ['slope']; }), /at least 2 concepts/));
+t('knowledge: a disposition needs at least two progression bands', () => hasErr(withConcepts(c => { c.knowledgeArchitecture.dispositions[0].bands = [{ level: 1, descriptor: 'x' }]; }), /2 progression bands/));
+t('knowledge: mode without matching evidence warns', () => hasWarn(withConcepts((c, l) => { l.blocks.find(b => b.id === 'p2').concepts = []; l.blocks.find(b => b.id === 'lab1').concepts = ['slope', 'intercept']; }), /check-models is assessed by "observation"/));
+t('knowledge: prerequisite taught later than its dependent warns', () => hasWarn(withConcepts(c => { c.knowledgeArchitecture.concepts.find(x => x.id === 'slope').lessons = ['line-review']; c.knowledgeArchitecture.prerequisites = [{ from: 'slope', to: 'intercept' }]; }), /first taught after/));
+t('knowledge: coverage report includes the knowledge table', () => { const md = lk.coverageMarkdown(lk.validateCourse(CONCEPTS)); ok(/## Knowledge architecture/.test(md) && /check-models/.test(md)); });
+
+// --- Roadmap: short learner intake ---
+t('intake: goals can come from intake.capability; decisions are recorded', () => {
+  const r = lk.checkRequest({ topic: 'Bird songs', intake: { capability: 'Tell 5 songs apart', familiarity: 'none', modality: 'hands-on', practiceLoad: 'heavy' }, time: { sessionMinutes: 20 } });
+  ok(r.ok, r.blocking.join(';')); eq(r.normalized.goals, ['Tell 5 songs apart']); eq(r.intakeQuestions, []);
+  eq(r.decisions.map(d => d.because), ['familiarity: none', 'modality: hands-on', 'practice load: heavy', 'sessions of 20 min']);
+});
+t('intake: missing answers produce at most three questions; invalid values are errors', () => {
+  const r = lk.checkRequest({ topic: 'T', goals: ['g'] }); eq(r.intakeQuestions.length, 2, 'familiarity + modality/load (capability comes from goals)');
+  eq(lk.checkRequest({ topic: 'T' }).intakeQuestions.length, 3);
+  ok(lk.checkRequest({ topic: 'T', goals: ['g'], intake: { familiarity: 'expert' } }).errors.some(e => /intake.familiarity/.test(e)));
+});
+t('intake: init stores the decisions; validate warns when intake has no decisions', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-in-')); const f = path.join(dir, 'r.json'); fs.writeFileSync(f, JSON.stringify({ topic: 'T', goals: ['g'], intake: { familiarity: 'some', modality: 'visual', practiceLoad: 'light' } }));
+  const r = lk.initCourse(f, path.join(dir, 'c')); ok(r.course.learner.decisions.length >= 3); fs.rmSync(dir, { recursive: true, force: true });
+  hasWarn(withConcepts(c => { c.learner.decisions = []; }), /learner.decisions is empty/);
+});
+
+// --- Roadmap: visual options with contrast validation ---
+t('theme: unsupported option values are errors; unknown keys warn', () => { const v = withConcepts(c => { c.theme.typeScale = 'huge'; c.theme.illustrationStyle = 'watercolor'; }); hasErr(v, /theme.typeScale/); hasWarn(v, /illustrationStyle is not a supported option/); });
+t('theme: token colours below 4.5:1 contrast are errors; per-mode colours pass', () => {
+  hasErr(withConcepts(c => { c.theme.tokens.light.accent = '#ffcc00'; }), /contrast .* against #f7f7f4/);
+  hasErr(withConcepts(c => { c.theme.tokens.dark.accent = '#333333'; }), /contrast .* against #15171a/);
+  near(lk.contrast('#000000', '#ffffff'), 21, 1e-9); near(lk.contrast('#777777', '#ffffff'), 4.48, 0.01);
+});
+
+// --- Roadmap: function-lab sandbox (course-local widget) ---
+t('function-lab: a failing author test case is an error', () => hasErr(withConcepts((c, l) => { l.blocks.find(b => b.id === 'lab1').config.testCases[0].value = 6; }), /test case .* failed/));
+t('function-lab: unknown variables and invalid task types are errors', () => { const v = withConcepts((c, l) => { const cfg = l.blocks.find(b => b.id === 'lab1').config; cfg.curves[0].expr = 'k*x'; cfg.tasks[0].type = 'guess'; }); hasErr(v, /unknown variable\(s\) k/); hasErr(v, /type must be direction or value/); });
+t('build: copies lk-state.js and the course widget; site references both', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-cb-')); fs.cpSync(CONCEPTS, dir, { recursive: true }); eq(lk.build(dir).errs, []);
+  ok(fs.existsSync(path.join(dir, 'site', 'runtime', 'lk-state.js')) && fs.existsSync(path.join(dir, 'site', 'widgets', 'function-lab.js')));
+  const html = fs.readFileSync(path.join(dir, 'site', 'index.html'), 'utf8'); ok(html.indexOf('lk-state.js') < html.indexOf('lk-app.js') && /widgets\/function-lab.js/.test(html));
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+
+// --- Roadmap: evaluation harness (evaluation/lk-eval.mjs) ---
+const EV = await import(path.join(ROOT, 'evaluation', 'lk-eval.mjs'));
+t('eval: automatic metrics build the course and check output integrity', () => {
+  const r = EV.autoMetrics(CONCEPTS); eq(r.validate.errors, 0); ok(r.integrity.built, 'built'); eq(r.integrity.problems, []);
+  eq(r.metrics.lessons, 2); eq(r.metrics.transfer.outcomesWithTransferPct, 100); eq(r.metrics.questions.mcqWithFullMisconceptionFeedbackPct, 100); ok(r.metrics.density.interactionsPer1000Words > 0); eq(r.metrics.knowledgeArchitecture.concepts, 4);
+});
+t('eval: an invalid course reports errors and is not built', () => { const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-ev-')); fs.cpSync(STARTER, dir, { recursive: true }); fs.writeFileSync(path.join(dir, 'lessons', 'fermi-decompose.json'), '{"format":1,"id":"fermi-decompose","blocks":[]}'); const r = EV.autoMetrics(dir); ok(r.validate.errors > 0); eq(r.integrity.built, false); fs.rmSync(dir, { recursive: true, force: true }); });
+t('eval: manual scores are validated; self-review is labelled; report aggregates', () => {
+  const m = EV.manualTemplate('x'); ok(EV.checkManual(m).length >= 8, 'empty template is incomplete');
+  for (const c of Object.keys(m.scores)) m.scores[c] = { score: 2, rationale: 'Checked lesson 1 and lesson 2 against the sources.' }; m.reviewer = 'test'; eq(EV.checkManual(m), []);
+  m.scores['factual-accuracy'].score = 3; ok(EV.checkManual(m).some(p => /0, 1 or 2/.test(p)));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-rp-')); fs.mkdirSync(path.join(dir, 'fix')); fs.writeFileSync(path.join(dir, 'fix', 'auto.json'), JSON.stringify(EV.autoMetrics(CONCEPTS))); m.scores['factual-accuracy'].score = 1; fs.writeFileSync(path.join(dir, 'fix', 'manual.json'), JSON.stringify(m));
+  const out = path.join(dir, 'R.md'); const r = EV.report({ results: dir, out }); eq(r.names, ['fix']); const md = fs.readFileSync(out, 'utf8'); ok(/no \(self-review\)/.test(md) && /\| 13 \|/.test(md), 'self-review label and total'); fs.rmSync(dir, { recursive: true, force: true });
+});
+t('eval: pilot aggregates valid exports, rejects other courses and never includes free text', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-pi-'));
+  const mk = (name, c1ok, text) => { const s = LS.empty('concepts-lab'); s.visited['slope-intercept'] = '2026-10-10'; s.items.c1 = { h: 'x', attempts: 1, first: c1ok ? 0 : 1, last: 0, correctFirst: c1ok, at: '2026-10-10' }; s.texts.tr1 = { id: 'tr1', v: text }; s.confidence['slope-intercept'] = 3; LS.retrieval(s, ['slope'], c1ok, '2026-10-10', [1, 3]); const f = path.join(dir, name); fs.writeFileSync(f, JSON.stringify(s)); return f; };
+  const files = [mk('a.json', true, 'Secret learner text that must not appear in the summary.'), mk('b.json', false, 'short'), mk('c.json', true, 'Another long enough private response here.')];
+  const other = path.join(dir, 'o.json'); fs.writeFileSync(other, JSON.stringify(LS.empty('another-course')));
+  const r = EV.pilot(CONCEPTS, [...files, other]); eq(r.n, 3); eq(r.rejected.length, 1);
+  const l1 = r.lessonRows.find(x => x.lesson === 'slope-intercept'); eq(l1.visitedPct, 100); eq(l1.firstAttemptCorrectPct, 66.7); eq(l1.confidence, [0, 0, 3, 0]);
+  eq(r.transferRows.find(x => x.id === 'tr1').writtenPct, 66.7); eq(r.conceptRows.find(x => x.concept === 'slope').successPct, 66.7);
+  ok(!/Secret learner text/.test(r.md), 'free text must not leak'); fs.rmSync(dir, { recursive: true, force: true });
+});
+
+t('markdown: code blocks inside question prompts keep their lines', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-md-')); fs.cpSync(STARTER, dir, { recursive: true });
+  const lf = path.join(dir, 'lessons', 'fermi-decompose.json'); const l = JSON.parse(fs.readFileSync(lf)); l.blocks.find(b => b.type === 'predict').prompt = '<p>What does this print?</p><pre><code>a = [1]\nb = a\nb.append(2)\nprint(a)</code></pre>'; fs.writeFileSync(lf, JSON.stringify(l));
+  eq(lk.build(dir).errs, []); const md = fs.readFileSync(path.join(dir, 'markdown', '01-fermi-decompose.md'), 'utf8'); ok(/```\nb = a\nb\.append\(2\)|b = a\nb\.append\(2\)/.test(md), 'code lines preserved'); fs.rmSync(dir, { recursive: true, force: true });
+});
+
+t('validate: question written with "type" instead of "kind" is an error (benchmark finding)', () => hasErr(withCourse((c, l) => { const q = l.blocks.find(b => b.type === 'check').questions[1]; delete q.kind; q.type = 'numeric'; }), /use "kind"/));
+t('validate: citation label that does not match the source position warns', () => { const v = withCourse((c, l) => { l.sources = [{ id: 'a', title: 'A', kind: 'official', url: 'https://example.org/a', accessed: '2026-10-20' }, { id: 'b', title: 'B', kind: 'official', url: 'https://example.org/b', accessed: '2026-10-20' }]; l.blocks[3].html += '<p>Claim <a data-source="b">[1]</a></p>'; }); ok(v.warns.some(w => /label \[1\] points to "b", which is source 2/.test(w)), v.warns.join('; ')); });
+t('validate: lessons longer than the requested total time warn', () => { const v = withCourse(c => { c.learner = Object.assign({}, c.learner, { time: { totalHours: 0.1 } }); }); ok(v.warns.some(w => /more than the 0.1 h the learner asked for/.test(w)), v.warns.join('; ')); });
+t('validate: a full lesson whose first prediction follows the explanation warns', () => { const v = withCourse((c, l) => { const i = l.blocks.findIndex(b => b.type === 'predict'); const [p] = l.blocks.splice(i, 1); l.blocks.push(p); l.blocks = l.blocks.filter(b => b.type !== 'activity'); }); ok(v.warns.some(w => /first prediction comes after the first explain/.test(w)), v.warns.join('; ')); });
+
 // --- Package hygiene ---
 t('skill: SKILL.md frontmatter follows the Agent Skills constraints', () => {
   const md = fs.readFileSync(path.join(SKILL, 'SKILL.md'), 'utf8'); const fm = md.match(/^---\n([\s\S]*?)\n---/)[1];

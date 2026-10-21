@@ -32,6 +32,21 @@ Run `node scripts/lk.mjs check-request request.json` to normalize a request. The
 | `sources.evidenceStandard` | string | authoritative sources | For example "peer-reviewed", "primary sources", "official docs". |
 | `diagnostic` | boolean | `true` | Whether to include the optional diagnostic. |
 
+## Short intake (start here)
+
+Three answers drive most design decisions. Collect them first, in `intake`, before the rest of the request:
+
+| Field | Values | What it changes |
+|---|---|---|
+| `intake.capability` | a concrete task, in the learner's words | Becomes the first goal if `goals` is empty. Anchors the capstone. |
+| `intake.familiarity` | `none`, `some`, `working`, `fluent` | Diagnostic, the starting point of the core route, how much prerequisite review to include, and whether to offer the advanced route. |
+| `intake.modality` | `visual`, `reading`, `hands-on`, `mixed` | What leads each full lesson: a visual model plus activity, prose plus worked example, or practice before explanation. |
+| `intake.practiceLoad` | `light`, `balanced`, `heavy` | Amount of practice per lesson, use of focused review lessons, and cumulative review. |
+
+`check-request` lists any missing intake answers as `intakeQuestions` (at most three). It also prints `decisions`: for each answer, the design choice it causes. `init` stores those decisions in `course.json` → `learner.decisions`, and the course home page shows them under "Why this course looks like this". If you depart from a decision, edit it so it stays true. The validator warns when an intake exists without decisions.
+
+Ask only the additional questions a selected lab needs, for example equipment.
+
 ## When to ask questions
 
 Ask the requester only when the answer changes what you build *and* no sensible default exists. Ask at most three questions at a time.
@@ -49,6 +64,7 @@ Personal details such as hardware, workplace, location or the services someone r
   "topic": "Introductory statistics: sampling variability and confidence intervals",
   "goals": ["Interpret a 95% confidence interval correctly", "Decide whether a reported margin of error supports a claim"],
   "language": "en",
+  "intake": { "capability": "Judge whether a poll's margin of error supports a headline", "familiarity": "some", "modality": "visual", "practiceLoad": "balanced" },
   "learner": { "startingKnowledge": "Comfortable with averages and percentages; no formal statistics", "depth": "solid" },
   "time": { "totalHours": 4, "sessionMinutes": 30 }
 }

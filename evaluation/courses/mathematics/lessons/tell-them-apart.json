@@ -1,0 +1,290 @@
+{
+  "format": 1,
+  "id": "tell-them-apart",
+  "title": "Tell them apart: differences or ratios?",
+  "summary": "Decide whether a table or graph shows linear or exponential growth by checking what stays constant over equal steps.",
+  "level": "core",
+  "profile": "full",
+  "minutes": 30,
+  "outcomes": [
+    "o1"
+  ],
+  "prerequisites": [],
+  "prereqText": "<p>You need arithmetic, percentages, and plotting points on axes. If percentages feel rusty, review \"percent change\" before lesson 2.</p>",
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>Two apps both have 5 thousand users today, and both add users every week. A friend says \"they are growing the same way.\" Here are their first five weeks. Both columns increase, so what could \"the same way\" even mean, and how would you check it?</p><div class=\"output\" data-label=\"Illustrative data, invented for this lesson\"><pre>week      0   1   2   3   4\nApp A     5   8  11  14  17   (thousands of users)\nApp B     5  10  20  40  80   (thousands of users)</pre></div>"
+    },
+    {
+      "type": "visual",
+      "purpose": "Show that equal steps in x add the same height for a linear table and multiply the height for an exponential table.",
+      "alt": "A chart of weeks 0 to 4 on the horizontal axis and users in thousands on the vertical axis. App A rises as a straight line from 5 to 17, about 3 more each week. App B starts at 5 as well but climbs ever more steeply, 5, 10, 20, 40, 80, doubling each week and overtaking App A before week 2.",
+      "html": "<figure><svg viewBox=\"0 0 400 260\" role=\"img\" aria-label=\"Line chart of App A (straight, 5 to 17) and App B (curving up, 5 to 80) over weeks 0 to 4\"><line class=\"edge\" x1=\"60\" y1=\"210\" x2=\"360\" y2=\"210\"/><line class=\"edge\" x1=\"60\" y1=\"210\" x2=\"60\" y2=\"20\"/><text class=\"ts\" x=\"170\" y=\"245\">week</text><text class=\"ts\" x=\"8\" y=\"18\">users (thousands)</text><text class=\"tm\" x=\"56\" y=\"226\">0</text><text class=\"tm\" x=\"126\" y=\"226\">1</text><text class=\"tm\" x=\"196\" y=\"226\">2</text><text class=\"tm\" x=\"266\" y=\"226\">3</text><text class=\"tm\" x=\"336\" y=\"226\">4</text><text class=\"tm\" x=\"30\" y=\"34\">80</text><text class=\"tm\" x=\"30\" y=\"124\">40</text><polyline class=\"edge dashed\" fill=\"none\" points=\"60,199 130,192 200,185 270,179 340,172\"/><circle class=\"n1\" cx=\"60\" cy=\"199\" r=\"4\"/><circle class=\"n1\" cx=\"130\" cy=\"192\" r=\"4\"/><circle class=\"n1\" cx=\"200\" cy=\"185\" r=\"4\"/><circle class=\"n1\" cx=\"270\" cy=\"179\" r=\"4\"/><circle class=\"n1\" cx=\"340\" cy=\"172\" r=\"4\"/><polyline class=\"edge\" fill=\"none\" points=\"60,199 130,188 200,165 270,120 340,30\"/><rect class=\"n2\" x=\"126\" y=\"184\" width=\"8\" height=\"8\"/><rect class=\"n2\" x=\"196\" y=\"161\" width=\"8\" height=\"8\"/><rect class=\"n2\" x=\"266\" y=\"116\" width=\"8\" height=\"8\"/><rect class=\"n2\" x=\"336\" y=\"26\" width=\"8\" height=\"8\"/><text class=\"t\" x=\"215\" y=\"55\">App B: ×2 each week (solid, squares)</text><text class=\"t\" x=\"170\" y=\"160\">App A: +3 each week (dashed, circles)</text></svg><figcaption>Illustrative data. A: equal steps add the same amount, giving a straight line. B: equal steps multiply by the same factor, giving a curve that steepens. Redrawn for this course from the tables above; data invented for teaching.</figcaption></figure>"
+    },
+    {
+      "type": "predict",
+      "id": "p-next-value",
+      "prompt": "A table (illustrative data) gives y = 3, 6, 12, 24 at x = 0, 1, 2, 3. If the pattern continues with equal steps in x, what is y at x = 5?",
+      "options": [
+        "36",
+        "48",
+        "96",
+        "60"
+      ],
+      "correct": 2,
+      "feedback": {
+        "0": "36 comes from adding the last difference (12) once. But the differences here are 3, 6, 12: they are not constant, so \"keep adding\" is the wrong rule.",
+        "1": "48 is y at x = 4, one step too early. Check: x = 4 is 24 × 2 = 48, and x = 5 is 48 × 2.",
+        "3": "60 comes from adding 12 twice to 24 (a linear continuation). The values are doubling, not growing by a fixed amount."
+      },
+      "explanation": "The ratios are 6/3 = 2, 12/6 = 2, 24/12 = 2: each step multiplies by 2. So x = 4 gives 48 and x = 5 gives 96."
+    },
+    {
+      "type": "activity",
+      "id": "a-sort-tables",
+      "widget": "classify",
+      "instructions": "For each table, decide first and only then read the feedback. Compute both the differences (new − old) and the ratios (new ÷ old) on paper if you are unsure. All x values step by 1, starting at 0. All data are invented for practice.",
+      "debrief": "<p>You should have noticed that \"increasing\" does not decide anything: every table here rises except the decays. What decides is which quantity is constant. The squares (1, 4, 9, 16, 25) are the trap: their differences grow, so they look exponential, but their ratios keep shrinking, so neither test is satisfied. \"Neither\" is a legitimate answer.</p>",
+      "config": {
+        "categories": [
+          {
+            "id": "lin",
+            "label": "Linear (constant difference)"
+          },
+          {
+            "id": "exp",
+            "label": "Exponential (constant ratio)"
+          },
+          {
+            "id": "neither",
+            "label": "Neither"
+          }
+        ],
+        "items": [
+          {
+            "id": "i1",
+            "html": "y = 10, 14, 18, 22, 26",
+            "category": "lin",
+            "feedback": "Differences: 4, 4, 4, 4. Constant difference means linear."
+          },
+          {
+            "id": "i2",
+            "html": "y = 3, 6, 12, 24, 48",
+            "category": "exp",
+            "feedback": "Ratios: 2, 2, 2, 2. Constant ratio means exponential. The differences 3, 6, 12, 24 grow."
+          },
+          {
+            "id": "i3",
+            "html": "y = 1, 4, 9, 16, 25",
+            "category": "neither",
+            "feedback": "Differences 3, 5, 7, 9 are not constant; ratios 4, 2.25, 1.78, 1.56 are not constant either."
+          },
+          {
+            "id": "i4",
+            "html": "y = 80, 40, 20, 10, 5",
+            "category": "exp",
+            "feedback": "Ratios are all 0.5, so it is exponential, here decaying because the factor is below 1."
+          },
+          {
+            "id": "i5",
+            "html": "y = 7, 7.7, 8.47, 9.317",
+            "category": "exp",
+            "feedback": "Ratios are all 1.1 (growth of 10% per step). The differences 0.7, 0.77, 0.847 grow slowly, which is easy to miss."
+          },
+          {
+            "id": "i6",
+            "html": "y = 50, 45, 40, 35, 30",
+            "category": "lin",
+            "feedback": "Differences are all −5. Linear can decrease too."
+          }
+        ],
+        "debrief": "<p>Constant difference gives linear and constant ratio gives exponential. If neither holds, neither model fits.</p>"
+      }
+    },
+    {
+      "type": "explain",
+      "title": "Two kinds of \"constant\"",
+      "html": "<p>Take a table where the input <span class=\"term\" data-term=\"linear growth\">x</span> goes up by the same step each row. Two questions sort most tables:</p><ul><li><strong>Is the difference constant?</strong> Compute new − old for each pair of neighbouring rows. If they all agree, the output changes by the same amount over equal steps: <span class=\"term\" data-term=\"linear growth\">linear growth</span>. The shared number is the <span class=\"term\" data-term=\"common difference\">common difference</span>.</li><li><strong>Is the ratio constant?</strong> Compute new ÷ old for each pair. If they all agree, the output changes by the same percentage over equal steps: <span class=\"term\" data-term=\"exponential growth\">exponential growth</span>. The shared number is the <span class=\"term\" data-term=\"common ratio\">common ratio</span> or growth factor.</li></ul><p>This is how the textbook separates the two: linear growth adds the same amount over equal steps of the input, exponential growth increases by the same percentage <a data-source=\"openstax61\">[1]</a>. Its first comparison pairs 2^x (outputs 1, 2, 4, 8, … 64) with 2x (0, 2, 4, … 12) and concludes that exponential growth soon dwarfs linear growth <a data-source=\"openstax61\">[1]</a>.</p><p><strong>Why ratios matter when differences look \"almost constant\".</strong> A 10% rise on 7 is 0.7, but 10% of the new value 7.7 is 0.77: a constant percentage means a growing amount. That is why you need the ratio test, not just a glance at the differences.</p><p><strong>Rows must be equally spaced in x.</strong> If x jumps from 2 to 4, one row covers two steps. Divide by the number of steps (for a ratio, take a root, or just insert the missing row) before comparing.</p><p><em>Simplification:</em> a finite table can only be <em>consistent with</em> a pattern. Four matching ratios do not prove the next value; they make the model worth testing.</p>"
+    },
+    {
+      "type": "explain",
+      "title": "Reading a graph",
+      "html": "<p>On a graph, apply the same two tests to <em>equally spaced x positions</em>:</p><ul><li>A <strong>straight line</strong> adds the same height for each step to the right: constant difference, linear. A line has the same steepness everywhere.</li><li>An exponential graph with b &gt; 1 <strong>curves upward and keeps getting steeper</strong>; with 0 &lt; b &lt; 1 it falls steeply, then flattens toward zero. Either way, the height at x + 1 is a fixed multiple of the height at x. Its y-intercept is the initial value, and the x-axis (y = 0) is a horizontal asymptote that the graph approaches but never reaches <a data-source=\"openstax61\">[1]</a>.</li></ul><p>So to decide from a graph, read the height at three or four equally spaced x values and then compute differences and ratios just as you would for a table. Judging by the \"look\" alone is risky: over a short window, an exponential with a factor close to 1 looks almost straight.</p>"
+    },
+    {
+      "type": "intuition",
+      "html": "<p>Think of two staircases. In a linear staircase every step rises the same height. In an exponential staircase every step is a fixed multiple of the one before, so each riser is taller than the last.</p>",
+      "limits": "The staircase picture suggests exponential means \"gets steeper\". That holds only when the factor is above 1. With a factor between 0 and 1 the risers shrink and the curve flattens. A factor very close to 1 also makes the first steps almost identical to a linear staircase."
+    },
+    {
+      "type": "worked",
+      "title": "Worked example: classify a table",
+      "html": "<div class=\"output\" data-label=\"Illustrative data, invented for this lesson\"><pre>x   0   1    2    3     4\ny   2   6   18   54   162</pre></div>",
+      "steps": [
+        {
+          "prompt": "Check the spacing of x.",
+          "html": "<p>x goes 0, 1, 2, 3, 4: equal steps of 1, so neighbouring rows can be compared directly.</p>"
+        },
+        {
+          "prompt": "Test the differences.",
+          "html": "<p>6 − 2 = 4, 18 − 6 = 12, 54 − 18 = 36, 162 − 54 = 108. The differences are 4, 12, 36, 108, not constant, so the table is not linear.</p>"
+        },
+        {
+          "prompt": "Test the ratios. What do you predict?",
+          "selfExplain": true,
+          "html": "<p>6 ÷ 2 = 3, 18 ÷ 6 = 3, 54 ÷ 18 = 3, 162 ÷ 54 = 3. The ratio is a constant 3, so the table is consistent with exponential growth with common ratio 3. Notice also that the differences themselves are multiplied by 3 each time (4, 12, 36, 108).</p>"
+        },
+        {
+          "prompt": "State the conclusion with its evidence and its limit.",
+          "html": "<p>\"Exponential: the ratio is 3 at all four steps, while the differences are not constant. The first value is 2, so I would expect y = 486 at x = 5, if the pattern holds.\" The prediction is an <em>extrapolation</em> and rests on only five points.</p>"
+        }
+      ],
+      "result": "Exponential, common ratio 3, starting value 2."
+    },
+    {
+      "type": "practice",
+      "id": "pr-guided-1",
+      "level": "guided",
+      "setting": "in-app",
+      "task": "<p>Invented data: x = 0, 1, 2, 3 gives y = 5, 6.5, 8.45, 10.985. (a) Compute the three differences and three ratios. (b) Decide the model. (c) Predict y at x = 4.</p>",
+      "hints": [
+        "Subtract each value from the next one, then divide each value by the previous one.",
+        "Do the three differences agree? Do the three ratios agree?",
+        "If the ratio is r, then the next value is the last value times r."
+      ],
+      "rubric": [
+        "I computed both differences and ratios, not just one",
+        "I stated which one is constant and what it equals",
+        "My prediction uses the constant I found"
+      ],
+      "solution": "<p>Differences: 1.5, 1.95, 2.535 (not constant). Ratios: 6.5/5 = 1.3, 8.45/6.5 = 1.3, 10.985/8.45 = 1.3 (constant). So the data are consistent with exponential growth, factor 1.3 (30% per step). At x = 4: 10.985 × 1.3 = 14.2805.</p>"
+    },
+    {
+      "type": "practice",
+      "id": "pr-independent-1",
+      "level": "independent",
+      "setting": "in-app",
+      "task": "<p>Invented data, both tables for x = 0, 1, 2, 3 (equal steps): <strong>Table P:</strong> 20, 26, 32, 38. <strong>Table Q:</strong> 20, 26, 33.8, 43.94. They agree at x = 0 and x = 1. Decide each model with evidence and give each table's value at x = 5. Then say which is larger at x = 5 and how you could have guessed that without computing.</p>",
+      "hints": [],
+      "rubric": [
+        "P: constant difference 6 identified",
+        "Q: constant ratio 1.3 identified",
+        "P(5) = 50 and Q(5) ≈ 74.26 computed",
+        "Explains that Q multiplies, so its steps get bigger"
+      ],
+      "solution": "<p>P: differences 6, 6, 6, so linear, P(4) = 44 and P(5) = 50. Q: ratios 1.3, 1.3, 1.3, so exponential, Q(4) = 57.122 and Q(5) = 74.2586. Q is larger: both start with a rise of 6, but Q's rise is multiplied by 1.3 each step while P's stays 6.</p>"
+    },
+    {
+      "type": "check",
+      "html": "<p>Four questions. Your first attempt is recorded as performance; later attempts are practice.</p>",
+      "questions": [
+        {
+          "id": "ck-spacing",
+          "assesses": [
+            "o1"
+          ],
+          "prompt": "Invented data: x = 0, 1, 2, 4 and y = 3, 6, 12, 48. Which statement is best?",
+          "options": [
+            "Neither: the differences are 3, 6 and 36",
+            "Exponential: the factor is 2 per one-unit step (from x = 2 to x = 4 is two steps and 12 → 48 is × 4 = 2 × 2)",
+            "Linear: every difference is a multiple of 3",
+            "Impossible to tell without a graph"
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "The differences are not constant, but the x gaps are unequal, so you cannot compare rows directly. Account for the step size first.",
+            "2": "Differences that are all multiples of 3 are not constant differences. Linear requires the same amount per equal step.",
+            "3": "A graph is not required: dividing by the number of steps (or filling in x = 3) lets the table decide."
+          },
+          "explanation": "The row for x = 4 covers two steps. Per one-unit step the factor is 2 (since 2 × 2 = 4). The ratios per equal step are then 2, 2, 2."
+        },
+        {
+          "id": "ck-ratio",
+          "assesses": [
+            "o1"
+          ],
+          "kind": "numeric",
+          "prompt": "Invented data: y = 12, 18, 27 at x = 0, 1, 2. What is the common ratio?",
+          "answer": 1.5,
+          "tolerance": 0.001,
+          "unit": "",
+          "explanation": "18 ÷ 12 = 1.5 and 27 ÷ 18 = 1.5.",
+          "feedbackWrong": "Divide each value by the one before it (new ÷ old); do not subtract."
+        },
+        {
+          "id": "ck-graph",
+          "assesses": [
+            "o1"
+          ],
+          "prompt": "Heights read from a graph at x = 0, 1, 2, 3 are 2, 3, 4.5, 6.75 (illustrative). What is the best conclusion?",
+          "options": [
+            "Linear: the graph rises steadily",
+            "Exponential: each height is 1.5 times the previous one",
+            "Neither, because the heights are not whole numbers",
+            "Linear: the differences 1, 1.5, 2.25 are close"
+          ],
+          "correct": 1,
+          "feedback": {
+            "0": "\"Rises steadily\" is not a test. The differences 1, 1.5, 2.25 are increasing.",
+            "2": "Whole numbers are not required for either model.",
+            "3": "Differences of 1, 1.5, 2.25 are growing by a factor of 1.5; they are not constant."
+          },
+          "explanation": "3/2 = 1.5, 4.5/3 = 1.5, 6.75/4.5 = 1.5: constant ratio, so exponential."
+        },
+        {
+          "id": "ck-own",
+          "assesses": [
+            "o1"
+          ],
+          "kind": "open",
+          "prompt": "In your own words: why is \"the values keep increasing\" not enough to say that a table is exponential?",
+          "rubric": [
+            "Gives or implies an increasing linear example",
+            "Names the constant ratio (or constant percentage) as the real test",
+            "Mentions that some increasing tables are neither"
+          ],
+          "model": "<p>Linear tables also increase. For example 5, 8, 11, 14 increases by a constant 3. A table is exponential only if the ratio between neighbouring rows is constant. Some tables increase and are neither, such as 1, 4, 9, 16.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "tr-apps",
+      "assesses": [
+        "o1"
+      ],
+      "task": "<p>New context, invented data. Monthly active users in millions: App P: 1.0, 1.4, 1.8, 2.2 (months 0 to 3). App Q: 1.0, 1.2, 1.44, 1.728. A colleague says \"Q grew less than P every month so Q is the slower app and will stay behind.\" (1) Classify each app with numbers. (2) Explain what is wrong with the colleague's reasoning. (3) Estimate each app's users at month 12 if its pattern held, and say whether you trust that estimate.</p>",
+      "rubric": [
+        "P: constant difference 0.4; Q: constant ratio 1.2",
+        "Points out that comparing early increases ignores that Q multiplies",
+        "Month 12: P about 5.8 and Q about 8.9 million",
+        "States that extrapolating 12 months from 4 points is uncertain"
+      ],
+      "model": "<p>P: differences 0.4, 0.4, 0.4, so linear: P(12) = 1 + 0.4 × 12 = 5.8 million. Q: ratios 1.2, 1.2, 1.2, so exponential: Q(12) = 1.2<sup>12</sup> ≈ 8.92 million. The colleague compares only the early increases. P adds 0.4 forever, but Q's increase is 20% of a growing total (0.2, 0.24, 0.288, …) and passes 0.4 within a few months. Q is slower early and faster later. The month-12 numbers extrapolate from four points; a real app's growth rate can change, so treat them as a model's consequence, not a forecast.</p>"
+    },
+    {
+      "type": "reflect",
+      "id": "rf-1",
+      "prompt": "Write the two questions you will ask of any table before naming a model. Then write one situation where you would still not be sure after asking them."
+    }
+  ],
+  "sources": [
+    {
+      "id": "openstax61",
+      "title": "Algebra and Trigonometry 2e, section 6.1 Exponential Functions",
+      "kind": "textbook",
+      "author": "OpenStax",
+      "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/6-1-exponential-functions#Table_04_01_01",
+      "accessed": "2026-10-20",
+      "note": "Definition of exponential function and growth; linear vs exponential comparison (Table 1). Read through a summarising fetch tool, so claims are paraphrased, not quoted."
+    },
+    {
+      "id": "invented",
+      "title": "Invented datasets in this lesson",
+      "kind": "pedagogical",
+      "note": "All tables are made up for teaching and are labelled illustrative. Arithmetic was recomputed with a script."
+    }
+  ],
+  "next": "<p>You can now classify growth. Next you will write the equation for each pattern, y = m·x + b or y = a·b^x, and learn what every parameter means.</p>"
+}

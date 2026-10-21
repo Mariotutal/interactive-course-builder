@@ -1,0 +1,29 @@
+{
+  "topic": "Correlation, causation and evidence in social research: the case of minimum wage and employment",
+  "goals": [
+    "Distinguish a correlation from a causal claim in a news report",
+    "Explain what a natural experiment adds and what it cannot settle",
+    "Write a qualified conclusion that acknowledges competing evidence"
+  ],
+  "scope": "Introductory; no econometrics",
+  "language": "es",
+  "locale": "es-ES",
+  "intake": {
+    "capability": "Read a claim about a policy's effect and judge how strong the evidence is",
+    "familiarity": "none",
+    "modality": "reading",
+    "practiceLoad": "light"
+  },
+  "learner": {
+    "startingKnowledge": "General reader; no statistics or economics training",
+    "background": "Synthetic benchmark learner: journalist",
+    "depth": "solid"
+  },
+  "time": {
+    "totalHours": 2,
+    "sessionMinutes": 30
+  },
+  "sources": {
+    "evidenceStandard": "Peer-reviewed research and official statistics; present competing findings"
+  }
+}

@@ -1,0 +1,286 @@
+{
+  "format": 1,
+  "id": "slope-intercept",
+  "title": "Slope and intercept",
+  "summary": "How m and b move a line.",
+  "level": "core",
+  "minutes": 30,
+  "outcomes": [
+    "o1",
+    "o2"
+  ],
+  "blocks": [
+    {
+      "type": "motivate",
+      "html": "<p>A phone plan costs a fixed amount plus a price per gigabyte. Which number changes the bill more when you use more data?</p>"
+    },
+    {
+      "type": "predict",
+      "id": "si-p0",
+      "prompt": "Plan A costs 10 plus 2 per GB. Plan B costs 20 plus 1 per GB. At 15 GB, which plan is cheaper?",
+      "options": [
+        "Plan A",
+        "Plan B",
+        "They cost the same"
+      ],
+      "correct": 1,
+      "feedback": {
+        "0": "Plan A starts cheaper, but its price per GB is higher. At 15 GB it costs 10 + 30 = 40, while Plan B costs 20 + 15 = 35.",
+        "2": "They cost the same only at 10 GB (30 each). At 15 GB, the per-GB price has made Plan A more expensive."
+      },
+      "explanation": "Plan A: 10 + 2·15 = 40. Plan B: 20 + 1·15 = 35. With enough data, the per-GB price matters more than the fixed amount."
+    },
+    {
+      "type": "visual",
+      "purpose": "Show slope and intercept on one line",
+      "alt": "A straight line crossing the vertical axis at b and rising m units for every unit to the right.",
+      "html": "<figure><svg viewBox='0 0 300 120' role='img' aria-label='Line with slope and intercept'><line class='edge' x1='20' y1='100' x2='280' y2='20'/><text class='ts' x='24' y='96'>b</text><text class='ts' x='200' y='60'>m</text></svg><figcaption>y = m·x + b</figcaption></figure>"
+    },
+    {
+      "type": "explain",
+      "html": "<p>In y = m·x + b, the <span class='term' data-term='slope'>slope</span> m is the change in y per unit of x and the <span class='term' data-term='intercept'>intercept</span> b is the value at x = 0.</p>"
+    },
+    {
+      "type": "worked",
+      "steps": [
+        {
+          "html": "<p>y = 2x + 1 at x = 3: 2·3 = 6.</p>"
+        },
+        {
+          "html": "<p>6 + 1 = 7.</p>"
+        }
+      ]
+    },
+    {
+      "type": "activity",
+      "id": "lab1",
+      "widget": "function-lab",
+      "concepts": [
+        "slope",
+        "intercept",
+        "check-models"
+      ],
+      "instructions": "<p>Predict first, then move the slider.</p>",
+      "debrief": "<p>The slope tilts the line; the intercept shifts it.</p>",
+      "config": {
+        "title": "Slope and intercept lab",
+        "params": [
+          {
+            "id": "m",
+            "label": "slope m",
+            "min": -3,
+            "max": 3,
+            "step": 0.5,
+            "value": 1
+          },
+          {
+            "id": "b",
+            "label": "intercept b",
+            "min": -4,
+            "max": 4,
+            "step": 1,
+            "value": 0
+          }
+        ],
+        "x": {
+          "from": -5,
+          "to": 5,
+          "label": "x"
+        },
+        "y": {
+          "from": -10,
+          "to": 10
+        },
+        "curves": [
+          {
+            "label": "y = m·x + b",
+            "expr": "m*x + b"
+          }
+        ],
+        "readouts": [
+          {
+            "label": "y at x = 2",
+            "expr": "m*2 + b"
+          },
+          {
+            "label": "y at x = 0",
+            "expr": "b"
+          }
+        ],
+        "markers": [
+          {
+            "label": "(2, y)",
+            "x": "2",
+            "y": "m*2 + b"
+          }
+        ],
+        "tasks": [
+          {
+            "id": "t1",
+            "type": "direction",
+            "prompt": "If you increase the slope m, what happens to y at x = 2?",
+            "param": "m",
+            "watch": "m*2 + b",
+            "explanation": "<p>At x = 2 the output is 2m + b, so it rises by 2 for every unit of m.</p>"
+          },
+          {
+            "id": "t2",
+            "type": "direction",
+            "prompt": "If you increase the intercept b, what happens to y at x = 2?",
+            "param": "b",
+            "watch": "m*2 + b",
+            "explanation": "<p>b shifts every point of the line up by the same amount.</p>"
+          },
+          {
+            "id": "t3",
+            "type": "value",
+            "prompt": "With m = 2 and b = -1, what is y at x = 3?",
+            "set": {
+              "m": 2,
+              "b": -1
+            },
+            "expr": "m*3 + b",
+            "tolerance": 0.001,
+            "explanation": "<p>2·3 − 1 = 5.</p>"
+          }
+        ],
+        "testCases": [
+          {
+            "label": "y(3) with m=2, b=-1",
+            "set": {
+              "m": 2,
+              "b": -1
+            },
+            "expr": "m*3 + b",
+            "value": 5
+          },
+          {
+            "label": "intercept",
+            "set": {
+              "m": 7,
+              "b": 3
+            },
+            "expr": "m*0 + b",
+            "value": 3
+          }
+        ],
+        "limitPrompt": "State one situation where a straight line would be a poor model.",
+        "limitModel": "<p>Growth that speeds up (compound interest), or quantities with a ceiling.</p>",
+        "assumptions": [
+          "Pure linear model y = m·x + b",
+          "Inputs between −5 and 5 only"
+        ]
+      }
+    },
+    {
+      "type": "practice",
+      "id": "p1",
+      "level": "guided",
+      "task": "<p>Compute y for y = 3x − 2 at x = 4.</p>",
+      "hints": [
+        "<p>Multiply first.</p>"
+      ],
+      "solution": "<p>10</p>",
+      "concepts": [
+        "evaluate-linear"
+      ]
+    },
+    {
+      "type": "practice",
+      "id": "p2",
+      "level": "independent",
+      "setting": "real-world",
+      "externalFeedback": "<p>Ask someone to check one value of your bill model against a real bill.</p>",
+      "task": "<p>Model one of your own bills as a line and check one value.</p>",
+      "rubric": [
+        "States m and b",
+        "Checks one value"
+      ],
+      "solution": "<p>Answers vary.</p>",
+      "concepts": [
+        "check-models"
+      ]
+    },
+    {
+      "type": "check",
+      "questions": [
+        {
+          "id": "c1",
+          "assesses": [
+            "o1"
+          ],
+          "concepts": [
+            "slope"
+          ],
+          "prompt": "Increasing m makes the line…",
+          "options": [
+            "steeper (if m > 0)",
+            "move up without tilting"
+          ],
+          "correct": 0,
+          "explanation": "m controls the tilt.",
+          "feedback": {
+            "1": "That is what b does."
+          }
+        },
+        {
+          "id": "c2",
+          "assesses": [
+            "o2"
+          ],
+          "concepts": [
+            "evaluate-linear",
+            "intercept"
+          ],
+          "kind": "numeric",
+          "prompt": "y = 2x + 3 at x = 0?",
+          "answer": 3,
+          "tolerance": 0,
+          "explanation": "At x = 0 the output is b.",
+          "feedbackWrong": "At x = 0 the slope term vanishes."
+        },
+        {
+          "id": "c3",
+          "assesses": [
+            "o1"
+          ],
+          "concepts": [
+            "rate-of-change"
+          ],
+          "kind": "open",
+          "prompt": "Explain slope as a rate of change in your own words.",
+          "rubric": [
+            "Mentions change per unit"
+          ],
+          "model": "<p>The output changes by m for each unit of input.</p>"
+        }
+      ]
+    },
+    {
+      "type": "transfer",
+      "id": "tr1",
+      "assesses": [
+        "o1",
+        "o2"
+      ],
+      "concepts": [
+        "rate-of-change"
+      ],
+      "task": "<p>A plant grows 2 cm per week from 5 cm. Model it and predict week 6.</p>",
+      "rubric": [
+        "y = 2x + 5",
+        "17 cm"
+      ],
+      "model": "<p>y = 2·6 + 5 = 17 cm.</p>"
+    }
+  ],
+  "sources": [
+    {
+      "title": "OpenStax Algebra and Trigonometry 2e, section 4.1 Linear Functions",
+      "kind": "textbook",
+      "url": "https://openstax.org/books/algebra-and-trigonometry-2e/pages/4-1-linear-functions",
+      "accessed": "2026-10-20"
+    }
+  ],
+  "next": "<p>Next, review the ideas.</p>"
+}
