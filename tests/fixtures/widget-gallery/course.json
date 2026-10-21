@@ -5,6 +5,9 @@
  "title": "Widget gallery (test fixture)",
  "language": "en",
  "locale": "en-US",
+ "theme": {
+  "profile": "programming"
+ },
  "assumptions": [
   "Test fixture: content is placeholder-free but synthetic; not a course"
  ],

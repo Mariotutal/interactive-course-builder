@@ -39,6 +39,7 @@ function withCourse(mutate) {
 }
 const hasErr = (v, re) => ok(v.errs.some(e => re.test(e)), `expected an error matching ${re}; got:\n  ${v.errs.join('\n  ')}`);
 t('validate: starter course is valid', () => { const v = lk.validateCourse(STARTER); eq(v.errs, []); });
+t('validate: theme profile must be a supported domain profile', () => hasErr(withCourse((c) => { c.theme = { profile: 'neon-cyber' }; }), /theme.profile must be one of/));
 t('validate: missing transfer is an error', () => hasErr(withCourse((c, l) => { l.blocks = l.blocks.filter(b => b.type !== 'transfer'); }), /missing transfer/));
 t('validate: justified exemption is accepted', () => { const v = withCourse((c, l) => { l.blocks = l.blocks.filter(b => b.type !== 'worked'); l.exemptions = { worked: 'Listening lesson: modelled dialogue replaces a worked example.' }; }); ok(!v.errs.some(e => /missing worked/.test(e)), v.errs.join('; ')); });
 t('validate: short exemption reason is rejected', () => hasErr(withCourse((c, l) => { l.exemptions = { worked: 'n/a' }; }), /justification/));
@@ -47,16 +48,22 @@ t('validate: script tag rejected', () => hasErr(withCourse((c, l) => { l.blocks[
 t('validate: placeholder text rejected', () => hasErr(withCourse((c, l) => { l.blocks[3].html = '<p>TODO write this</p>'; }), /placeholder/));
 t('validate: Spanish words "todo"/"método" are not placeholders (regression)', () => { const v = withCourse((c, l) => { l.blocks[3].html = '<p>Sobre todo, el método importa. Todo el grupo.</p>'; }); ok(!v.errs.some(e => /placeholder/.test(e)), v.errs.join('; ')); });
 t('validate: visual without text equivalent rejected', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'visual').alt = 'short'; }), /text equivalent/));
+t('validate: inline citations require a matching original URL', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'explain').html += '<p>Claim <a data-source="missing">[1]</a></p>'; }), /inline citation "missing"/));
+t('validate: local images need an asset and alt text', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'visual').html = '<figure><img src="assets/absent.png"><figcaption>Figure</figcaption></figure>'; }), /image needs meaningful alt text|must exist in the course assets/));
 t('validate: outcome never assessed is an error', () => hasErr(withCourse((c, l) => { c.outcomes.push({ id: 'o3', text: 'Something extra' }); l.outcomes.push('o3'); }), /o3 is never assessed/));
 t('validate: outcome never taught is an error', () => hasErr(withCourse(c => { c.outcomes.push({ id: 'o4', text: 'Untaught' }); c.capstone.assesses.push('o4'); }), /o4 is not taught/));
 t('validate: bad expression rejected', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'activity').config.outputs[0].expr = 'pop / missing'; }), /unknown variable/));
+t('validate: chart current position checks its expression', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'activity').config.chart = { x: { from: 1, to: 10 }, series: [{ label: 'a', expr: 'x' }], current: { x: 'missing' } }; }), /unknown variable/));
 t('validate: unknown widget rejected', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'activity').widget = 'nope'; }), /unknown widget/));
 t('validate: mcq correct index out of range', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'check').questions[0].correct = 9; }), /index of an option/));
 t('validate: undefined glossary term rejected', () => hasErr(withCourse((c, l) => { l.blocks[3].html += '<span class="term" data-term="nonexistent">x</span>'; }), /glossary term/));
 t('validate: duplicate ids rejected', () => hasErr(withCourse((c, l) => { l.blocks.find(b => b.type === 'reflect').id = 'fd-pr1'; }), /duplicate id/));
 t('validate: custom widget detected from widgets/ folder', () => { const v = withCourse((c, l, dir) => { fs.mkdirSync(path.join(dir, 'widgets')); fs.writeFileSync(path.join(dir, 'widgets', 'x.js'), "LK.registerWidget('my-sim', { mount() {} });"); l.blocks.find(b => b.type === 'activity').widget = 'my-sim'; }); ok(!v.errs.some(e => /unknown widget/.test(e)), v.errs.join('; ')); ok(v.warns.some(w => /assumptions/.test(w)) || true); });
 
-t('validate: widget gallery fixture (all 10 patterns) is valid', () => { const v = lk.validateCourse(path.join(ROOT, 'tests', 'fixtures', 'widget-gallery')); eq(v.errs, []); });
+t('validate: widget gallery fixture (all 13 patterns) is valid', () => { const v = lk.validateCourse(path.join(ROOT, 'tests', 'fixtures', 'widget-gallery')); eq(v.errs, []); });
+t('validate: code trace rejects a missing highlighted line', () => hasErr(withCourse((c, l) => { const a = l.blocks.find(b => b.type === 'activity'); a.widget = 'code-trace'; a.config = { code: 'x = 1', steps: [{ line: 2, html: '<p>Bad.</p>' }, { line: 1, html: '<p>Good.</p>' }] }; }), /line must be between/));
+t('validate: system flow rejects a missing active node', () => hasErr(withCourse((c, l) => { const a = l.blocks.find(b => b.type === 'activity'); a.widget = 'system-flow'; a.config = { nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }], steps: [{ active: ['a'], html: '<p>One.</p>' }, { active: ['missing'], html: '<p>Two.</p>' }] }; }), /unknown active node/));
+t('validate: causal map rejects an invalid challenge link', () => hasErr(withCourse((c, l) => { const a = l.blocks.find(b => b.type === 'activity'); a.widget = 'causal-map'; a.config = { nodes: [{ id: 'a', label: 'A' }, { id: 'b', label: 'B' }, { id: 'c', label: 'C' }], links: [{ id: 'ab', from: 'a', to: 'b', explanation: '<p>One.</p>' }, { id: 'bc', from: 'b', to: 'c', explanation: '<p>Two.</p>' }], challenge: { prompt: 'Choose', options: ['ab', 'none'], correct: 'ab', explanation: 'Because.' } }; }), /unknown link/));
 t('validate: scenario with dangling choice rejected', () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-g-')); fs.cpSync(path.join(ROOT, 'tests', 'fixtures', 'widget-gallery'), dir, { recursive: true });
   const lf = path.join(dir, 'lessons', 'gallery.json'); const l = JSON.parse(fs.readFileSync(lf)); l.blocks.find(b => b.id === 'g-sc').config.nodes.n1.choices[0].next = 'nowhere'; fs.writeFileSync(lf, JSON.stringify(l));
@@ -74,6 +81,20 @@ t('build: writes site, markdown, coverage; hashes stable across builds', () => {
   const lf = path.join(dir, 'lessons', 'fermi-decompose.json'); const l = JSON.parse(fs.readFileSync(lf)); l.blocks.find(b => b.id === 'fd-p1').options[1] = 'changed'; fs.writeFileSync(lf, JSON.stringify(l));
   lk.build(dir); const h3 = read(); ok(h3['fd-p1'] !== h1['fd-p1'], 'changed question must get a new hash'); eq(h3['fd-c1'], h1['fd-c1'], 'unchanged question keeps its hash');
   const html = fs.readFileSync(path.join(dir, 'site', 'index.html'), 'utf8'); ok(!/{{/.test(html), 'unreplaced template placeholders'); ok(/lang="en"/.test(html));
+  fs.rmSync(dir, { recursive: true, force: true });
+});
+t('build: resolves inline sources and packages lesson images in both outputs', () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-media-')); fs.cpSync(STARTER, dir, { recursive: true });
+  const lf = path.join(dir, 'lessons', 'fermi-decompose.json'); const l = JSON.parse(fs.readFileSync(lf));
+  l.sources.push({ id: 'diagram', title: 'Original diagram', kind: 'official', url: 'https://example.org/figure#panel-a', accessed: '2026-10-20' });
+  l.blocks.find(b => b.type === 'visual').html = '<figure><img src="assets/diagram.png" alt="Four estimation factors shown in sequence"><figcaption>Follow the factors <a data-source="diagram">[source]</a></figcaption></figure>';
+  fs.mkdirSync(path.join(dir, 'assets')); fs.writeFileSync(path.join(dir, 'assets', 'diagram.png'), 'image bytes'); fs.writeFileSync(lf, JSON.stringify(l));
+  eq(lk.build(dir).errs, []);
+  for (const target of ['site/assets/diagram.png', 'markdown/assets/diagram.png']) ok(fs.existsSync(path.join(dir, target)), 'missing ' + target);
+  const siteJs = fs.readFileSync(path.join(dir, 'site', 'content.js'), 'utf8'); const site = JSON.parse(siteJs.slice(siteJs.indexOf('=') + 1).trim().replace(/;$/, ''));
+  const visual = site.lessons[0].blocks.find(b => b.type === 'visual').html; const md = fs.readFileSync(path.join(dir, 'markdown', '01-fermi-decompose.md'), 'utf8');
+  ok(visual.includes('href="https://example.org/figure#panel-a"') && !visual.includes('data-source='), 'site citation unresolved');
+  ok(md.includes('https://example.org/figure#panel-a') && !md.includes('data-source="diagram"'), 'Markdown citation unresolved');
   fs.rmSync(dir, { recursive: true, force: true });
 });
 t('build: refuses to build an invalid course', () => { const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'lk-c-')); fs.cpSync(STARTER, dir, { recursive: true }); fs.writeFileSync(path.join(dir, 'lessons', 'fermi-decompose.json'), '{"format":1,"id":"fermi-decompose","blocks":[]}'); const r = lk.build(dir); ok(r.errs.length > 0); ok(!fs.existsSync(path.join(dir, 'site')), 'site should not be written'); fs.rmSync(dir, { recursive: true, force: true }); });
