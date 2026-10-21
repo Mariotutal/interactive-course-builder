@@ -45,22 +45,27 @@
     },
     {
       "type": "explain",
-      "html": "<p>Write the target as a formula of factors whose units cancel. For each factor, give a low and a high value you would be surprised to see exceeded. Use the <span class='term' data-term='geometric mean'>geometric mean</span> of the bounds as your point estimate. The <span class='term' data-term='order of magnitude'>order of magnitude</span> of the result is usually right even when individual factors are off by a factor of two.</p>"
+      "html": "<p>Write the target as a formula of factors whose units cancel. For each factor, give a low and a high value you would be surprised to see exceeded. Use the <span class='term' data-term='geometric mean'>geometric mean</span> of the bounds as your point estimate. The <span class='term' data-term='order of magnitude'>order of magnitude</span> of the result is usually right even when individual factors are off by a factor of two.</p><p><strong>Why the geometric mean.</strong> If you think a factor lies between 1 and 100, the arithmetic mean (about 50) sits almost at the top of your range, so it treats 100 as far more likely than 1. The geometric mean, √(1 × 100) = 10, is the same number of times away from each bound. Fermi factors are uncertain by multiples, not by fixed amounts, so the middle that matters is the one measured in multiples.</p><p><strong>Check the units before the numbers.</strong> Write each factor with its unit, such as people, households per person or tunings per piano per year, and cancel them on paper. If the result is not in the unit you asked for (here, tuners), a factor is missing or upside down. Most large Fermi errors are a missing or inverted factor, not a bad guess.</p><p><strong>Find the factor that matters most.</strong> Once you have an estimate, ask which factor you are least sure of, and redo the product with its low and high bound. If the answer changes by a factor of ten, that factor is where to look for data first. If no plausible bound moves the answer near the claim you are testing, you can reject the claim without better data.</p>"
     },
     {
       "type": "worked",
       "title": "Piano tuners in a city of 1 million",
       "steps": [
         {
-          "html": "<p>Pianos: about 1 in 20 households, about 2.5 people per household → 1,000,000 / 2.5 / 20 = 20,000 pianos.</p>"
+          "html": "<p>Pianos: about 2.5 people per household gives 1,000,000 / 2.5 = 400,000 households. If about 1 in 20 households owns a piano (low 1 in 50, high 1 in 10), that is 400,000 / 20 = 20,000 pianos. Units: people ÷ (people per household) × (pianos per household) = pianos.</p>"
         },
         {
           "prompt": "<p>How many tunings per year does that imply?</p>",
           "selfExplain": true,
-          "html": "<p>About one per piano per year → 20,000 tunings.</p>"
+          "html": "<p>About one tuning per piano per year → 20,000 tunings. Many home pianos are tuned less often and concert pianos far more often, so treat one per year as a middle value, not a fact.</p>"
         },
         {
-          "html": "<p>One tuner does about 4 per day × 250 days = 1,000 per year → 20,000 / 1,000 ≈ 20 tuners.</p>"
+          "html": "<p>A tuning takes about two hours including travel, so one tuner does about 4 per day. Working about 250 days a year gives 1,000 tunings per tuner → 20,000 / 1,000 ≈ 20 tuners. Units: tunings per year ÷ (tunings per tuner per year) = tuners.</p>"
+        },
+        {
+          "prompt": "<p>Which bound would you test first to see whether the colleague could still be right?</p>",
+          "selfExplain": true,
+          "html": "<p>Push every factor to the high end: 1 in 10 households, two tunings a year and 2 tunings per tuner per day (500 a year). That gives 40,000 pianos × 2 / 500 = 160 tuners. Even under these generous assumptions the answer is far below 2,000, so the claim needs a reason this sketch leaves out, such as a region much larger than the city.</p>"
         }
       ],
       "result": "<p>About 20 tuners, so 2,000 is off by a factor of 100. The claim needs a very different assumption to survive.</p>"

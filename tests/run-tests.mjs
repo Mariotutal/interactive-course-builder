@@ -289,6 +289,9 @@ t('validate: question written with "type" instead of "kind" is an error (benchma
 t('validate: citation label that does not match the source position warns', () => { const v = withCourse((c, l) => { l.sources = [{ id: 'a', title: 'A', kind: 'official', url: 'https://example.org/a', accessed: '2026-10-20' }, { id: 'b', title: 'B', kind: 'official', url: 'https://example.org/b', accessed: '2026-10-20' }]; l.blocks[3].html += '<p>Claim <a data-source="b">[1]</a></p>'; }); ok(v.warns.some(w => /label \[1\] points to "b", which is source 2/.test(w)), v.warns.join('; ')); });
 t('validate: lessons longer than the requested total time warn', () => { const v = withCourse(c => { c.learner = Object.assign({}, c.learner, { time: { totalHours: 0.1 } }); }); ok(v.warns.some(w => /more than the 0.1 h the learner asked for/.test(w)), v.warns.join('; ')); });
 t('validate: a full lesson whose first prediction follows the explanation warns', () => { const v = withCourse((c, l) => { const i = l.blocks.findIndex(b => b.type === 'predict'); const [p] = l.blocks.splice(i, 1); l.blocks.push(p); l.blocks = l.blocks.filter(b => b.type !== 'activity'); }); ok(v.warns.some(w => /first prediction comes after the first explain/.test(w)), v.warns.join('; ')); });
+t('validate: a lesson far below the words-per-minute floor warns', () => { const v = withCourse((c, l) => { l.minutes = 180; }); ok(v.warns.some(w => /too thin for a full lesson/.test(w)), v.warns.join('; ')); });
+t('validate: the starter lesson meets the depth floor', () => { const v = lk.validateCourse(STARTER); ok(!v.warns.some(w => /too thin/.test(w)), v.warns.join('; ')); });
+t('lessonWords: counts prose and ignores SVG, code and markup', () => eq(lk.lessonWords({ blocks: [{ type: 'explain', html: '<p>One <b>two</b> three.</p><svg><text>no</text></svg><pre>x = 1</pre>' }] }), 3));
 
 // --- Package hygiene ---
 t('skill: SKILL.md frontmatter follows the Agent Skills constraints', () => {
