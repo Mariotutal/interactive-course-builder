@@ -7,3 +7,6 @@ tests/out/
 
 # Local operating-system files
 .DS_Store
+
+# Local semantic-code index
+.serena/

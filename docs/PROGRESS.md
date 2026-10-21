@@ -9,7 +9,7 @@ Status as of 2026-10-20: **implemented and verified, within the limits listed in
 - **Skill package** (`skills/interactive-course-builder/`):
   - `SKILL.md`;
   - 6 references;
-  - runtime: app, 10 interaction patterns, safe expression evaluator, i18n in en and es, CSS;
+  - runtime: app, 13 interaction patterns, safe expression evaluator, i18n in en and es, CSS;
   - templates: request, starter course;
   - CLI `lk.mjs` with `check-request`, `init`, `validate`, `build`, `coverage` and `serve`.
 - **Tests:** 48 automated tests, a widget-gallery fixture, browser tests, a headless Chrome `file://` render test.

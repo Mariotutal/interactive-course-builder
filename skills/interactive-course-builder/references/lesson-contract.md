@@ -7,13 +7,14 @@ my-course/
   course.json            # manifest: outcomes, modules, glossary, routes, diagnostic, capstone
   lessons/<lesson-id>.json
   widgets/*.js           # optional course-specific activities (see activities.md)
-  assets/                # optional local images/audio, referenced as assets/...
+  assets/                # local images/audio, referenced as assets/...
 ```
 
 `node scripts/lk.mjs build my-course` validates the source and writes:
 
 - `my-course/site/`: an offline web app; open `site/index.html`.
 - `my-course/markdown/`: one Markdown file per lesson.
+- `my-course/markdown/assets/`: copies of local assets, so image references also work in Markdown.
 - `my-course/COVERAGE.md`: the coverage report.
 
 Never edit the generated `site/content.js`. With `--out <dir>`, the site goes to `<dir>`, but `markdown/` and `COVERAGE.md` always stay in the course folder. The builder refuses to delete an output folder that is the course folder, one of its parents, or a non-empty folder without its `.lk-build` marker.
@@ -47,13 +48,17 @@ All ids are stable lowercase slugs. Learner state is keyed by these ids, so **ne
   "review": { "intervals": [1, 3, 7, 21, 60] },
   "ui": { "start": "Begin" },
   "//ui": "Overrides for interface strings (keys in assets/runtime/lk-i18n.js). Built-in strings exist for en and es. For other languages translate every key here, or the interface and Markdown headings fall back to English.",
-  "theme": { "accent": "#1f5f8b" }
+  "theme": { "profile": "mathematics", "accent": "#1f5f8b" }
 }
 ```
 
 `init` writes `version: "0.1.0"`, an `id` derived from the topic (rename it before anyone studies the course, since ids are stable afterwards), empty `outcomes` and `modules`, and `request.normalized.json` next to `course.json` for reference.
 
 Every outcome must be **taught** by at least one lesson (`lesson.outcomes`) and **assessed** by at least one check question, transfer task or the capstone (`assesses`). The validator enforces both.
+
+### Visual profile
+
+`theme.profile` changes the palette and emphasis of the offline app without changing the course data. Choose one based on the material: `mathematics`, `systems`, `programming`, `social-science`, `science` or `languages`; use `general` when no profile fits. `theme.accent` remains an optional course-specific override. See [domain-toolkit.md](domain-toolkit.md) for the visual grammar and interactions that match each profile.
 
 ## lessons/&lt;id&gt;.json
 
@@ -63,7 +68,7 @@ Every outcome must be **taught** by at least one lesson (`lesson.outcomes`) and 
   "outcomes": ["o1"], "prerequisites": [], "prereqText": "<p>Optional: what to know first and where to review it.</p>",
   "exemptions": { "worked": "Justification of at least 20 characters, e.g. a pure listening lesson where a worked example is replaced by a modelled dialogue." },
   "blocks": [ … ],
-  "sources": [ { "title": "…", "kind": "official", "url": "https://…", "accessed": "2026-10-20", "note": "section 3" } ],
+  "sources": [ { "id": "source-a", "title": "…", "kind": "official", "url": "https://…", "accessed": "2026-10-20", "note": "section 3" } ],
   "next": "<p>How this connects to the next lesson.</p>"
 }
 ```
@@ -103,7 +108,7 @@ All `html` fields are HTML fragments. No `<script>`, `<style>`, inline `on…=` 
 |---|---|
 | `motivate` | `html` |
 | `intuition` | `html`, `limits` (where the analogy or model stops working) |
-| `visual` | `html` (an inline `<figure><svg role="img" aria-labelledby>…<title>…</title><desc>…</desc></svg><figcaption>`), `alt`, `purpose` |
+| `visual` | `html` (a `<figure>` containing an SVG, labelled local image, comparison or chart), `alt` (text equivalent), `purpose` |
 | `explain` | `html`, optional `title` |
 | `worked` | `title`, optional `html`, `steps: [{ prompt?, html, selfExplain? }]`, optional `result`. A `selfExplain: true` step hides its `html` behind "show" so the learner explains the step first. |
 | `predict` | `id`, `prompt`, then **either** `options`, `correct`, `feedback: {"<wrong index>": "misconception explained"}`, `explanation` **or** `kind: "open"` with `model`/`rubric` |
@@ -127,6 +132,8 @@ The learner's **first attempt** is recorded as performance; later attempts are p
 
 ### Inline helpers inside html
 
+- **Inline original-source citation:** give the lesson source an `id` and `url`, then cite beside the claim with `<a data-source="source-a">[1]</a>`. The builder verifies the id and resolves the link in the site and Markdown. Link to a specific section, figure or timestamp when possible. Ordinary explicit `<a href="https://…">…</a>` links also work.
+- **Local image:** put a licensed or generated file under the course's `assets/` folder and use `<figure><img src="assets/example.webp" alt="What the image shows"><figcaption>What to notice · Creator, original source, license or generated status <a data-source="image-source">[source]</a></figcaption></figure>`. Keep the block's `alt` as a fuller text equivalent that conveys the teaching point. The builder checks the file and copies it to both outputs. Remote image URLs need network and produce a warning.
 - **Glossary term:** `<span class="term" data-term="standard error">standard error</span>`. The term must exist in `course.glossary` (term or alias).
 - **Illustrative data:** `<div class="output" data-label="Illustrative data — not a real measurement"><pre>…</pre></div>`. If `data-label` is omitted, a default label is used.
 - **Mock interfaces:** `<figure class="mockup" data-label="Mockup — not a screenshot">…</figure>`.

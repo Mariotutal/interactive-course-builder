@@ -9,7 +9,7 @@ metadata:
 
 # Interactive course builder
 
-You write the course content. This skill gives you the method, a content contract, ten interaction patterns, a renderer and deterministic tools. The renderer and validator do not make content correct; research and review do.
+You write the course content. This skill gives you the method, a content contract, thirteen interaction patterns, a renderer and deterministic tools. The renderer and validator do not make content correct; research and review do.
 
 **Requirements:**
 
@@ -40,12 +40,14 @@ Scripts are in this skill's `scripts/` folder. Run `node <this-skill-dir>/script
    - modules and lessons sized to `sessionMinutes`;
    - a **core route** (required);
    - an **advanced route**, only when depth or time allow substantive advanced lessons;
-   - for each lesson, the activity type that fits the *kind of knowledge* (read [references/pedagogy.md](references/pedagogy.md) and the selection table in [references/activities.md](references/activities.md));
+   - for each lesson, the activity type that fits the *kind of knowledge* (read [references/pedagogy.md](references/pedagogy.md), [references/domain-toolkit.md](references/domain-toolkit.md) and the selection table in [references/activities.md](references/activities.md));
+   - a `theme.profile` that fits the subject, then a small visual system with a deliberate palette, typography and diagrams. Do not recycle the starter course's orange-blue look by default.
    - a map from every outcome to the lessons that teach it and the items that assess it. Include at least one transfer task per outcome, either in a lesson or in the capstone.
 4. **Research** the central claims of each lesson in authoritative sources.
    - Record the title, kind, URL and access date.
    - Note versions or jurisdiction.
    - Separate facts, contested points and simplifications.
+   - Give sources stable lesson-local ids and cite them beside the claims, images and data they support. Link to the original page or document section when available; a source list alone is not enough for a claim the learner should verify.
 5. **Create the course.**
    - Run `init request.json <course-dir>`, or copy `assets/templates/starter-course/` as a format reference and replace all of its content.
    - Fill in `course.json`: outcomes, modules, glossary, routes, an optional diagnostic and a capstone.
@@ -60,6 +62,8 @@ Scripts are in this skill's `scripts/` folder. Run `node <this-skill-dir>/script
      - a transfer task in a new context, and an own-words reflection.
    - **`focused`** is for short review, drill, listening, reading or consolidation lessons. It requires only an authentic start, an explanation, a check and sources. Add other functions where they help.
    - Every lesson has sources and a link to what comes next.
+   - Choose a visual form for each idea: a sourced photograph or historical artifact, a labelled diagram, a comparison, a chart, or a model the learner can change. Use images found online when reuse is allowed and package them in `assets/` for offline use; generate an explanatory image when a suitable source image is unavailable. Record creator, source and license or generated status in the caption and lesson sources. See [references/evidence.md](references/evidence.md) and [references/lesson-contract.md](references/lesson-contract.md).
+   - Make dynamic visuals answer a learning question. Give learners a prediction, meaningful controls, a visible readout or comparison, and a debrief about what changed and what the model leaves out. Use a course-specific widget when a built-in pattern cannot show the relevant mechanism.
    - Use `exemptions`, with a reason, when a required function genuinely does not fit a `full` lesson.
    - Add a course-specific widget in `widgets/` only when no built-in pattern fits. Never edit the core runtime for one subject.
    - For long courses, finish whole modules in stages. Keep `PROGRESS.md` in the course folder, listing what is done, what is pending and the next exact step. Never leave empty or placeholder lessons; the validator rejects them.
@@ -85,5 +89,6 @@ Scripts are in this skill's `scripts/` folder. Run `node <this-skill-dir>/script
 - Interactions require thinking, such as predicting, deciding, producing or interpreting. Clicking "next" is not interaction.
 - Keep visiting, attempting, self-rated confidence and first-attempt performance separate. Never claim mastery from clicks.
 - Accessibility: text equivalents for visuals, keyboard operation, meaning never carried by color alone, and a layout that works at 375 px.
+- Visuals and citations must survive the offline site and Markdown export; check both outputs.
 - Depth comes from explanation, worked examples, practice, misconceptions and transfer, not from word count or from forcing every block into every lesson.
 - Ids are stable. Changing a question's content invalidates saved answers to it; this is intended.

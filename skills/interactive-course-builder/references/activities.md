@@ -4,6 +4,8 @@
 
 An activity earns its place only if the learner has to **think**: predict, manipulate and explain, gather evidence and decide, classify and justify, or produce language. Clicking "next" is not interactivity, and neither is a carousel. Every activity needs `instructions`, which tell the learner what to try and what to look for, and a `debrief`, which says what they should have noticed and why.
 
+For a dynamic visual, name the relationship the learner should discover before choosing controls. Show the current state and make changes legible with a plotted point, comparison or visible consequence. Ask for a prediction before experimentation and an explanation afterward. If a built-in pattern cannot represent the mechanism, use a course-specific widget with accessible controls and a text readout. A decorative animation does not satisfy an activity.
+
 ## Choose by the kind of knowledge, not by the subject
 
 | The learner must… | Pattern | Typical subjects |
@@ -18,6 +20,9 @@ An activity earns its place only if the learner has to **think**: predict, manip
 | Recall and produce exact forms | `cloze` | vocabulary, conjugation, formulas, code syntax |
 | Locate and name parts of a structure | `hotspot-diagram` (explore mode plus find-it quiz) | anatomy, architecture, interfaces, maps |
 | Follow a process, predicting each step | `stepper` (a predict gate before a step is revealed) | algorithms, proofs, chemical or physiological processes |
+| Trace how a line of code, a manifest or an algorithm changes state | `code-trace` | programming, algorithms, configuration reading |
+| Follow what is active after an event in an architecture or lifecycle | `system-flow` | Kubernetes, networking, biology, protocols, operations |
+| Inspect a causal claim, mechanism or competing relationship | `causal-map` | social science, history, policy, ecology, economics |
 | Something else, such as a stochastic simulation or a domain manipulative | a **custom widget** in the course's `widgets/` folder | — |
 
 Some practice cannot be verified by a browser: speaking with a person, a physical skill, lab work, writing judged by an expert. Use a `practice` block with `setting: "real-world"`, concrete criteria (`rubric`) and `externalFeedback` saying who or what can give feedback. Never pretend the app can judge it.
@@ -37,7 +42,7 @@ All text fields accept HTML unless noted otherwise. `title` and `intro` are opti
   "outputs": [ { "id": "se", "label": "Standard error", "expr": "s / sqrt(n)", "format": { "digits": 2 } },
                { "id": "moe", "label": "Margin of error", "expr": "1.96 * s / sqrt(n)" } ],
   "chart": { "x": { "var": "x", "from": 5, "to": 400 }, "series": [ { "label": "margin of error vs n", "expr": "1.96 * s / sqrt(x)" } ],
-             "markers": [ { "label": "current n", "x": "n" } ], "xLabel": "n", "yLabel": "margin of error" },
+             "current": { "label": "Current n", "x": "n" }, "xLabel": "n", "yLabel": "margin of error", "ariaLabel": "Margin of error as sample size changes" },
   "interpret": [ { "when": "n < 30", "tone": "warn", "html": "With small n the normal approximation is shakier…" } ],
   "assumptions": ["Known population SD; z = 1.96 instead of a t quantile", "Simple random sampling"] }
 ```
@@ -50,6 +55,7 @@ Expressions use a **safe evaluator**, with no `eval`. It supports numbers, input
 Numbers are formatted for the course language (for example `3,00` in Spanish).
 
 Chart series may use the chart variable (`x.var`, default `x`). The validator parses every expression and rejects unknown variables.
+`chart.current.x` is an optional expression using current inputs; it draws the current position and each series value, with a text readout below the chart. Use it when the graph represents a controllable value. `markers` remain available for other reference points.
 
 ### evidence-case
 
@@ -129,6 +135,45 @@ Audio uses the browser's speech synthesis when it is available. A text fallback 
 A step's `predict` gates **that** step: its `html` stays hidden, and Next stays disabled, until the learner answers.
 
 `{ "steps": [ { "title": "…", "html": "<p>…</p>", "predict": { "prompt": "What happens next?", "options": ["…"], "correct": 1, "explanation": "…" } } ] }`
+
+### code-trace
+
+Use this to explain code or declarative configuration. It displays code without executing it; each step highlights a line and shows a concrete state.
+
+```json
+{ "code": "total = 0\nfor n in values:\n  total += n",
+  "steps": [
+    { "line": 1, "title": "Initialize", "state": { "total": 0 }, "html": "<p>The accumulator starts at zero.</p>" },
+    { "line": 3, "title": "First iteration", "state": { "n": 4, "total": 4 }, "html": "<p>The current value is added.</p>",
+      "predict": { "prompt": "What is total after n = 4?", "options": ["0", "4"], "correct": 1, "explanation": "The update adds 4." } }
+  ], "assumptions": ["The trace omits language runtime details."] }
+```
+
+### system-flow
+
+Use this for a changing architecture or lifecycle. A step names the active components after an event; learners can inspect components and must answer a prediction when one is present.
+
+```json
+{ "nodes": [ { "id": "deploy", "label": "Deployment", "kind": "controller", "html": "<p>Creates ReplicaSets.</p>" },
+             { "id": "pod", "label": "Pod", "kind": "workload", "html": "<p>Runs a container.</p>" } ],
+  "steps": [ { "event": "Apply manifest", "active": ["deploy"], "html": "<p>The controller is accepted.</p>" },
+             { "event": "Reconcile", "active": ["deploy", "pod"], "html": "<p>A Pod is created.</p>" } ],
+  "assumptions": ["This omits scheduling and image-pull failure paths."] }
+```
+
+### causal-map
+
+Use this for a causal or argumentative structure. Links must state what they claim and why; the map never establishes causation by itself.
+
+```json
+{ "nodes": [ { "id": "policy", "label": "Policy change", "kind": "intervention", "html": "<p>The proposed change.</p>" },
+             { "id": "income", "label": "Household income", "kind": "outcome", "html": "<p>A measured outcome.</p>" },
+             { "id": "confound", "label": "Local economy", "kind": "confounder", "html": "<p>May affect both.</p>" } ],
+  "links": [ { "id": "l1", "from": "policy", "to": "income", "label": "hypothesized effect", "explanation": "<p>This needs evidence and controls.</p>" },
+             { "id": "l2", "from": "confound", "to": "income", "label": "alternative cause", "explanation": "<p>It can bias a comparison.</p>" } ],
+  "challenge": { "prompt": "Which link names an alternative explanation?", "options": ["l1", "l2"], "correct": "l2", "explanation": "The local economy can affect income independently of the policy." },
+  "assumptions": ["Arrows are claims to investigate, not proof of causation."] }
+```
 
 ## Custom widgets (extension point)
 

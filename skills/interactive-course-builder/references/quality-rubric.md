@@ -8,12 +8,12 @@ Score each criterion 0–2 for every lesson: 0 = absent or wrong, 1 = present bu
 
 | Criterion | 2 = solid |
 |---|---|
-| Accuracy | Central claims trace to the cited sources; versions and jurisdiction are stated; simplifications are labelled. |
+| Accuracy | Central claims have inline links to original sources where available; versions and jurisdiction are stated; simplifications are labelled. |
 | Prerequisite clarity | Terms are defined before use; prerequisites are listed and come earlier; outside prerequisites say where to learn them. |
 | Depth | Mechanisms, alternatives and limits are covered, at the depth the learner asked for. A worked example shows reasoning, not just steps. |
-| Interaction quality | Each activity requires predicting, deciding, producing or interpreting. Every control works. Assumptions are stated. |
+| Interaction quality | Each activity requires predicting, deciding, producing or interpreting; dynamic visuals show the consequences of input changes and explain the model's limits. Every control works. |
 | Feedback | Wrong options name misconceptions; explanations give reasons; open tasks have criteria and a model. |
-| Accessibility | Text equivalents for visuals; keyboard operable; meaning not carried by color alone; works at 375 px width. |
+| Accessibility | Images have alt text and visual blocks have text equivalents; controls are keyboard operable; meaning is not carried by color alone; works at 375 px width. |
 | Transfer | The transfer task uses a genuinely new context and assesses the stated outcome. |
 | Usability | The lesson fits the session length; the next step is clear; nothing is a dead end. |
 
@@ -29,6 +29,8 @@ Score each criterion 0–2 for every lesson: 0 = absent or wrong, 1 = present bu
    - the glossary popover opens from the keyboard;
    - the layout works at 375 px width;
    - the print view shows solutions.
+   - inline citations open the original source, and images render in both site and Markdown without network access;
+   - dynamic visuals update their plotted state and text readout when inputs change.
 4. Spot-check facts against sources, prioritizing numbers, dates, quotations and version-specific instructions.
 5. Report separately:
    - what you ran and observed;

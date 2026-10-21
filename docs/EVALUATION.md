@@ -68,7 +68,7 @@ This is a manual review by the package author based on spot checks. It is not ev
 
 ### Browser (Chromium pane, served over local HTTP)
 
-- **Widget gallery fixture** (`tests/fixtures/widget-gallery`): all 10 built-in patterns were driven by script. Every one produced the expected feedback and recorded an attempt:
+- **Widget gallery fixture** (`tests/fixtures/widget-gallery`): the original 10 built-in patterns were driven by script. Every one produced the expected feedback and recorded an attempt:
   - evidence-case: verdict, plus the list of unexamined key evidence;
   - scenario: branching path, restart;
   - classify: per-item feedback;
@@ -78,6 +78,9 @@ This is a manual review by the package author based on spot checks. It is not ev
   - cloze: correct and incorrect marking;
   - hotspot-diagram: highlight, find-it quiz right and wrong;
   - stepper: predict gate locks and unlocks;
+  - code-trace: code line and state change render together; a prediction gate locks the next state;
+  - system-flow: active components and their explanation render at each lifecycle step;
+  - causal-map: selecting the supported relationship reveals its explanation and feedback.
   - parameter-explorer: outputs, two-series chart.
 - **Starter course:**
   - First-attempt performance is kept after a retry.
