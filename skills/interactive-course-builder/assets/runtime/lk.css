@@ -284,9 +284,6 @@ details[open] > summary { margin-bottom: 8px; }
 /* Inicio */
 .hero { padding: 8px 0 4px; }
 .hero p.lead { font-size: 1.15rem; color: var(--muted); max-width: 60ch; }
-.mapwrap svg { min-width: 860px; }
-.mapwrap a text { fill: var(--text); }
-.mapwrap a:hover rect, .mapwrap a:focus rect { stroke: var(--accent); stroke-width: 3; }
 .search-results li { margin: 12px 0; }
 .search-results mark { background: var(--n-store); color: var(--text); }
 .pager { display: flex; justify-content: space-between; gap: 12px; margin-top: 48px; flex-wrap: wrap; }
@@ -486,3 +483,21 @@ svg .hl { stroke: var(--ink-2); }
   .card, .q, .widget, .lab, .btn, .q .opt, .block.transfer, .popover { box-shadow: none !important; }
 }
 @media (max-width: 600px) { :root { --shadow: 4px; } h1 { font-size: 1.9rem; } }
+
+/* Course map: numbered module cards in a responsive grid */
+.route { list-style: none; margin: 16px 0; padding: 0; display: grid; gap: 18px calc(14px + var(--shadow)); grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr)); counter-reset: none; }
+.route-mod { background: var(--surface); border: 2.5px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow) var(--shadow) 0 var(--ink-1); padding: 12px 14px 14px; min-width: 0; }
+.route-mod:nth-child(even) { box-shadow: var(--shadow) var(--shadow) 0 var(--ink-2); }
+.route-head { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: start; border-bottom: 2px solid var(--line); padding-bottom: 8px; margin-bottom: 8px; }
+.route-head h3 { margin: 2px 0 0; font-size: 1.02rem; line-height: 1.25; overflow-wrap: anywhere; }
+.route-n { display: inline-grid; place-items: center; min-width: 2em; height: 2em; padding: 0 6px; background: var(--ink-1); color: #fff; font-weight: 900; border-radius: 3px; }
+.route-mod:nth-child(even) .route-n { background: var(--ink-2); color: #1b1b3a; }
+.route-count { font-size: 0.8rem; font-weight: 700; color: var(--muted); padding-top: 4px; white-space: nowrap; }
+.route-lessons { margin: 0; padding-left: 1.3em; }
+.route-lessons li { margin: 6px 0; overflow-wrap: anywhere; }
+.route-lessons li.adv { list-style-type: circle; }
+.route-lessons a { font-weight: 600; }
+.route-meta, .route-after { display: block; font-size: 0.82rem; color: var(--muted); }
+.route-meta .done { color: var(--ok); font-weight: 700; }
+.route-after { font-style: italic; }
+@media print { .route-mod { box-shadow: none; break-inside: avoid; } }

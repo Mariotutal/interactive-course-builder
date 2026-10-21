@@ -324,21 +324,29 @@
     if (dec.length) h += `<h2>${esc(t('whyDesign'))}</h2><ul>${dec.map(d => `<li><strong>${esc(d.because)}</strong> → ${esc(d.decision)}</li>`).join('')}</ul>`;
     if (C.assumptions && C.assumptions.length) h += `<h2>${esc(t('modelNote'))}</h2><ul>${C.assumptions.map(a => `<li>${esc(a)}</li>`).join('')}</ul>`;
     h += `<p class="meta">${order.length} · ≈ ${Math.round(total / 6) / 10} h</p>`;
-    h += `<h2>${esc(t('map'))}</h2>${mapSvg()}`;
+    h += `<h2>${esc(t('map'))}</h2>${mapHtml()}`;
     return h;
   }
-  function mapSvg() {
-    const colW = 230, rowH = 52, x0 = 10, y0 = 34, bw = 210;
-    const pos = {}; C.modules.forEach((m, mi) => m.lessons.map(lessonById).filter(Boolean).forEach((l, li) => { pos[l.id] = { x: x0 + mi * colW, y: y0 + li * rowH }; }));
-    const rows = Math.max(1, ...C.modules.map(m => m.lessons.length)); const W = x0 + C.modules.length * colW; const H = y0 + rows * rowH + 10;
-    let lines = '', boxes = '';
-    order.forEach(l => (l.prerequisites || []).forEach(p => { const a = pos[p], b = pos[l.id]; if (!a || !b) return; lines += a.x === b.x ? `<path class="edge dashed" opacity="0.5" d="M${a.x + 6} ${a.y + 20} C ${a.x - 8} ${(a.y + b.y) / 2 + 20}, ${b.x - 8} ${(a.y + b.y) / 2 + 20}, ${b.x + 6} ${b.y + 20}"/>` : `<path class="edge" opacity="0.45" marker-end="url(#arrow)" d="M${a.x + bw} ${a.y + 20} C ${a.x + bw + 12} ${a.y + 20}, ${b.x - 12} ${b.y + 20}, ${b.x} ${b.y + 20}"/>`; }));
-    order.forEach(l => { const p = pos[l.id]; const v = S.visited[l.id]; const lab = l.title.length > 30 ? l.title.slice(0, 29) + '…' : l.title; boxes += `<a href="#/l/${esc(l.id)}" aria-label="${esc(l.title)}"><rect x="${p.x}" y="${p.y}" width="${bw}" height="40" rx="7" class="n${(C.modules.indexOf(moduleOf(l)) % 4) + 1}" ${l.level === 'advanced' ? 'stroke-dasharray="5 3"' : ''}/><text class="ts" x="${p.x + 8}" y="${p.y + 17}">${esc(lab)}</text><text class="tm" x="${p.x + 8}" y="${p.y + 32}">${v ? '✓ · ' : ''}${l.minutes} ${esc(t('minutes'))}</text></a>`; });
-    const heads = C.modules.map((m, i) => `<text class="t" x="${x0 + i * colW}" y="20">${i + 1}. ${esc(m.title.length > 26 ? m.title.slice(0, 25) + '…' : m.title)}</text>`).join('');
-    return `<figure class="mapwrap"><svg viewBox="0 0 ${W} ${H}" style="min-width:${Math.min(W, 900)}px" role="group" aria-label="${esc(t('map'))}">${heads}${lines}${boxes}</svg><figcaption>${esc(t('map'))}: ${C.modules.map((m, i) => `${i + 1}. ${m.title} (${m.lessons.length})`).map(esc).join(' · ')}</figcaption></figure>`;
+  // Course map as HTML: one numbered card per module, lessons in order, cross-module prerequisites named.
+  // Plain text in a responsive grid stays readable at any width and needs no separate text equivalent.
+  function mapHtml() {
+    const mods = C.modules.map((m, mi) => {
+      const ls = m.lessons.map(lessonById).filter(Boolean); const seen = ls.filter(l => S.visited[l.id]).length;
+      const items = ls.map(l => {
+        // Name only prerequisites from other modules that are not simply the previous lesson on the route.
+        const prev = order[order.indexOf(l) - 1];
+        const ext = (l.prerequisites || []).map(lessonById).filter(p => p && moduleOf(p) !== m && p !== prev);
+        // Lesson titles often repeat the module title ("Module: part"); the card already shows it.
+        const pre = m.title + ':'; let name = l.title.startsWith(pre) && l.title.length > pre.length + 1 ? l.title.slice(pre.length).trim() : l.title;
+        if (name !== l.title) name = name.charAt(0).toLocaleUpperCase(C.language) + name.slice(1);
+        return `<li class="${l.level === 'advanced' ? 'adv' : ''}"><a href="#/l/${esc(l.id)}" aria-label="${esc(l.title)}">${esc(name)}</a><span class="route-meta">${l.minutes} ${esc(t('minutes'))}${l.level === 'advanced' ? ` · ${esc(t('advanced'))}` : ''}${S.visited[l.id] ? ` · <span class="done">✓ ${esc(t('visited'))}</span>` : ''}</span>${ext.length ? `<span class="route-after">${esc(t('after'))}: ${ext.map(p => esc(p.title)).join(', ')}</span>` : ''}</li>`;
+      }).join('');
+      return `<li class="route-mod"><div class="route-head"><span class="route-n">${mi + 1}</span><h3>${esc(m.title)}</h3><span class="route-count">${seen}/${ls.length}</span></div><ol class="route-lessons">${items}</ol></li>`;
+    }).join('');
+    return `<nav aria-label="${esc(t('map'))}"><ol class="route">${mods}</ol></nav>`;
   }
   function pageMap() {
-    let h = `<h1>${esc(t('map'))}</h1>${mapSvg()}`;
+    let h = `<h1>${esc(t('map'))}</h1>${mapHtml()}`;
     h += `<h2>${esc(t('outcomes'))}</h2><div class="table-wrap"><table><thead><tr><th>${esc(t('outcomes'))}</th><th>${esc(t('lesson'))}</th><th>${esc(t('b_check'))}</th></tr></thead><tbody>`;
     (C.outcomes || []).forEach(o => {
       const ls = order.filter(l => (l.outcomes || []).includes(o.id));
