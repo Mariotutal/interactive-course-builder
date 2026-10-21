@@ -60,6 +60,8 @@ Every outcome must be **taught** by at least one lesson (`lesson.outcomes`) and 
 
 `theme.profile` changes the palette and emphasis of the offline app without changing the course data. Choose one based on the material: `mathematics`, `systems`, `programming`, `social-science`, `science` or `languages`; use `general` when no profile fits. See [domain-toolkit.md](domain-toolkit.md) for the visual grammar and interactions that match each profile.
 
+The app uses a risograph print style: white offset paper with a faint grain, dark ink for text, printed outlines and two flat Riso inks per profile, used for fills and offset shadows. Ink pairs: `mathematics` Purple + Sunflower, `systems` Teal + Orange, `programming` Medium Blue + Fluorescent Green, `social-science` and `general` Blue + Fluorescent Pink, `science` Pine + Yellow, `languages` Burgundy + Aqua. The inks are fills only; `tokens` change the text-safe accents, not the inks.
+
 The other options exist only where they serve learning. The `//` comments in this example are explanations only; remove them in `course.json`:
 
 ```json
