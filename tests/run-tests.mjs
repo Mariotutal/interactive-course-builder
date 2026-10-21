@@ -239,8 +239,8 @@ t('intake: init stores the decisions; validate warns when intake has no decision
 // --- Roadmap: visual options with contrast validation ---
 t('theme: unsupported option values are errors; unknown keys warn', () => { const v = withConcepts(c => { c.theme.typeScale = 'huge'; c.theme.illustrationStyle = 'watercolor'; }); hasErr(v, /theme.typeScale/); hasWarn(v, /illustrationStyle is not a supported option/); });
 t('theme: token colours below 4.5:1 contrast are errors; per-mode colours pass', () => {
-  hasErr(withConcepts(c => { c.theme.tokens.light.accent = '#ffcc00'; }), /contrast .* against #f7f7f4/);
-  hasErr(withConcepts(c => { c.theme.tokens.dark.accent = '#333333'; }), /contrast .* against #15171a/);
+  hasErr(withConcepts(c => { c.theme.tokens.light.accent = '#ffcc00'; }), /contrast .* against #fbfbf8/);
+  hasErr(withConcepts(c => { c.theme.tokens.dark.accent = '#333333'; }), /contrast .* against #171a26/);
   near(lk.contrast('#000000', '#ffffff'), 21, 1e-9); near(lk.contrast('#777777', '#ffffff'), 4.48, 0.01);
 });
 

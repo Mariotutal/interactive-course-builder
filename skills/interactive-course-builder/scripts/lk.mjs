@@ -281,7 +281,7 @@ function checkWidget(where, b, errs, warns, custom) {
 // WCAG 2.x relative luminance and contrast ratio.
 const lum = hex => { const c = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255).map(v => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4))); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
 export const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
-const BACKGROUNDS = { light: ['#f7f7f4', '#ffffff'], dark: ['#15171a', '#1d2024'] };
+const BACKGROUNDS = { light: ['#fbfbf8', '#ffffff'], dark: ['#171a26', '#1f2333'] }; // --bg and --surface in lk.css
 export const THEME_OPTIONS = { typeScale: ['compact', 'standard', 'large'], diagramStyle: ['filled', 'outline', 'high-contrast'], layout: ['standard', 'reading', 'wide'], codeTheme: ['auto', 'light', 'dark'] };
 const THEME_TOKENS = ['accent', 'accent2', 'ok', 'warn', 'danger'];
 function themeIssues(th, errs, warns) {
