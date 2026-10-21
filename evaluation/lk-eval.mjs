@@ -56,7 +56,7 @@ export function autoMetrics(dir) {
   const kind = q => q.kind || (q.options ? 'mcq' : 'open');
   const mcq = qs.filter(q => kind(q) === 'mcq'); const fullFb = mcq.filter(q => q.options.every((_, i) => i === q.correct || (q.feedback && q.feedback[i])));
   const acts = blocks.filter(b => b.type === 'activity'); const patterns = [...new Set(acts.map(a => a.widget))];
-  const prose = lessons.map(l => lk.lessonWords(l)); const totalWords = prose.reduce((a, b) => a + b, 0);
+  const prose = lessons.map(l => lk.lessonWords(l, C.language)); const totalWords = prose.reduce((a, b) => a + b, 0);
   const sources = lessons.flatMap(l => l.sources || []).concat(C.sources || []);
   const visuals = blocks.filter(b => b.type === 'visual');
   const outcomes = (C.outcomes || []).map(o => ({ id: o.id, assessedBy: (v.assessed.get(o.id) || []).length, transfer: blocks.some(b => b.type === 'transfer' && (b.assesses || []).includes(o.id)) || !!(C.capstone && (C.capstone.assesses || []).includes(o.id)) }));

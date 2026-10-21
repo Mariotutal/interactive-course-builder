@@ -161,8 +161,8 @@ All `html` fields are HTML fragments. No `<script>`, `<style>`, inline `on…=` 
 | `explain` | `html`, optional `title` |
 | `worked` | `title`, optional `html`, `steps: [{ prompt?, html, selfExplain? }]`, optional `result`. A `selfExplain: true` step hides its `html` behind "show" so the learner explains the step first. |
 | `predict` | `id`, `prompt`, then **either** `options`, `correct`, `feedback: {"<wrong index>": "misconception explained"}`, `explanation` **or** `kind: "open"` with `model`/`rubric`. Prediction is formative: it does not count as assessing an outcome (use `check` or `transfer` for that), but it may carry `concepts` |
-| `activity` | `id`, `widget`, `config`, `instructions` (what to try and what to think about), `debrief` (what they should have noticed), optional `assesses` |
-| `practice` | `id`, `level` (`guided`/`independent`), `task`, `hints[]`, `rubric[]` (self-check criteria), `solution` or `model`, `setting` (`in-app`/`offline`/`real-world`), `externalFeedback` (how to get feedback the browser cannot give) |
+| `activity` | `id`, `widget`, `config`, `instructions` (what to try and what to think about), `debrief` (what they should have noticed), optional `assesses`, optional `minutes` (time the learner spends working in it; default 4 for the depth floor) |
+| `practice` | `id`, `level` (`guided`/`independent`), `task`, `hints[]`, `rubric[]` (self-check criteria), `solution` or `model`, `setting` (`in-app`/`offline`/`real-world`), `externalFeedback` (how to get feedback the browser cannot give), optional `minutes` (time spent on a hands-on task, such as a lab or fieldwork, for the depth floor) |
 | `check` | optional `html`, `questions: [question]` |
 | `transfer` | `id`, `task`, `rubric[]`, `model`, `assesses[]` |
 | `reflect` | `id`, `prompt` |

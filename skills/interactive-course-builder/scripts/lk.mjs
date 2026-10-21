@@ -35,8 +35,20 @@ export const PROFILES = { full: REQUIRED_FUNCTIONS, focused: ['motivate', 'expla
 // Depth floor: learner-facing words per declared minute. A full lesson needs real explanation, a worked example and specific feedback; a lesson far below this is a summary, not a lesson.
 export const MIN_WORDS_PER_MINUTE = { full: 25, focused: 10 };
 const proseOf = l => (l.blocks || []).flatMap(b => [b.html, b.limits, b.task, b.prompt, b.solution, b.model, b.result, b.instructions, b.debrief, ...(b.steps || []).flatMap(s => [s.prompt, s.html]), ...(b.questions || []).flatMap(q => [q.prompt, q.explanation, ...Object.values(q.feedback || {}), q.model])]).join(' ');
-// Words of learner-facing prose, excluding SVG, code blocks and markup.
-export function lessonWords(l) { return String(proseOf(l)).replace(/<svg[\s\S]*?<\/svg>/gi, ' ').replace(/<pre[\s\S]*?<\/pre>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').split(/\s+/).filter(x => /[\p{L}\p{N}]/u.test(x)).length; }
+// Words of learner-facing prose, excluding SVG, code blocks and markup. Intl.Segmenter splits words in the course language, so languages written without spaces (Chinese, Japanese, Thai) are counted correctly.
+const stripProse = h => String(h).replace(/<svg[\s\S]*?<\/svg>/gi, ' ').replace(/<pre[\s\S]*?<\/pre>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ');
+export function lessonWords(l, language) {
+  const text = stripProse(proseOf(l));
+  if (typeof Intl === 'undefined' || !Intl.Segmenter) return text.split(/\s+/).filter(x => /[\p{L}\p{N}]/u.test(x)).length;
+  let seg; try { seg = new Intl.Segmenter(language || undefined, { granularity: 'word' }); } catch { seg = new Intl.Segmenter(undefined, { granularity: 'word' }); }
+  let n = 0; for (const x of seg.segment(text)) if (x.isWordLike) n++; return n;
+}
+// Time a learner spends working in interactions rather than reading. An activity defaults to ACTIVITY_MINUTES; an activity or practice block may declare its own "minutes". The credit is capped so that reading still has to fill at least half of the lesson.
+export const ACTIVITY_MINUTES = 4;
+export function interactionMinutes(l) {
+  const raw = (l.blocks || []).reduce((acc, b) => acc + (b && typeof b.minutes === 'number' && b.minutes > 0 ? b.minutes : b && b.type === 'activity' ? ACTIVITY_MINUTES : 0), 0);
+  return Math.min(raw, (l.minutes || 0) / 2);
+}
 
 const readJson = f => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { throw new Error(`${f}: ${e.message}`); } };
 const slug = s => String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60) || 'course';
@@ -466,7 +478,7 @@ export function validateCourse(dir) {
     citationIssues(w, l, errs, warns);
     req(l.next, `${w}: needs "next", connecting to what comes after`);
     const sm = C.learner && C.learner.time && typeof C.learner.time.sessionMinutes === 'number' ? C.learner.time.sessionMinutes : null;
-    if (typeof l.minutes === 'number' && l.minutes > 0 && MIN_WORDS_PER_MINUTE[profile]) { const wc = lessonWords(l), floor = Math.round(l.minutes * MIN_WORDS_PER_MINUTE[profile]); if (wc < floor) warns.push(`${w}: ${wc} words of learner-facing text for ${l.minutes} min is too thin for a ${profile} lesson (expect at least ${floor}); develop the explanation, the worked example's reasoning, the feedback and the practice. "minutes" must stay the learner's real study time`); }
+    if (typeof l.minutes === 'number' && l.minutes > 0 && MIN_WORDS_PER_MINUTE[profile]) { const wc = lessonWords(l, C.language), im = interactionMinutes(l), floor = Math.round((l.minutes - im) * MIN_WORDS_PER_MINUTE[profile]); if (wc < floor) warns.push(`${w}: ${wc} words of learner-facing text for ${l.minutes} min${im ? ` (${im} min credited to activities)` : ''} is too thin for a ${profile} lesson (expect at least ${floor}); develop the explanation, the worked example's reasoning, the feedback and the practice. "minutes" must stay the learner's real study time`); }
     if (sm && l.minutes > sm * 1.5) warns.push(`${w}: ${l.minutes} min is much longer than the learner's ${sm}-minute sessions; split the lesson or mark natural break points`);
     if (profile === 'full') { const ty = (l.blocks || []).map(b => b && b.type); const firstP = ty.findIndex(t => t === 'predict' || t === 'activity'); const firstE = ty.findIndex(t => t === 'explain' || t === 'worked'); if (firstE >= 0 && (firstP < 0 || firstP > firstE)) warns.push(`${w}: the first prediction comes after the first explain/worked block; put a predict block or a predicting activity before the explanation that reveals its answer (or use a later prediction only for a new case)`); }
     if (has.has('check')) { const min = profile === 'full' ? 2 : 1; if (nQuestions < min) errs.push(`${w}: a ${profile} lesson needs at least ${min} check question(s) in total`); }
