@@ -20,16 +20,20 @@
       const touch = once(api); const fmt = (v, f = {}) => !isFinite(v) ? '—' : f.percent ? api.fmt(v * 100, f.digits != null ? f.digits : 1) + ' %' : api.fmt(v, f.digits != null ? f.digits : 2);
       function chart() {
         const c = cfg.chart; if (!c) return '';
-        const W = 560, H = 240, pad = { l: 46, r: 12, t: 12, b: 34 };
+        const W = 720, H = 310, pad = { l: 52, r: 18, t: 18, b: 40 };
         const steps = c.x.steps || 120; const xs = []; for (let k = 0; k <= steps; k++) xs.push(c.x.from + (c.x.to - c.x.from) * k / steps);
         const ser = (c.series || []).map(s => ({ s, pts: xs.map(x => { const v = E.evaluate(s.expr, Object.assign({}, vals, { [c.x.var || 'x']: x })); return [x, v]; }).filter(p => isFinite(p[1])) }));
         const ys = ser.flatMap(r => r.pts.map(p => p[1])); let y0 = c.y && c.y.from != null ? c.y.from : Math.min(0, ...ys), y1 = c.y && c.y.to != null ? c.y.to : Math.max(...ys); if (y1 === y0) y1 = y0 + 1;
         const X = x => pad.l + (x - c.x.from) / (c.x.to - c.x.from) * (W - pad.l - pad.r); const Y = y => H - pad.b - (y - y0) / (y1 - y0) * (H - pad.t - pad.b);
         const paths = ser.map((r, i) => `<path class="${i ? 'line2' : 'line'}" d="${r.pts.map((p, k) => (k ? 'L' : 'M') + X(p[0]).toFixed(1) + ' ' + Y(p[1]).toFixed(1)).join(' ')}"/>`).join('');
         const marks = (c.markers || []).map(m => { const xv = E.evaluate(m.x, vals); if (!isFinite(xv)) return ''; return `<line x1="${X(xv)}" x2="${X(xv)}" y1="${pad.t}" y2="${H - pad.b}" class="axis" stroke-dasharray="3 3"/><text x="${X(xv) + 3}" y="${pad.t + 10}">${esc(m.label)} ${fmt(xv, m.format)}</text>`; }).join('');
+        const currentX = c.current && E.evaluate(c.current.x, vals);
+        const current = c.current && isFinite(currentX) && currentX >= c.x.from && currentX <= c.x.to
+          ? `<line x1="${X(currentX)}" x2="${X(currentX)}" y1="${pad.t}" y2="${H - pad.b}" class="axis" stroke-dasharray="4 4"/>${ser.map((r, i) => { const y = E.evaluate(r.s.expr, Object.assign({}, vals, { [c.x.var || 'x']: currentX })); return isFinite(y) ? `<circle class="chart-point ${i ? 'second' : ''}" cx="${X(currentX)}" cy="${Y(y)}" r="6"/>` : ''; }).join('')}` : '';
         const ticks = [0, 0.25, 0.5, 0.75, 1].map(f => { const xv = c.x.from + f * (c.x.to - c.x.from); return `<text x="${X(xv)}" y="${H - pad.b + 16}" text-anchor="middle">${api.fmt(+xv.toFixed(2), Number.isInteger(+xv.toFixed(2)) ? 0 : 2)}</text>`; }).join('') + [0, 0.5, 1].map(f => { const yv = y0 + f * (y1 - y0); return `<text x="${pad.l - 6}" y="${Y(yv) + 4}" text-anchor="end">${(+yv.toPrecision(3)).toLocaleString(api.lang)}</text>`; }).join('');
         const legend = ser.map((r, i) => `${i ? '- - -' : '———'} ${esc(r.s.label)}`).join(' · ');
-        return `<figure style="margin:8px 0"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(c.ariaLabel || cfg.title || '')}"><line class="axis" x1="${pad.l}" x2="${W - pad.r}" y1="${H - pad.b}" y2="${H - pad.b}"/><line class="axis" x1="${pad.l}" x2="${pad.l}" y1="${pad.t}" y2="${H - pad.b}"/>${paths}${marks}${ticks}<text x="${W / 2}" y="${H - 4}" text-anchor="middle">${esc(c.xLabel || '')}</text></svg><figcaption>${legend}${c.yLabel ? ' · ' + esc(c.yLabel) : ''}</figcaption></figure>`;
+        const reading = current ? `${esc(c.current.label || c.xLabel || '')}: ${fmt(currentX)} · ${ser.map(r => { const y = E.evaluate(r.s.expr, Object.assign({}, vals, { [c.x.var || 'x']: currentX })); return `${esc(r.s.label)}: ${fmt(y)}`; }).join(' · ')}` : '';
+        return `<figure style="margin:8px 0"><svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(c.ariaLabel || cfg.title || '')}"><line class="axis" x1="${pad.l}" x2="${W - pad.r}" y1="${H - pad.b}" y2="${H - pad.b}"/><line class="axis" x1="${pad.l}" x2="${pad.l}" y1="${pad.t}" y2="${H - pad.b}"/>${paths}${marks}${current}${ticks}<text x="${W / 2}" y="${H - 4}" text-anchor="middle">${esc(c.xLabel || '')}</text></svg><figcaption>${legend}${c.yLabel ? ' · ' + esc(c.yLabel) : ''}${reading ? `<br><strong>${reading}</strong>` : ''}</figcaption></figure>`;
       }
       function render() {
         let outs = '', interp = '';
@@ -219,6 +223,69 @@
         el.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { answered[i] = +b.dataset.p; api.record({ answered: Object.assign({}, answered) }); keepFocus(el, '[data-next]', render); });
         el.querySelector('[data-prev]').onclick = () => { i = Math.max(0, i - 1); keepFocus(el, '[data-prev]', render); };
         el.querySelector('[data-next]').onclick = () => { i = Math.min(cfg.steps.length - 1, i + 1); touch(); keepFocus(el, i === cfg.steps.length - 1 ? '[data-prev]' : '[data-next]', render); };
+      }
+      render();
+    },
+  });
+
+  /* 11. Code trace: reveal a program or manifest's execution state one line at a time. */
+  LK.registerWidget('code-trace', {
+    title: 'Code trace', kind: 'w_walkthrough',
+    mount(el, cfg, api) {
+      const lines = String(cfg.code || '').split('\n'); let i = 0; const answered = {}; const touch = once(api);
+      function render() {
+        const s = cfg.steps[i]; const p = s.predict; const locked = p && answered[i] == null;
+        const state = s.state && Object.keys(s.state).length ? JSON.stringify(s.state, null, 2) : (s.stateText || '—');
+        el.innerHTML = header(cfg, api, 'w_walkthrough') + `<p class="small">${i + 1} / ${cfg.steps.length}${s.title ? ' · ' + esc(s.title) : ''}</p>
+          ${p ? `<div class="q predict"><div class="q-text">${p.prompt}</div><div class="opts">${p.options.map((o, k) => { const cls = answered[i] == null ? '' : k === p.correct ? 'correct' : k === answered[i] ? 'wrong' : ''; return `<button type="button" class="opt ${cls}" data-p="${k}" aria-pressed="${answered[i] === k}">${o}</button>`; }).join('')}</div>${answered[i] != null ? `<div class="fb">${p.explanation || ''}</div>` : ''}</div>` : ''}
+          <div class="trace"><pre class="trace-code" aria-label="${esc(cfg.codeLabel || 'Code')}"><code>${lines.map((line, k) => `<span class="trace-line ${k + 1 === s.line ? 'active' : ''}">${esc(line || ' ')}</span>`).join('')}</code></pre><pre class="trace-state" aria-live="polite"><code>${esc(state)}</code></pre></div>
+          <div class="w-out" aria-live="polite">${locked ? '' : (s.html || '')}</div>
+          <div class="row" style="margin-top:8px"><button type="button" class="btn small" data-prev ${i === 0 ? 'disabled' : ''}>← ${esc(api.t('previous'))}</button><button type="button" class="btn small primary" data-next ${i === cfg.steps.length - 1 || locked ? 'disabled' : ''}>${esc(api.t('next'))} →</button></div>${note(cfg, api)}`;
+        el.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { answered[i] = +b.dataset.p; api.record({ answered: Object.assign({}, answered) }); keepFocus(el, '[data-next]', render); });
+        el.querySelector('[data-prev]').onclick = () => { i = Math.max(0, i - 1); keepFocus(el, '[data-prev]', render); };
+        el.querySelector('[data-next]').onclick = () => { i = Math.min(cfg.steps.length - 1, i + 1); touch({ step: i }); keepFocus(el, i === cfg.steps.length - 1 ? '[data-prev]' : '[data-next]', render); };
+      }
+      render();
+    },
+  });
+
+  /* 12. System flow: show changing states in an architecture, protocol or deployment. */
+  LK.registerWidget('system-flow', {
+    title: 'System flow', kind: 'w_explore',
+    mount(el, cfg, api) {
+      let i = 0, selected = null; const answered = {}; const touch = once(api);
+      const node = id => cfg.nodes.find(n => n.id === id);
+      function render() {
+        const s = cfg.steps[i]; const p = s.predict; const locked = p && answered[i] == null; const detail = selected && node(selected);
+        el.innerHTML = header(cfg, api, 'w_explore') + `<p class="small">${i + 1} / ${cfg.steps.length}${s.event ? ' · ' + esc(s.event) : ''}</p>
+          ${p ? `<div class="q predict"><div class="q-text">${p.prompt}</div><div class="opts">${p.options.map((o, k) => { const cls = answered[i] == null ? '' : k === p.correct ? 'correct' : k === answered[i] ? 'wrong' : ''; return `<button type="button" class="opt ${cls}" data-p="${k}" aria-pressed="${answered[i] === k}">${o}</button>`; }).join('')}</div>${answered[i] != null ? `<div class="fb">${p.explanation || ''}</div>` : ''}</div>` : ''}
+          <div class="flow-map" role="group" aria-label="${esc(cfg.mapLabel || 'System components')}">${cfg.nodes.map(n => `<button type="button" class="flow-node ${s.active.includes(n.id) ? 'active' : ''}" data-node="${esc(n.id)}" aria-pressed="${selected === n.id}"><strong>${esc(n.label)}</strong>${n.kind ? `<small>${esc(n.kind)}</small>` : ''}</button>`).join('')}</div>
+          <div class="w-out" aria-live="polite">${locked ? '' : (s.html || '')}${detail ? `<hr><h4>${esc(detail.label)}</h4>${detail.html || ''}` : ''}</div>
+          <div class="row" style="margin-top:8px"><button type="button" class="btn small" data-prev ${i === 0 ? 'disabled' : ''}>← ${esc(api.t('previous'))}</button><button type="button" class="btn small primary" data-next ${i === cfg.steps.length - 1 || locked ? 'disabled' : ''}>${esc(api.t('next'))} →</button></div>${note(cfg, api)}`;
+        el.querySelectorAll('[data-node]').forEach(b => b.onclick = () => { selected = b.dataset.node; touch({ selected }); keepFocus(el, `[data-node="${selected}"]`, render); });
+        el.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { answered[i] = +b.dataset.p; api.record({ answered: Object.assign({}, answered) }); keepFocus(el, '[data-next]', render); });
+        el.querySelector('[data-prev]').onclick = () => { i = Math.max(0, i - 1); keepFocus(el, '[data-prev]', render); };
+        el.querySelector('[data-next]').onclick = () => { i = Math.min(cfg.steps.length - 1, i + 1); touch({ step: i }); keepFocus(el, i === cfg.steps.length - 1 ? '[data-prev]' : '[data-next]', render); };
+      }
+      render();
+    },
+  });
+
+  /* 13. Causal map: inspect claims, mechanisms and evidence, then test a relationship. */
+  LK.registerWidget('causal-map', {
+    title: 'Causal map', kind: 'w_analyze',
+    mount(el, cfg, api) {
+      let selected = null, chosen = null; const touch = once(api);
+      const node = id => cfg.nodes.find(n => n.id === id); const link = id => cfg.links.find(l => l.id === id);
+      function render() {
+        const q = cfg.challenge; const picked = chosen && link(chosen); const current = selected && node(selected);
+        el.innerHTML = header(cfg, api, 'w_analyze') + `<div class="causal-map" role="group" aria-label="${esc(cfg.mapLabel || 'Causal map')}">${cfg.nodes.map(n => `<button type="button" class="causal-node" data-node="${esc(n.id)}" aria-pressed="${selected === n.id}"><strong>${esc(n.label)}</strong>${n.kind ? `<small>${esc(n.kind)}</small>` : ''}</button>`).join('')}</div>
+          <ul class="map-links">${cfg.links.map(l => `<li><button type="button" class="btn small" data-link="${esc(l.id)}" aria-pressed="${chosen === l.id}">${esc(node(l.from).label)} → ${esc(node(l.to).label)}${l.label ? ' · ' + esc(l.label) : ''}</button></li>`).join('')}</ul>
+          ${q ? `<div class="q predict"><div class="q-text">${q.prompt}</div><div class="opts">${q.options.map(id => { const l = link(id); const cls = chosen == null ? '' : id === q.correct ? 'correct' : id === chosen ? 'wrong' : ''; return `<button type="button" class="opt ${cls}" data-answer="${esc(id)}" aria-pressed="${chosen === id}">${esc(node(l.from).label)} → ${esc(node(l.to).label)}</button>`; }).join('')}</div>${chosen ? `<div class="fb">${q.explanation || ''}</div>` : ''}</div>` : ''}
+          <div class="w-out" aria-live="polite">${current ? `<h4>${esc(current.label)}</h4>${current.html || ''}` : ''}${picked ? `<p><strong>${esc(node(picked.from).label)} → ${esc(node(picked.to).label)}</strong>${picked.explanation ? `<br>${picked.explanation}` : ''}</p>` : ''}</div>${note(cfg, api)}`;
+        el.querySelectorAll('[data-node]').forEach(b => b.onclick = () => { selected = b.dataset.node; touch({ selected }); keepFocus(el, `[data-node="${selected}"]`, render); });
+        el.querySelectorAll('[data-link]').forEach(b => b.onclick = () => { chosen = b.dataset.link; touch({ chosen }); keepFocus(el, `[data-link="${chosen}"]`, render); });
+        el.querySelectorAll('[data-answer]').forEach(b => b.onclick = () => { chosen = b.dataset.answer; api.record({ chosen }); keepFocus(el, `[data-answer="${chosen}"]`, render); });
       }
       render();
     },

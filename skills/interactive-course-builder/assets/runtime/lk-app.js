@@ -20,6 +20,7 @@
   const order = C.modules.flatMap(m => m.lessons).map(lessonById).filter(Boolean);
   document.documentElement.lang = C.language || 'en';
   if (C.dir) document.documentElement.dir = C.dir;
+  document.documentElement.dataset.profile = (C.theme && C.theme.profile) || 'general';
 
   /* ---------- Learner state ---------- */
   const KEY = 'lk:' + C.id + ':v1';

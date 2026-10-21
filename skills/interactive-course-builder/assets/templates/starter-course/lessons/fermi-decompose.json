@@ -109,6 +109,14 @@
             }
           }
         ],
+        "chart": {
+          "x": { "var": "x", "from": 1, "to": 20 },
+          "series": [ { "label": "Estimated tuners", "expr": "pop / 2.5 * x / 100 / (perday * 250)" } ],
+          "current": { "label": "Current piano share (%)", "x": "share" },
+          "xLabel": "Households with a piano (%)",
+          "yLabel": "Estimated tuners",
+          "ariaLabel": "Estimated piano tuners as the share of households with a piano changes"
+        },
         "interpret": [
           {
             "when": "pop / 2.5 * share / 100 / (perday * 250) > 200",

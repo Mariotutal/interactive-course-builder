@@ -25,7 +25,8 @@ const I18N = (() => { const ctx = { window: {} }; vm.runInNewContext(fs.readFile
 export const UI_LANGUAGES = Object.keys(I18N);
 const uiStrings = C => Object.assign({}, I18N.en, I18N[String(C.language || 'en').split('-')[0]] || {}, C.ui || {});
 
-export const BUILTIN_WIDGETS = ['parameter-explorer', 'evidence-case', 'scenario', 'classify', 'timeline', 'source-compare', 'dialogue', 'cloze', 'hotspot-diagram', 'stepper'];
+export const BUILTIN_WIDGETS = ['parameter-explorer', 'evidence-case', 'scenario', 'classify', 'timeline', 'source-compare', 'dialogue', 'cloze', 'hotspot-diagram', 'stepper', 'code-trace', 'system-flow', 'causal-map'];
+export const DESIGN_PROFILES = ['general', 'mathematics', 'systems', 'programming', 'social-science', 'science', 'languages'];
 const SOURCE_KINDS = ['primary', 'secondary', 'official', 'research', 'reference', 'textbook', 'data', 'pedagogical'];
 const REQUIRED_FUNCTIONS = ['motivate', 'explain', 'visual', 'worked', 'predict', 'practice-guided', 'practice-independent', 'check', 'transfer', 'own-words', 'sources'];
 // "full" lessons carry the whole learning cycle; "focused" lessons (short review, drill, listening, reading) carry only what every lesson needs.
@@ -135,6 +136,18 @@ function htmlIssues(where, html, errs, warns, terms) {
   if (/<img[^>]+src=["']https?:/i.test(html)) warns.push(`${where}: remote image (needs network; prefer a local asset)`);
   for (const m of html.matchAll(/data-term="([^"]+)"/g)) if (terms && !terms.has(m[1].toLowerCase())) errs.push(`${where}: glossary term "${m[1]}" is not defined`);
 }
+function imageIssues(where, html, dir, errs) {
+  for (const m of String(html).matchAll(/<img\b([^>]*)>/gi)) {
+    const attrs = m[1];
+    const alt = attrs.match(/(?:^|\s)alt=["']([^"']*)["']/i);
+    if (!alt || !alt[1].trim()) errs.push(`${where}: image needs meaningful alt text`);
+    const src = attrs.match(/(?:^|\s)src=["']([^"']+)["']/i);
+    if (!src) { errs.push(`${where}: image needs src`); continue; }
+    if (/^(https?:|data:)/i.test(src[1])) continue;
+    const asset = path.resolve(dir, src[1]);
+    if (!src[1].startsWith('assets/') || !inside(asset, path.resolve(dir, 'assets')) || !fs.existsSync(asset)) errs.push(`${where}: image "${src[1]}" must exist in the course assets/ folder`);
+  }
+}
 const allStrings = v => v == null ? [] : typeof v === 'string' ? [v] : Array.isArray(v) ? v.flatMap(allStrings) : typeof v === 'object' ? Object.values(v).flatMap(allStrings) : [];
 
 function checkQuestion(where, q, outcomes, errs, warns, terms, requireAssess) {
@@ -167,6 +180,7 @@ function checkWidget(where, b, errs, warns, custom) {
   if (!b.debrief) warns.push(`${where}: activity without a debrief explaining what the learner should have noticed`);
   if (custom[w]) { if (!(c.assumptions || []).length) warns.push(`${where}: custom widget config should list assumptions`); return; }
   const need = (cond, msg) => { if (!cond) errs.push(`${where} (${w}): ${msg}`); };
+  const predict = (p, label) => { if (!p) return; need(Array.isArray(p.options) && p.options.length >= 2, `${label}: predict needs at least 2 options`); need(Number.isInteger(p.correct) && p.correct >= 0 && p.correct < (p.options || []).length, `${label}: predict needs a valid correct option`); need(p.explanation, `${label}: predict needs an explanation`); };
   switch (w) {
     case 'parameter-explorer': {
       need(Array.isArray(c.inputs) && c.inputs.length, 'needs inputs'); need(Array.isArray(c.outputs) && c.outputs.length, 'needs outputs');
@@ -174,7 +188,7 @@ function checkWidget(where, b, errs, warns, custom) {
       const vars = new Set((c.inputs || []).map(i => i.id)); (c.inputs || []).forEach(i => need(['id', 'label', 'min', 'max', 'value'].every(k => i[k] != null) && i.min < i.max && i.value >= i.min && i.value <= i.max, `input ${i.id}: needs id,label,min<max,value within range`));
       const exprCheck = (e, extra = []) => { try { LKExpr.parse(e); const unknown = LKExpr.variables(e).filter(v => !vars.has(v) && !extra.includes(v)); if (unknown.length) errs.push(`${where}: expression "${e}" uses unknown variable(s) ${unknown.join(', ')}`); } catch (x) { errs.push(`${where}: invalid expression "${e}": ${x.message}`); } };
       (c.outputs || []).forEach(o => exprCheck(o.expr)); (c.interpret || []).forEach(r => exprCheck(r.when));
-      if (c.chart) { const xv = (c.chart.x && c.chart.x.var) || 'x'; need(c.chart.x && c.chart.x.from < c.chart.x.to, 'chart.x needs from < to'); (c.chart.series || []).forEach(s => exprCheck(s.expr, [xv])); (c.chart.markers || []).forEach(m => exprCheck(m.x)); }
+      if (c.chart) { const xv = (c.chart.x && c.chart.x.var) || 'x'; need(c.chart.x && c.chart.x.from < c.chart.x.to, 'chart.x needs from < to'); (c.chart.series || []).forEach(s => exprCheck(s.expr, [xv])); (c.chart.markers || []).forEach(m => exprCheck(m.x)); if (c.chart.current) exprCheck(c.chart.current.x); }
       if (c.chart && (c.inputs || []).length) {
         const vals = Object.fromEntries(c.inputs.map(i => [i.id, i.value]));
         try { (c.outputs || []).forEach(o => { const v = LKExpr.evaluate(o.expr, vals); if (!isFinite(v)) warns.push(`${where}: output "${o.label}" is not finite at default inputs`); }); } catch (x) { /* reported above */ }
@@ -193,7 +207,23 @@ function checkWidget(where, b, errs, warns, custom) {
     case 'dialogue': need((c.lines || []).length >= 2, 'needs ≥2 lines'); need(c.targetLang, 'needs targetLang (BCP 47) for pronunciation and lang attributes'); (c.comprehension || []).forEach((q, i) => need(Array.isArray(q.options) && Number.isInteger(q.correct), `comprehension ${i}: needs options and correct`)); (c.production || []).forEach((p, i) => need((p.accept || []).length, `production ${i}: needs accepted answers`)); break;
     case 'cloze': need(/\[\[[^\]]+\]\]/.test(c.text || ''), 'text needs at least one [[answer]] blank'); break;
     case 'hotspot-diagram': need(/<svg\b/.test(c.svg || ''), 'needs an svg'); need(c.alt, 'needs alt text'); (c.hotspots || []).forEach(h => { need(h.html, `hotspot ${h.id}: needs an explanation`); if (h.target) need(new RegExp(`id=["']${h.target}["']`).test(c.svg || ''), `hotspot ${h.id}: target #${h.target} not found in svg`); }); (c.quiz || []).forEach(q => need((c.hotspots || []).some(h => h.id === q.answer), `quiz "${q.ask}": answer is not a hotspot id`)); break;
-    case 'stepper': need((c.steps || []).length >= 2, 'needs ≥2 steps'); (c.steps || []).forEach((s, i) => { need(s.html, `step ${i}: needs html`); if (s.predict) need(Number.isInteger(s.predict.correct) && s.predict.explanation, `step ${i}: predict needs correct and explanation`); }); break;
+    case 'stepper': need((c.steps || []).length >= 2, 'needs ≥2 steps'); (c.steps || []).forEach((s, i) => { need(s.html, `step ${i}: needs html`); predict(s.predict, `step ${i}`); }); break;
+    case 'code-trace': {
+      need(typeof c.code === 'string' && c.code.trim(), 'needs code'); need((c.steps || []).length >= 2, 'needs ≥2 trace steps'); const count = String(c.code || '').split('\n').length;
+      (c.steps || []).forEach((s, i) => { need(Number.isInteger(s.line) && s.line >= 1 && s.line <= count, `step ${i}: line must be between 1 and ${count}`); need(s.html, `step ${i}: needs html explaining the state`); predict(s.predict, `step ${i}`); });
+      break;
+    }
+    case 'system-flow': {
+      const nodes = new Set((c.nodes || []).map(n => n.id)); need(nodes.size >= 2, 'needs ≥2 nodes'); (c.nodes || []).forEach(n => need(n.id && n.label, `node ${n.id}: needs id and label`)); need((c.steps || []).length >= 2, 'needs ≥2 flow steps');
+      (c.steps || []).forEach((s, i) => { need(Array.isArray(s.active) && s.active.length, `step ${i}: needs active node ids`); (s.active || []).forEach(id => need(nodes.has(id), `step ${i}: unknown active node ${id}`)); need(s.html, `step ${i}: needs html explaining the transition`); predict(s.predict, `step ${i}`); });
+      break;
+    }
+    case 'causal-map': {
+      const nodes = new Map((c.nodes || []).map(n => [n.id, n])); const links = new Map((c.links || []).map(l => [l.id, l])); need(nodes.size >= 3, 'needs ≥3 nodes'); need(links.size >= 2, 'needs ≥2 links');
+      (c.nodes || []).forEach(n => need(n.id && n.label, `node ${n.id}: needs id and label`)); (c.links || []).forEach(l => { need(l.id && nodes.has(l.from) && nodes.has(l.to), `link ${l.id}: needs id and valid from/to nodes`); need(l.explanation, `link ${l.id}: needs an explanation`); });
+      const q = c.challenge; need(q && q.prompt, 'needs a challenge prompt'); if (q) { need(Array.isArray(q.options) && q.options.length >= 2, 'challenge needs ≥2 link options'); (q.options || []).forEach(id => need(links.has(id), `challenge references unknown link ${id}`)); need(links.has(q.correct), 'challenge needs a correct link id'); need(q.explanation, 'challenge needs an explanation'); }
+      break;
+    }
   }
 }
 
@@ -205,6 +235,7 @@ export function validateCourse(dir) {
   req(C.format === 1, 'course.json: "format" must be 1');
   req(/^[a-z0-9][a-z0-9-]{1,63}$/.test(C.id || ''), 'course.json: "id" must be a lowercase slug');
   req(C.title, 'course.json: needs a title'); req(/^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$/.test(C.language || ''), 'course.json: "language" must be a BCP 47 tag');
+  if (C.theme && C.theme.profile && !DESIGN_PROFILES.includes(C.theme.profile)) errs.push(`course.json: theme.profile must be one of ${DESIGN_PROFILES.join(', ')}`);
   const outcomes = new Map((C.outcomes || []).map(o => [o.id, o])); req(outcomes.size, 'course.json: needs outcomes');
   req(outcomes.size === (C.outcomes || []).length, 'course.json: duplicate outcome ids');
   (C.outcomes || []).forEach(o => { req(o.id && o.text, 'outcome needs id and text'); if (o.text && !/^\s*\S+/.test(o.text)) errs.push(`outcome ${o.id}: empty`); });
@@ -261,11 +292,13 @@ export function validateCourse(dir) {
         default: errs.push(`${bw}: unknown block type "${b.type}"`);
       }
       allStrings(b).forEach(s => htmlIssues(bw, s, errs, warns, terms));
+      allStrings(b).forEach(s => imageIssues(bw, s, dir, errs));
     });
     if (has.has('predict-activity')) has.add('predict');
     if (has.has('own-words-candidate')) has.add('own-words');
     if ((l.sources || []).length) has.add('sources');
     (l.sources || []).forEach((s, i) => checkSource(`${w} sources[${i}]`, s, errs, warns));
+    citationIssues(w, l, errs);
     req(l.next, `${w}: needs "next", connecting to what comes after`);
     const sm = C.learner && C.learner.time && typeof C.learner.time.sessionMinutes === 'number' ? C.learner.time.sessionMinutes : null;
     if (sm && l.minutes > sm * 1.5) warns.push(`${w}: ${l.minutes} min is much longer than the learner's ${sm}-minute sessions; split the lesson or mark natural break points`);
@@ -291,12 +324,35 @@ export function validateCourse(dir) {
   return { errs, warns, data, contract, assessed, taught };
 }
 function checkSource(where, s, errs, warns) {
+  if (s.id && !/^[a-z][a-z0-9-]*$/.test(s.id)) errs.push(`${where}: id must be a lowercase slug`);
   if (!s.title) errs.push(`${where}: source needs a title`);
   if (!SOURCE_KINDS.includes(s.kind)) errs.push(`${where}: kind must be one of ${SOURCE_KINDS.join(', ')}`);
   if (s.url && !/^https?:\/\//.test(s.url)) errs.push(`${where}: url must be http(s)`);
   if (s.url && !s.accessed && s.kind !== 'pedagogical') warns.push(`${where}: web source without "accessed" date`);
   if (s.status && !['verified', 'unverified'].includes(s.status)) errs.push(`${where}: status must be verified or unverified`);
   if (s.status === 'unverified') warns.push(`${where}: unverified source "${s.title}" — claims relying on it must be labelled in the text`);
+}
+
+const CITATION = /<a\s+data-source=["']([a-z][a-z0-9-]*)["']\s*>/gi;
+function citationIssues(where, lesson, errs) {
+  const sources = new Map();
+  (lesson.sources || []).forEach(s => { if (s.id) { if (sources.has(s.id)) errs.push(`${where}: duplicate source id "${s.id}"`); sources.set(s.id, s); } });
+  allStrings([lesson.blocks, lesson.next, lesson.prereqText]).forEach(html => {
+    for (const m of html.matchAll(CITATION)) {
+      const s = sources.get(m[1]);
+      if (!s || !s.url) errs.push(`${where}: inline citation "${m[1]}" needs a matching lesson source with a URL`);
+    }
+  });
+}
+
+function resolveCitations(value, sources) {
+  if (typeof value === 'string') return value.replace(CITATION, (_, id) => {
+    const url = sources.find(s => s.id === id).url.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
+    return `<a class="source-ref" href="${url}">`;
+  });
+  if (Array.isArray(value)) return value.map(v => resolveCitations(v, sources));
+  if (value && typeof value === 'object') return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, resolveCitations(v, sources)]));
+  return value;
 }
 
 /* ---------------- Build ---------------- */
@@ -344,7 +400,10 @@ export function build(dir, outDir) {
   resetDir(out);
   copyDir(RUNTIME, path.join(out, 'runtime')); fs.rmSync(path.join(out, 'runtime', 'index.html'));
   const byId = new Map(lessons.map(l => [l.id, l]));
-  const ordered = C.modules.flatMap(m => m.lessons).map(id => byId.get(id));
+  const ordered = C.modules.flatMap(m => m.lessons).map(id => {
+    const l = byId.get(id);
+    return resolveCitations(l, l.sources || []);
+  });
   const bundle = { format: 1, kit: KIT_VERSION, builtAt: new Date().toISOString(), course: C, lessons: ordered, hashes: itemHashes(C, lessons) };
   fs.writeFileSync(path.join(out, 'content.js'), '/* Generated by interactive-course-builder. Edit the course source, not this file. */\nwindow.LK_DATA = ' + JSON.stringify(bundle).replace(/<\/script/gi, '<\\/script') + ';\n');
   let custom = '';
@@ -354,6 +413,7 @@ export function build(dir, outDir) {
   const escH = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   fs.writeFileSync(path.join(out, 'index.html'), tpl.replace(/{{TITLE}}/g, escH(C.title)).replace(/{{LANG}}/g, escH(C.language)).replace('{{KIT_VERSION}}', KIT_VERSION).replace('{{CUSTOM_WIDGETS}}', custom));
   exportMarkdown(C, ordered, md);
+  if (fs.existsSync(path.join(dir, 'assets'))) copyDir(path.join(dir, 'assets'), path.join(md, 'assets'));
   fs.writeFileSync(path.join(dir, 'COVERAGE.md'), coverageMarkdown(v));
   return Object.assign(v, { out, md });
 }
